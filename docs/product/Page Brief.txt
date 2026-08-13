@@ -1,0 +1,39 @@
+1-Page Brief – SmartParking 
+Tên dự án
+SmartParking  – Hệ thống hỗ trợ tìm chỗ đỗ xe thông minh bằng AI cho khu dân cư.
+
+Vấn đề (Problem Statement)
+Các hệ thống Smart Parking hiện nay chủ yếu hỗ trợ Ban quản lý theo dõi bãi xe và kiểm soát phương tiện, nhưng chưa hỗ trợ hiệu quả Resident trong việc tìm chỗ đỗ phù hợp.
+Người dùng thường phải tự tìm chỗ mặc dù hệ thống đã biết trạng thái toàn bộ bãi xe. Điều này làm tăng thời gian tìm kiếm, gây ùn tắc và chưa đáp ứng các nhu cầu thực tế như:
+Gần thang máy hoặc gần căn hộ.
+Có trạm sạc cho xe điện.
+Phù hợp với loại phương tiện.
+Tuân thủ Parking Rules.
+Ngoài ra, việc quản lý phương tiện, xe khách, giữ chỗ và kiểm soát xe ra vào còn phân tán giữa nhiều quy trình, làm giảm hiệu quả vận hành và tăng nguy cơ sai sót.
+
+Đối tượng mục tiêu (Target Audience)
+Resident (Cư dân): tìm chỗ đỗ nhanh cho xe cá nhân và xe khách.
+Security Guard (Bảo vệ): xác minh phương tiện và kiểm soát xe ra vào.
+Parking Manager (Ban quản lý): quản lý bãi xe, quy định, hạn mức phương tiện và theo dõi toàn bộ hoạt động.
+
+Giải pháp (Solution)
+SmartParking AI sử dụng AI Agent để hiểu yêu cầu bằng ngôn ngữ tự nhiên, ví dụ:
+&quot;Tìm chỗ gần thang máy tầng 10.&quot;
+AI sẽ:
+Phân tích yêu cầu của người dùng.
+Kết hợp dữ liệu trạng thái bãi xe, thông tin phương tiện và Parking Rules.
+Loại bỏ các vị trí không hợp lệ.
+Xếp hạng và đề xuất chỗ đỗ tối ưu cho từng phương tiện.
+Tạo Soft Reservation sau khi người dùng xác nhận.
+Hỗ trợ bảo vệ xác minh biển số khi xe vào/ra và tự động cập nhật Parking Session.
+Cho phép Ban quản lý theo dõi, phê duyệt và quản lý toàn bộ vòng đời đỗ xe trong một hệ thống thống nhất.
+
+Giá trị cốt lõi (Unique Value Proposition)
+SmartParking AI khác biệt ở việc lấy Resident làm trung tâm, thay vì chỉ hỗ trợ Ban quản lý như các hệ thống Smart Parking truyền thống.
+Điểm nổi bật gồm:
+AI hiểu ngôn ngữ tự nhiên để tìm chỗ theo nhu cầu thực tế thay vì chỉ hiển thị Slot còn trống.
+Quản lý xuyên suốt từ đăng ký phương tiện, xe khách, giữ chỗ, xác minh xe vào/ra đến kết thúc phiên đỗ.
+Minh bạch và dễ truy vết với Activity Log và trạng thái đồng bộ giữa Vehicle, Reservation, Parking Session và Parking Slot.
+Kết hợp AI và con người, trong đó AI hỗ trợ ra quyết định còn các quyền quan trọng như phê duyệt phương tiện vẫn thuộc Ban quản lý.
+Chuyển dữ liệu vận hành thành quyết định thông minh: AI khai thác đồng thời trạng thái bãi xe, thông tin phương tiện và các quy định vận hành để đưa ra đề xuất theo thời gian thực, thay vì chỉ hiển thị dữ liệu cho người dùng tự quyết định. 
+

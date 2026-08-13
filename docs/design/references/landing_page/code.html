@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Parking AI | Intelligent Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#d3e4fe",
+                    "on-primary-fixed": "#00174b",
+                    "on-tertiary-fixed": "#360f00",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#434655",
+                    "status-reserved": "#F59E0B",
+                    "tertiary-fixed": "#ffdbcd",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "outline-variant": "#c3c6d7",
+                    "on-surface": "#191b23",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf8ff",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "ai-accent": "#8B5CF6",
+                    "outline": "#737686",
+                    "surface-container-low": "#f3f3fe",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-container": "#2563eb",
+                    "on-background": "#191b23",
+                    "background": "#faf8ff",
+                    "inverse-surface": "#2e3039",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container": "#ededf9",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-container": "#d0e1fb",
+                    "on-tertiary-container": "#ffede6",
+                    "tertiary": "#943700",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "surface-tint": "#0053db",
+                    "on-primary-container": "#eeefff",
+                    "surface-container-high": "#e7e7f3",
+                    "on-tertiary": "#ffffff",
+                    "border-subtle": "#E2E8F0",
+                    "primary": "#004ac6",
+                    "surface-container-lowest": "#ffffff",
+                    "bg-main": "#F8FAFC",
+                    "status-occupied": "#EF4444",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#bc4800",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d9d9e5",
+                    "secondary": "#505f76",
+                    "status-available": "#10B981",
+                    "inverse-on-surface": "#f0f0fb",
+                    "on-secondary-fixed-variant": "#38485d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px",
+                    "stack-lg": "32px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ai-gradient-text {
+            background: linear-gradient(135deg, #2563EB 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+    </style>
+</head>
+<body class="bg-bg-main text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Shell -->
+<nav class="sticky top-0 z-50 bg-surface-container-lowest/80 backdrop-blur-md border-b border-border-subtle h-16 w-full px-gutter flex items-center justify-between">
+<div class="flex items-center gap-stack-lg">
+<span class="text-title-md font-headline-md text-primary tracking-tight">Smart Parking AI</span>
+<div class="hidden md:flex gap-stack-md">
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#features">Features</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#ai-assistant">AI Assistant</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#how-it-works">About</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#contact">Contact</a>
+</div>
+</div>
+<div class="flex items-center gap-stack-sm">
+<button class="px-4 py-2 text-on-surface-variant font-label-md hover:bg-surface-container-high rounded-lg transition-all">Login</button>
+<button class="px-4 py-2 bg-primary text-on-primary font-label-md rounded-lg shadow-sm hover:opacity-90 active:scale-95 transition-all">Get Started</button>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-gutter py-stack-lg">
+<!-- Hero Section -->
+<section class="relative py-16 lg:py-24 overflow-hidden">
+<div class="max-w-3xl mb-16 relative z-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-primary-container/10 border border-primary/20 rounded-full mb-6">
+<span class="material-symbols-outlined text-primary text-[18px]">auto_awesome</span>
+<span class="text-primary font-label-md">Next-Gen Urban Mobility</span>
+</div>
+<h1 class="font-display text-display text-on-surface mb-6">Smart Parking Management <span class="ai-gradient-text">Powered by AI</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-2xl">
+                    Optimize city space and maximize revenue with our enterprise-grade AI engine. Real-time monitoring, predictive analytics, and autonomous enforcement in one unified dashboard.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-4 bg-primary text-on-primary font-title-md rounded-xl shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+                        Start Free Trial
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="px-8 py-4 border border-border-subtle bg-white text-on-surface font-title-md rounded-xl hover:bg-surface-container-low transition-all">
+                        Watch Demo
+                    </button>
+</div>
+</div>
+<!-- Dashboard Preview Assembly -->
+<div class="relative group">
+<div class="absolute -inset-4 bg-gradient-to-tr from-primary/5 to-ai-accent/5 blur-3xl opacity-50"></div>
+<div class="relative glass-panel rounded-2xl overflow-hidden shadow-2xl border border-border-subtle aspect-[16/9]">
+<div class="flex h-full">
+<!-- Mini Sidebar -->
+<div class="w-16 bg-surface-container-low border-r border-border-subtle flex flex-col items-center py-6 gap-8">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="material-symbols-outlined text-on-surface-variant">map</span>
+<span class="material-symbols-outlined text-on-surface-variant">directions_car</span>
+<span class="material-symbols-outlined text-on-surface-variant">analytics</span>
+</div>
+<!-- Main Canvas -->
+<div class="flex-1 bg-white relative overflow-hidden">
+<!-- Map Background Placeholder -->
+<div class="absolute inset-0 grayscale-[0.5] opacity-20 pointer-events-none" data-alt="A detailed professional map visualization of San Francisco downtown, showing high-contrast parking lot segments and road networks in a clean, modern slate-gray and primary blue color palette. The aesthetic is high-performance minimalism, emphasizing data clarity with soft ambient lighting and sharp vector lines typical of premium GIS interfaces." data-location="San Francisco Downtown" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsP1pas7rhRV6GxemkjH5eRD74VBFCjOYZwpu2L4-9Tpms9ci7fyJTh1pxFIA8_BQS3hIvnpK77t56k5Mrb5Bo9JpGBgBvM7z1-STcFCKjiXCGqxC9bE5AIuShYXiTn_Db9liXrTWSngekYu-VxhdWcu_0n9TXtjoWLQWceW_MlWUlZkSN-7LwkphzLd24P_AHnpCzTY8nGFzSBAX9Md0ZOwZF1q5vE33RL-gwHGTwT2MfhGGLhqcVlw')"></div>
+<div class="relative p-8 h-full flex flex-col">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">District Overview</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Live occupancy data • SOMA District</p>
+</div>
+<div class="flex gap-4">
+<div class="bg-white p-4 rounded-xl shadow-sm border border-border-subtle flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-status-available/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-status-available">local_parking</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant">Available</p>
+<p class="text-title-md font-title-md">1,240</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Fake Visualization Bars -->
+<div class="mt-auto grid grid-cols-7 gap-4 items-end h-32">
+<div class="bg-primary/20 rounded-t-lg h-[40%]"></div>
+<div class="bg-primary/20 rounded-t-lg h-[60%]"></div>
+<div class="bg-primary/20 rounded-t-lg h-[45%]"></div>
+<div class="bg-primary/40 rounded-t-lg h-[85%]"></div>
+<div class="bg-primary/20 rounded-t-lg h-[55%]"></div>
+<div class="bg-primary/20 rounded-t-lg h-[70%]"></div>
+<div class="bg-primary/20 rounded-t-lg h-[50%]"></div>
+</div>
+</div>
+<!-- Floating AI Assistant Mini Window -->
+<div class="absolute bottom-6 right-6 w-72 glass-panel rounded-xl shadow-xl p-4 transform translate-y-0 group-hover:-translate-y-2 transition-transform">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-2 h-2 rounded-full bg-status-available animate-pulse"></div>
+<span class="font-label-md text-on-surface-variant">AI Assistant • Thinking</span>
+</div>
+<div class="space-y-2">
+<div class="bg-surface-container-low p-3 rounded-lg text-body-md">
+                                        "Parking demand in Sector 4 is projected to increase by 22% in the next hour. Recommend dynamic pricing adjustment."
+                                    </div>
+<div class="flex justify-end">
+<div class="bg-primary text-white p-2 rounded-lg text-label-md px-4">Apply Pricing</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="py-12 border-y border-border-subtle mb-24 grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="text-center">
+<p class="text-display font-display text-primary">98%</p>
+<p class="text-on-surface-variant font-label-md">Accuracy Rate</p>
+</div>
+<div class="text-center">
+<p class="text-display font-display text-primary">30m+</p>
+<p class="text-on-surface-variant font-label-md">Transactions</p>
+</div>
+<div class="text-center">
+<p class="text-display font-display text-primary">15%</p>
+<p class="text-on-surface-variant font-label-md">Revenue Growth</p>
+</div>
+<div class="text-center">
+<p class="text-display font-display text-primary">24/7</p>
+<p class="text-on-surface-variant font-label-md">AI Monitoring</p>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="py-16" id="features">
+<div class="mb-16">
+<h2 class="font-headline-lg text-headline-lg mb-4">Enterprise Intelligence Features</h2>
+<p class="text-body-lg text-on-surface-variant max-w-xl">Every tool you need to manage modern parking infrastructure, powered by the industry's most advanced neural networks.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 grid-rows-2 gap-6 min-h-[600px]">
+<!-- AI Assistant Card -->
+<div class="md:col-span-8 bg-white border border-border-subtle rounded-2xl p-8 flex flex-col relative overflow-hidden">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-ai-accent text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h3 class="font-title-md text-title-md mb-2">Predictive AI Assistant</h3>
+<p class="text-on-surface-variant max-w-md">Our AI doesn't just record data; it predicts trends. Anticipate surges before they happen and receive actionable insights to optimize flow.</p>
+</div>
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
+
+</div>
+</div>
+<!-- Real-time Card -->
+<div class="md:col-span-4 bg-surface-container-low border border-border-subtle rounded-2xl p-8">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">sensors</span>
+<h3 class="font-title-md text-title-md mb-2">Real-time Availability</h3>
+<p class="text-on-surface-variant">Sub-second latency tracking of every individual parking stall across your entire network.</p>
+</div>
+<!-- Automation Card -->
+<div class="md:col-span-4 bg-surface-container-low border border-border-subtle rounded-2xl p-8">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">robot_2</span>
+<h3 class="font-title-md text-title-md mb-2">Smart Automation</h3>
+<p class="text-on-surface-variant">Automate enforcement, billing, and entry/exit controls without manual intervention.</p>
+</div>
+<!-- Analytics Card -->
+<div class="md:col-span-8 bg-white border border-border-subtle rounded-2xl p-8 flex items-center gap-8">
+<div class="flex-1">
+<h3 class="font-title-md text-title-md mb-2">Advanced Fleet Analytics</h3>
+<p class="text-on-surface-variant">Detailed heatmaps, demographic breakdowns, and revenue forecasting at your fingertips.</p>
+</div>
+<div class="w-48 h-32 bg-surface-container flex items-center justify-center rounded-xl">
+<span class="material-symbols-outlined text-outline-variant text-4xl">monitoring</span>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="py-24 bg-surface-container-lowest rounded-3xl p-12 border border-border-subtle my-24" id="how-it-works">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg">Simple Integration. Powerful Results.</h2>
+</div>
+<div class="grid md:grid-cols-3 gap-12 relative">
+<!-- Connectors for Desktop -->
+<div class="hidden md:block absolute top-1/2 left-1/4 right-1/4 h-px bg-border-subtle -translate-y-12"></div>
+<div class="relative text-center">
+<div class="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 font-headline-md">1</div>
+<h4 class="font-title-md mb-2">Connect Sensors</h4>
+<p class="text-on-surface-variant text-body-md">Install or connect your existing camera and IoT hardware to our secure gateway.</p>
+</div>
+<div class="relative text-center">
+<div class="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 font-headline-md">2</div>
+<h4 class="font-title-md mb-2">AI Processing</h4>
+<p class="text-on-surface-variant text-body-md">Our neural networks process raw video and sensor data to identify patterns and occupancy.</p>
+</div>
+<div class="relative text-center">
+<div class="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 font-headline-md">3</div>
+<h4 class="font-title-md mb-2">Go Live</h4>
+<p class="text-on-surface-variant text-body-md">Access your dashboard immediately and start optimizing your parking assets with AI.</p>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 text-center" id="contact">
+<div class="max-w-2xl mx-auto">
+<h2 class="font-display text-headline-lg md:text-display mb-8">Ready to revolutionize your parking infrastructure?</h2>
+<div class="flex flex-col md:flex-row justify-center gap-4">
+<button class="px-8 py-4 bg-primary text-on-primary font-title-md rounded-xl shadow-lg hover:opacity-90 active:scale-95 transition-all">Request Enterprise Demo</button>
+<button class="px-8 py-4 border border-border-subtle bg-white text-on-surface font-title-md rounded-xl hover:bg-surface-container-low transition-all">Contact Sales</button>
+</div>
+<p class="mt-8 text-on-surface-variant font-label-md">Trusted by 50+ Municipalities Worldwide</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white border-t border-border-subtle py-16 px-gutter">
+<div class="max-w-container-max mx-auto grid md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<span class="text-title-md font-headline-md text-primary mb-6 block">Smart Parking AI</span>
+<p class="text-on-surface-variant text-body-md">Redefining urban mobility through intelligent computer vision and predictive analytics.</p>
+</div>
+<div>
+<h5 class="font-label-md text-on-surface uppercase tracking-wider mb-6">Product</h5>
+<ul class="space-y-4 text-on-surface-variant text-body-md">
+<li><a class="hover:text-primary transition-colors" href="#">Features</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Case Studies</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Docs</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md text-on-surface uppercase tracking-wider mb-6">Company</h5>
+<ul class="space-y-4 text-on-surface-variant text-body-md">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Press Kit</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Sustainability</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md text-on-surface uppercase tracking-wider mb-6">Legal</h5>
+<ul class="space-y-4 text-on-surface-variant text-body-md">
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Cookie Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-container-max mx-auto mt-16 pt-8 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-on-surface-variant text-label-md">© 2024 Smart Parking AI Inc. All rights reserved.</p>
+<div class="flex gap-6">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">language</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">public</span>
+</div>
+</div>
+</footer>
+<!-- Persistent AI FAB (Mobile Only) -->
+<div class="fixed bottom-24 right-6 md:hidden z-50">
+<button class="w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</button>
+</div>
+<!-- Bottom Nav Shell (Mobile Only) -->
+<div class="lg:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-border-subtle flex justify-around items-center px-4 py-2 pb-safe z-50 shadow-lg">
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-2 px-4 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-md mt-1">Map</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-label-md mt-1">Cars</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-md mt-1">AI</span>
+</div>
+</div>
+<script>
+        // Micro-interaction for hero section
+        document.addEventListener('mousemove', (e) => {
+            const dashboard = document.querySelector('.group');
+            if (!dashboard) return;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+            dashboard.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // Reset transform on mouse leave
+        document.querySelector('.group')?.addEventListener('mouseleave', () => {
+            const dashboard = document.querySelector('.group');
+            dashboard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+    </script>
+</body></html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Parking AI - Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#d3e4fe",
+                    "on-primary-fixed": "#00174b",
+                    "on-tertiary-fixed": "#360f00",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#434655",
+                    "status-reserved": "#F59E0B",
+                    "tertiary-fixed": "#ffdbcd",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "outline-variant": "#c3c6d7",
+                    "on-surface": "#191b23",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf8ff",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "ai-accent": "#8B5CF6",
+                    "outline": "#737686",
+                    "surface-container-low": "#f3f3fe",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-container": "#2563eb",
+                    "on-background": "#191b23",
+                    "background": "#faf8ff",
+                    "inverse-surface": "#2e3039",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container": "#ededf9",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-container": "#d0e1fb",
+                    "on-tertiary-container": "#ffede6",
+                    "tertiary": "#943700",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "surface-tint": "#0053db",
+                    "on-primary-container": "#eeefff",
+                    "surface-container-high": "#e7e7f3",
+                    "on-tertiary": "#ffffff",
+                    "border-subtle": "#E2E8F0",
+                    "primary": "#004ac6",
+                    "surface-container-lowest": "#ffffff",
+                    "bg-main": "#F8FAFC",
+                    "status-occupied": "#EF4444",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#bc4800",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d9d9e5",
+                    "secondary": "#505f76",
+                    "status-available": "#10B981",
+                    "inverse-on-surface": "#f0f0fb",
+                    "on-secondary-fixed-variant": "#38485d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px",
+                    "stack-lg": "32px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 4px;
+        }
+        .ai-gradient-text {
+            background: linear-gradient(135deg, #2563EB, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .ai-border {
+            position: relative;
+        }
+        .ai-border::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, #2563EB, #8B5CF6);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-bg-main text-on-surface font-body-md selection:bg-primary/20">
+<!-- Sidebar (Shared Component) -->
+<aside class="fixed left-0 top-0 bottom-0 z-50 py-stack-lg px-gutter w-[240px] h-screen hidden lg:flex flex-col bg-surface-container-lowest border-r border-border-subtle shadow-sm">
+<div class="mb-stack-lg px-2">
+<h1 class="text-headline-md font-headline-md text-primary tracking-tight">Smart Parking AI</h1>
+<p class="text-label-md font-label-md text-outline">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active State: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all scale-100 active:scale-[0.98] text-primary font-bold bg-primary-container/10" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all scale-100 active:scale-[0.98] text-secondary hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-body-md text-body-md">Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all scale-100 active:scale-[0.98] text-secondary hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+<span class="font-body-md text-body-md">Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all scale-100 active:scale-[0.98] text-secondary hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all scale-100 active:scale-[0.98] text-secondary hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4 px-2">
+<button class="w-full flex items-center justify-center gap-2 py-2 text-label-md font-label-md text-secondary border border-border-subtle rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span>
+                Help Center
+            </button>
+<div class="flex items-center gap-3 p-2">
+<img class="w-10 h-10 rounded-full border-2 border-primary/20 object-cover" data-alt="A professional headshot of a system administrator with a confident expression, wearing modern business-casual attire. The background is a clean, softly blurred office environment with cool blue and white tones, reflecting a high-performance tech workplace aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8qTwLcOSnQgZZ-oqDhrCVhM6dySZezd9xoz3m1RBAbra78FXCzULXsPksA59nCkVo5ZJnTy7-oeCAczob1K1uH4jRWsYUsx-KIVO-qjRZl3xHQk3uFqFz9f1HFT8R71KPonqdkRRyK730iChzH5SIW23LPrz1A3k8dpGUGUUbKMJhFon0AYF-LIqfjn9GlWKQRFKeU_8KD8Ds-M6cLU0naJgpzZjML4fawG18Lu2_Dh4yJz2BCoNUeA"/>
+<div>
+<p class="text-body-md font-bold leading-tight">Admin User</p>
+<p class="text-label-md text-outline">Super Admin</p>
+</div>
+</div>
+<a class="flex items-center gap-3 px-4 py-2 text-error hover:bg-error-container/10 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-[240px] min-h-screen">
+<!-- Top Navigation (Shared Component) -->
+<header class="sticky top-0 right-0 z-40 flex items-center justify-between h-16 px-gutter bg-surface-container-lowest/80 backdrop-blur-md border-b border-border-subtle shadow-sm max-w-container-max mx-auto">
+<div class="flex items-center flex-1 max-w-md">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-body-md focus:ring-2 focus:ring-primary/20 placeholder:text-outline-variant" placeholder="Search data, slots, or logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-secondary hover:text-primary transition-colors" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined p-2 text-secondary hover:text-primary transition-colors" data-icon="chat_sparkle">chat_sparkle</button>
+<button class="material-symbols-outlined p-2 text-secondary hover:text-primary transition-colors" data-icon="account_circle">account_circle</button>
+</div>
+</header>
+<section class="p-gutter max-w-container-max mx-auto pb-24 lg:pb-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-stack-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg tracking-tight">System Overview</h2>
+<p class="text-body-lg text-secondary">Real-time performance and predictive intelligence for Central Hub.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-xl text-body-md font-medium hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+                        Last 24 Hours
+                        <span class="material-symbols-outlined text-[20px]" data-icon="expand_more">expand_more</span>
+</button>
+<button class="px-4 py-2 bg-primary text-on-primary rounded-xl text-body-md font-medium shadow-sm hover:opacity-90 transition-all active:scale-95">
+                        Generate Report
+                    </button>
+</div>
+</div>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-gutter mb-gutter">
+<!-- KPI Card 1 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="local_parking">local_parking</span>
+</div>
+<span class="text-status-available text-label-md font-bold bg-status-available/10 px-2 py-1 rounded-full">+2.4%</span>
+</div>
+<p class="text-label-md text-outline mb-1">Total Slots</p>
+<p class="text-headline-md font-headline-md">1,248</p>
+</div>
+<!-- KPI Card 2 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-lg bg-status-occupied/10 text-status-occupied flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="pie_chart">pie_chart</span>
+</div>
+<span class="text-status-occupied text-label-md font-bold bg-status-occupied/10 px-2 py-1 rounded-full">Busy</span>
+</div>
+<p class="text-label-md text-outline mb-1">Occupancy</p>
+<p class="text-headline-md font-headline-md">84.2%</p>
+</div>
+<!-- KPI Card 3 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-lg bg-secondary-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+</div>
+<span class="text-status-available text-label-md font-bold bg-status-available/10 px-2 py-1 rounded-full">+12%</span>
+</div>
+<p class="text-label-md text-outline mb-1">Daily Visitors</p>
+<p class="text-headline-md font-headline-md">3,120</p>
+</div>
+<!-- KPI Card 4 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-lg bg-status-reserved/10 text-status-reserved flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="text-status-reserved text-label-md font-bold bg-status-reserved/10 px-2 py-1 rounded-full">12 Alerts</span>
+</div>
+<p class="text-label-md text-outline mb-1">Pending Requests</p>
+<p class="text-headline-md font-headline-md">45</p>
+</div>
+</div>
+<!-- Main Dashboard Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Trends Chart (Large) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-stack-lg">
+<div>
+<h3 class="font-title-md text-title-md">Occupancy Trends</h3>
+<p class="text-body-md text-outline">Volume comparison between current and previous week</p>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-1">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-label-md">Current</span>
+</div>
+<div class="flex items-center gap-1 ml-2">
+<span class="w-3 h-3 rounded-full bg-outline-variant"></span>
+<span class="text-label-md">Past</span>
+</div>
+</div>
+</div>
+<div class="h-[320px] w-full relative flex items-end justify-between gap-1">
+<!-- Chart Mockup with CSS bars -->
+<div class="flex-1 flex flex-col items-center gap-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[60%] group-hover:bg-primary/30 transition-colors relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary rounded-t-sm h-[80%]"></div>
+</div>
+<span class="text-label-md text-outline font-mono-sm">08:00</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[75%] group-hover:bg-primary/30 transition-colors relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary rounded-t-sm h-[90%]"></div>
+</div>
+<span class="text-label-md text-outline font-mono-sm">10:00</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[95%] group-hover:bg-primary/30 transition-colors relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary rounded-t-sm h-[100%]"></div>
+</div>
+<span class="text-label-md text-outline font-mono-sm">12:00</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[80%] group-hover:bg-primary/30 transition-colors relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary rounded-t-sm h-[85%]"></div>
+</div>
+<span class="text-label-md text-outline font-mono-sm">14:00</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[70%] group-hover:bg-primary/30 transition-colors relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary rounded-t-sm h-[75%]"></div>
+</div>
+<span class="text-label-md text-outline font-mono-sm">16:00</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[90%] group-hover:bg-primary/30 transition-colors relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary rounded-t-sm h-[95%]"></div>
+</div>
+<span class="text-label-md text-outline font-mono-sm">18:00</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[50%] group-hover:bg-primary/30 transition-colors relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary rounded-t-sm h-[60%]"></div>
+</div>
+<span class="text-label-md text-outline font-mono-sm">20:00</span>
+</div>
+</div>
+</div>
+<!-- AI Insight Card -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm ai-border relative overflow-hidden flex-1">
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined ai-gradient-text" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="font-title-md text-title-md ai-gradient-text">AI Intelligent Insights</h3>
+</div>
+<div class="space-y-4">
+<div class="p-4 rounded-lg bg-surface-container-low border-l-4 border-ai-accent">
+<p class="text-label-md font-bold text-ai-accent uppercase mb-1">Peak Prediction</p>
+<p class="text-body-md font-medium">Heavy congestion expected at <span class="font-bold">17:30</span>.</p>
+<p class="text-label-md text-outline">Confidence: 94%</p>
+</div>
+<div class="p-4 rounded-lg bg-surface-container-low border-l-4 border-primary">
+<p class="text-label-md font-bold text-primary uppercase mb-1">Suggested Action</p>
+<p class="text-body-md text-on-surface">Enable dynamic pricing (+15%) on Levels 2 &amp; 3 to distribute load.</p>
+<button class="mt-3 px-4 py-2 bg-primary text-on-primary rounded-lg text-label-md font-bold w-full">Apply Recommendation</button>
+</div>
+</div>
+<div class="mt-6 p-4 rounded-lg border border-dashed border-outline-variant text-center">
+<p class="text-label-md text-outline italic">"Optimization would improve revenue by $420 today."</p>
+</div>
+</div>
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+</div>
+</div>
+<!-- Heatmap Section -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-stack-lg">
+<div>
+<h3 class="font-title-md text-title-md">Floor Usage Heatmap</h3>
+<p class="text-body-md text-outline">Real-time occupancy density by section</p>
+</div>
+<select class="bg-surface-container-low border-none rounded-lg text-label-md font-medium focus:ring-primary/20">
+<option>Level B1</option>
+<option>Level B2</option>
+<option>Main Level</option>
+</select>
+</div>
+<div class="heatmap-grid aspect-video bg-surface-container-low rounded-lg p-4 border border-outline-variant">
+<!-- Simulated Grid Items -->
+<script>
+                            const grid = document.querySelector('.heatmap-grid');
+                            const intensities = ['bg-status-available', 'bg-status-available', 'bg-status-reserved', 'bg-status-occupied', 'bg-status-occupied', 'bg-status-occupied'];
+                            for(let i=0; i<144; i++) {
+                                const div = document.createElement('div');
+                                const intensity = intensities[Math.floor(Math.random() * intensities.length)];
+                                div.className = `${intensity} opacity-60 rounded-sm hover:scale-110 hover:opacity-100 transition-all cursor-crosshair`;
+                                grid.appendChild(div);
+                            }
+                        </script>
+</div>
+<div class="mt-6 flex items-center justify-center gap-6">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-status-available"></div>
+<span class="text-label-md text-outline">Low</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-status-reserved"></div>
+<span class="text-label-md text-outline">Medium</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-status-occupied"></div>
+<span class="text-label-md text-outline">Critical</span>
+</div>
+</div>
+</div>
+<!-- Recent Activity / Logs -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-stack-lg">
+<h3 class="font-title-md text-title-md">Anomalies &amp; Events</h3>
+<button class="text-primary text-label-md font-bold hover:underline">View All</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="w-8 h-8 rounded-full bg-error-container text-error flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="warning">warning</span>
+</div>
+<div>
+<p class="text-body-md font-bold">Unauthorized Parking - Slot A-42</p>
+<p class="text-label-md text-outline">Non-resident vehicle detected. Security notified.</p>
+<p class="text-[10px] font-mono-sm text-outline-variant mt-1 uppercase">12:45 PM • CAM-04</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="electric_car">electric_car</span>
+</div>
+<div>
+<p class="text-body-md font-bold">EV Charging Fault - Slot C-12</p>
+<p class="text-label-md text-outline">Incomplete handshake. Maintenance required.</p>
+<p class="text-[10px] font-mono-sm text-outline-variant mt-1 uppercase">11:30 AM • SYS-LOG</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="w-8 h-8 rounded-full bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="info">info</span>
+</div>
+<div>
+<p class="text-body-md font-bold">Maintenance Complete</p>
+<p class="text-label-md text-outline">Sensors updated on Level B1. 100% connectivity.</p>
+<p class="text-[10px] font-mono-sm text-outline-variant mt-1 uppercase">09:15 AM • ADMIN</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="w-8 h-8 rounded-full bg-status-reserved/10 text-status-reserved flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="history">history</span>
+</div>
+<div>
+<p class="text-body-md font-bold">Reserved Expired - Slot D-05</p>
+<p class="text-label-md text-outline">Slot released back to public availability.</p>
+<p class="text-[10px] font-mono-sm text-outline-variant mt-1 uppercase">08:00 AM • AUTO</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation for Mobile (Shared Component) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest border-t border-border-subtle shadow-lg z-50">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-md text-label-md">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+<span class="font-label-md text-label-md">Cars</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md text-label-md">AI</span>
+</a>
+</nav>
+<!-- Floating Action Button for AI (Mobile) -->
+<button class="md:hidden fixed bottom-24 right-4 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center z-50 animate-bounce">
+<span class="material-symbols-outlined" data-icon="chat_sparkle">qr_code_2</span>
+</button>
+<script>
+        // Micro-interactions for heatmap and charts
+        document.querySelectorAll('.heatmap-grid div').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                el.style.boxShadow = '0 0 12px rgba(37, 99, 235, 0.4)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body></html>

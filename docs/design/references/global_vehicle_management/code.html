@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vehicle Management | Smart Parking AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#d3e4fe",
+                    "on-primary-fixed": "#00174b",
+                    "on-tertiary-fixed": "#360f00",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#434655",
+                    "status-reserved": "#F59E0B",
+                    "tertiary-fixed": "#ffdbcd",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "outline-variant": "#c3c6d7",
+                    "on-surface": "#191b23",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf8ff",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "ai-accent": "#8B5CF6",
+                    "outline": "#737686",
+                    "surface-container-low": "#f3f3fe",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-container": "#2563eb",
+                    "on-background": "#191b23",
+                    "background": "#faf8ff",
+                    "inverse-surface": "#2e3039",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container": "#ededf9",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-container": "#d0e1fb",
+                    "on-tertiary-container": "#ffede6",
+                    "tertiary": "#943700",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "surface-tint": "#0053db",
+                    "on-primary-container": "#eeefff",
+                    "surface-container-high": "#e7e7f3",
+                    "on-tertiary": "#ffffff",
+                    "border-subtle": "#E2E8F0",
+                    "primary": "#004ac6",
+                    "surface-container-lowest": "#ffffff",
+                    "bg-main": "#F8FAFC",
+                    "status-occupied": "#EF4444",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#bc4800",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d9d9e5",
+                    "secondary": "#505f76",
+                    "status-available": "#10B981",
+                    "inverse-on-surface": "#f0f0fb",
+                    "on-secondary-fixed-variant": "#38485d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px",
+                    "stack-lg": "32px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-header { backdrop-filter: blur(12px); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-bg-main text-on-surface">
+<!-- SideNavBar (Persistent) -->
+<aside class="fixed left-0 top-0 bottom-0 z-50 py-stack-lg px-gutter w-[240px] h-screen hidden lg:flex flex-col bg-surface-container-lowest border-r border-border-subtle">
+<div class="mb-stack-lg">
+<h1 class="text-headline-md font-headline-md text-primary">Smart Parking AI</h1>
+<p class="text-label-md font-label-md text-secondary">Admin Console</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-secondary hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-secondary hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-body-md text-body-md">Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-primary font-bold bg-primary-container/10 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-body-md text-body-md">Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-secondary hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-secondary hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-border-subtle">
+<div class="flex items-center gap-3 mb-6 px-4">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">SA</div>
+<div class="overflow-hidden">
+<p class="text-body-md font-bold truncate">Admin User</p>
+<p class="text-label-md text-secondary truncate">System Administrator</p>
+</div>
+</div>
+<a class="flex items-center gap-3 px-4 py-2 text-secondary hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-error hover:bg-error-container/10 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar (Persistent) -->
+<header class="sticky top-0 right-0 z-40 h-16 flex items-center justify-between px-gutter lg:ml-[240px] bg-surface-container-lowest/80 backdrop-blur-md border-b border-border-subtle shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-body-md focus:ring-2 focus:ring-primary" placeholder="Search plates, owners, or slots..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full border-2 border-surface-container-lowest"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">qr_code_2</span>
+</button>
+<div class="w-px h-6 bg-border-subtle mx-2"></div>
+<button class="flex items-center gap-2 p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="lg:ml-[240px] p-gutter min-h-[calc(100vh-64px)] pb-24 lg:pb-gutter">
+<div class="max-w-container-max mx-auto">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-stack-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Vehicle Management</h2>
+<p class="text-body-lg text-secondary">Manage active registrations and monitor parking compliance.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-border-subtle bg-surface-container-lowest rounded-lg font-title-md text-secondary hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined">filter_list</span>
+                        Filter
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg font-title-md shadow-sm hover:opacity-90 transition-all active:scale-95">
+<span class="material-symbols-outlined">add</span>
+                        Register Vehicle
+                    </button>
+</div>
+</div>
+<!-- Dashboard Stats Summary (Bento Lite) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-stack-lg">
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-border-subtle shadow-sm">
+<p class="text-label-md text-secondary uppercase tracking-wider mb-1">Total Registered</p>
+<div class="flex items-end gap-2">
+<span class="text-headline-md font-bold">1,284</span>
+<span class="text-status-available text-label-md flex items-center mb-1"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 4%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-border-subtle shadow-sm">
+<p class="text-label-md text-secondary uppercase tracking-wider mb-1">Currently Parked</p>
+<div class="flex items-end gap-2">
+<span class="text-headline-md font-bold">412</span>
+<span class="text-secondary text-label-md mb-1">/ 600 slots</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-border-subtle shadow-sm">
+<p class="text-label-md text-secondary uppercase tracking-wider mb-1">Expiring Soon</p>
+<div class="flex items-end gap-2">
+<span class="text-headline-md font-bold text-status-reserved">28</span>
+<span class="text-label-md text-secondary mb-1">Next 24h</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-border-subtle shadow-sm">
+<p class="text-label-md text-secondary uppercase tracking-wider mb-1">Suspended</p>
+<div class="flex items-end gap-2">
+<span class="text-headline-md font-bold text-status-occupied">12</span>
+<span class="text-label-md text-secondary mb-1">Flagged accounts</span>
+</div>
+</div>
+</div>
+<!-- Main Table Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-sm overflow-hidden">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-border-subtle">
+<th class="px-6 py-4 font-title-md text-label-md text-secondary uppercase tracking-wider">Plate Number</th>
+<th class="px-6 py-4 font-title-md text-label-md text-secondary uppercase tracking-wider">Vehicle Type</th>
+<th class="px-6 py-4 font-title-md text-label-md text-secondary uppercase tracking-wider">Owner / Resident</th>
+<th class="px-6 py-4 font-title-md text-label-md text-secondary uppercase tracking-wider">Assigned Slot</th>
+<th class="px-6 py-4 font-title-md text-label-md text-secondary uppercase tracking-wider">Permit Expiry</th>
+<th class="px-6 py-4 font-title-md text-label-md text-secondary uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 font-title-md text-label-md text-secondary uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle">
+<!-- Row 1 -->
+<tr class="hover:bg-bg-main transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono-sm text-mono-sm bg-surface-container-high px-2 py-1 rounded text-on-surface">ABC-1234</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">directions_car</span>
+<span class="text-body-md">Tesla Model 3</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full" data-alt="A professional headshot of a young entrepreneur in a modern office, soft natural lighting, high-end professional photography style, minimalist background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBioJCB2V8dsqbzvjRl93SPcm-P0r58PW_4EQFBrCnct_vlfAcOFH6MHqtxbH-Y0lRrsUrc84DJKU6rgKxjfMF3otMfrY21B3raB2y9DY2WDJMgAJHpP9b0J5k8IO88H5sQL5zYYSDNfk1VPxNCzDLZ3iGDqdsaiNTUH85LkJzFsHgjIMy1pL6BGoP3_mCUURvjenu_7wKe4GroorKGwGYMISbeKfzpquysCSZROcnpjzuvbCaQvRMfig')"></div>
+<div>
+<p class="text-body-md font-bold">Jonathan Wick</p>
+<p class="text-label-md text-secondary">Unit 402B</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-sm text-mono-sm text-primary">P2-B45</span>
+</td>
+<td class="px-6 py-4 text-body-md">Oct 12, 2024</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-md font-medium bg-status-available/10 text-status-available">
+                                        Active
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-secondary hover:text-primary hover:bg-primary-container/10 rounded-lg transition-colors" title="View"><span class="material-symbols-outlined">visibility</span></button>
+<button class="p-2 text-secondary hover:text-primary hover:bg-primary-container/10 rounded-lg transition-colors" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-secondary hover:text-error hover:bg-error-container/10 rounded-lg transition-colors" title="Suspend"><span class="material-symbols-outlined">block</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-bg-main transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono-sm text-mono-sm bg-surface-container-high px-2 py-1 rounded text-on-surface">XYZ-9876</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">airport_shuttle</span>
+<span class="text-body-md">Ford F-150</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full" data-alt="A portrait of a senior architect in a bright, modern studio, wearing glasses and a minimalist sweater, soft professional lighting, clean cinematic style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBKuP2qKVMXph6kC4RaiPtw2zt4W323rIgfseOJc9NFf9gBa5KAKxvSsrVQ4cZdErFUac_HoQvK17mQerBEqsC81ooYtEVr3SuMg-4KIY0zM7IM0C9MKqd6I0DwgB7wp0ebpqGny1qLpgbSh-g4JBzpvaMFe0oYE3ldVNeVYDHF0R5XSY3W7h_Yy_Swb2mRsRv4E80Jh6e8szLntOrdMQAiAo-2sqH9wbY1PZhQEOOHLp9V9yzXihExSQ')"></div>
+<div>
+<p class="text-body-md font-bold">Sarah Connor</p>
+<p class="text-label-md text-secondary">Penthouse A</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-sm text-mono-sm text-primary">P1-A01</span>
+</td>
+<td class="px-6 py-4 text-body-md text-status-reserved">Oct 02, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-md font-medium bg-status-reserved/10 text-status-reserved">
+                                        Expiring
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-secondary hover:text-primary hover:bg-primary-container/10 rounded-lg transition-colors" title="View"><span class="material-symbols-outlined">visibility</span></button>
+<button class="p-2 text-secondary hover:text-primary hover:bg-primary-container/10 rounded-lg transition-colors" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-secondary hover:text-error hover:bg-error-container/10 rounded-lg transition-colors" title="Suspend"><span class="material-symbols-outlined">block</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-bg-main transition-colors group bg-error-container/5">
+<td class="px-6 py-4">
+<span class="font-mono-sm text-mono-sm bg-surface-container-high px-2 py-1 rounded text-on-surface">FLG-4455</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">motorcycle</span>
+<span class="text-body-md">Ducati Panigale</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full" data-alt="A profile of a creative designer with tattoos and modern casual wear, warm evening light in an urban loft setting, high-end lifestyle photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGK1WShn4F6Fhl1s4xB143bYXFaG35-z6ZBgSRUr5U4x1mKVwtJLm57EvHENXWgOKJeNZcFsOrPLG1g5tPai7gYbFVY9SoMdB0GVxvTnvCTZUZA736ssLOXuCsgggKD-z68UqW0hZsfThWGfPjdX9mPJE2lm8jhqhxk3e0sHMiuv5YZHloDvLtgTvCfjUBUhybbiDxNV8Q-3n7LLkKmZTatUbHnLpyas4SRy56IB7xMjsjxLnXSOwxew')"></div>
+<div>
+<p class="text-body-md font-bold">Leo Sterling</p>
+<p class="text-label-md text-secondary">Unit 1205</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-sm text-mono-sm text-primary">M-12</span>
+</td>
+<td class="px-6 py-4 text-body-md">Expired</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-md font-medium bg-status-occupied/10 text-status-occupied">
+                                        Suspended
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-secondary hover:text-primary hover:bg-primary-container/10 rounded-lg transition-colors" title="View"><span class="material-symbols-outlined">visibility</span></button>
+<button class="p-2 text-secondary hover:text-primary hover:bg-primary-container/10 rounded-lg transition-colors" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-status-available hover:bg-status-available/10 rounded-lg transition-colors" title="Unsuspend"><span class="material-symbols-outlined">check_circle</span></button>
+</div>
+</td>
+</tr>
+<!-- More rows added for realism -->
+<tr class="hover:bg-bg-main transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono-sm text-mono-sm bg-surface-container-high px-2 py-1 rounded text-on-surface">KLO-2231</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">electric_car</span>
+<span class="text-body-md">Porsche Taycan</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full" data-alt="A portrait of a confident woman in a business suit, background of a sleek high-tech corporate office, professional lighting, sharp clean aesthetics." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAMTHorBL7k1IaqtufX3vqxr7E3TcjJO9UkmBrbxNADgm-q8-eaBMuqwe-DHjpi9OQbPwcE2-aWTjavifDN1U-nNpE60oQP_kXGlFpN4ZMh6fM7DMuMhkfxRGulZWjqd3pvxqvng0p1Vr5yQLpsKM3R3fQ35IYeMrwqCiyNVwlCUk2-sIU6vQd81QFLACaePOvAJd4n5QdxjE0zBnFb5cxOfLzYCZVAW74QKmXRq4CEdQFLqoRRarFhdg')"></div>
+<div>
+<p class="text-body-md font-bold">Elena Vance</p>
+<p class="text-label-md text-secondary">Unit 300C</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-sm text-mono-sm text-primary">P2-C11</span>
+</td>
+<td class="px-6 py-4 text-body-md">Dec 30, 2024</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-md font-medium bg-status-available/10 text-status-available">
+                                        Active
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-secondary hover:text-primary hover:bg-primary-container/10 rounded-lg transition-colors" title="View"><span class="material-symbols-outlined">visibility</span></button>
+<button class="p-2 text-secondary hover:text-primary hover:bg-primary-container/10 rounded-lg transition-colors" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-secondary hover:text-error hover:bg-error-container/10 rounded-lg transition-colors" title="Suspend"><span class="material-symbols-outlined">block</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 flex items-center justify-between bg-surface-container-low/50">
+<p class="text-body-md text-secondary">Showing <span class="font-bold text-on-surface">1-4</span> of <span class="font-bold text-on-surface">1,284</span> entries</p>
+<div class="flex gap-2">
+<button class="p-2 border border-border-subtle rounded hover:bg-surface-container-high transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="px-3 py-1 bg-primary text-on-primary rounded font-bold">1</button>
+<button class="px-3 py-1 hover:bg-surface-container-high rounded transition-colors text-body-md">2</button>
+<button class="px-3 py-1 hover:bg-surface-container-high rounded transition-colors text-body-md">3</button>
+<span class="px-2 py-1 text-secondary">...</span>
+<button class="px-3 py-1 hover:bg-surface-container-high rounded transition-colors text-body-md">321</button>
+<button class="p-2 border border-border-subtle rounded hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- AI Assistant Floating Button -->
+<div class="fixed bottom-6 right-6 z-50">
+<button class="w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all border-2 border-ai-accent group">
+<span class="material-symbols-outlined text-ai-accent" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<div class="absolute -top-2 -right-2 bg-primary text-on-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">AI</div>
+</button>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest border-t border-border-subtle shadow-lg z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 active:bg-surface-container-high transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 active:bg-surface-container-high transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-md text-label-md">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-label-md text-label-md">Cars</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 active:bg-surface-container-high transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-md text-label-md">AI</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.transform = 'translateY(-1px)';
+                row.style.transition = 'transform 0.2s ease, background-color 0.2s ease';
+            });
+            row.addEventListener('mouseleave', () => {
+                row.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Search highlight effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>

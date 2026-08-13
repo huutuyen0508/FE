@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Parking AI - Interactive Map</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#d3e4fe",
+                    "on-primary-fixed": "#00174b",
+                    "on-tertiary-fixed": "#360f00",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#434655",
+                    "status-reserved": "#F59E0B",
+                    "tertiary-fixed": "#ffdbcd",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "outline-variant": "#c3c6d7",
+                    "on-surface": "#191b23",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf8ff",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "ai-accent": "#8B5CF6",
+                    "outline": "#737686",
+                    "surface-container-low": "#f3f3fe",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-container": "#2563eb",
+                    "on-background": "#191b23",
+                    "background": "#faf8ff",
+                    "inverse-surface": "#2e3039",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container": "#ededf9",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-container": "#d0e1fb",
+                    "on-tertiary-container": "#ffede6",
+                    "tertiary": "#943700",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "surface-tint": "#0053db",
+                    "on-primary-container": "#eeefff",
+                    "surface-container-high": "#e7e7f3",
+                    "on-tertiary": "#ffffff",
+                    "border-subtle": "#E2E8F0",
+                    "primary": "#004ac6",
+                    "surface-container-lowest": "#ffffff",
+                    "bg-main": "#F8FAFC",
+                    "status-occupied": "#EF4444",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#bc4800",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d9d9e5",
+                    "secondary": "#505f76",
+                    "status-available": "#10B981",
+                    "inverse-on-surface": "#f0f0fb",
+                    "on-secondary-fixed-variant": "#38485d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px",
+                    "stack-lg": "32px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #F8FAFC; font-family: 'Inter', sans-serif; overflow: hidden; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .slot-available { background-color: rgba(16, 185, 129, 0.15); border: 1px solid #10B981; }
+        .slot-occupied { background-color: rgba(239, 68, 68, 0.1); border: 1px solid #EF4444; }
+        .slot-reserved { background-color: rgba(245, 158, 11, 0.1); border: 1px solid #F59E0B; }
+        .glass-panel { backdrop-filter: blur(8px); background: rgba(255, 255, 255, 0.85); }
+        .parking-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
+        .drawer-transition { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .ai-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-on-surface">
+<!-- SideNavBar (JSON Derived) -->
+<aside class="w-[240px] h-screen hidden lg:flex flex-col fixed left-0 top-0 bottom-0 z-50 py-stack-lg px-gutter bg-surface-container-lowest border-r border-border-subtle">
+<div class="mb-10">
+<h1 class="text-headline-md font-headline-md text-primary tracking-tight">Smart Parking AI</h1>
+<p class="text-body-md text-secondary mt-1">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary font-bold bg-primary-container/10" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-body-md text-body-md">Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-body-md text-body-md">Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full text-left flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-container-high rounded-xl">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Help Center</span>
+</button>
+<div class="pt-4 border-t border-border-subtle">
+<button class="flex items-center gap-3 px-4 py-3 text-secondary hover:text-error transition-colors">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md">Logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 lg:ml-[240px] relative h-screen flex flex-col bg-bg-main overflow-hidden">
+<!-- TopNavBar (JSON Derived) -->
+<header class="sticky top-0 right-0 z-40 flex items-center justify-between px-gutter h-16 bg-surface-container-lowest/80 backdrop-blur-md border-b border-border-subtle shadow-sm">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-outline material-symbols-outlined">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full w-80 text-body-md focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Search by Slot, Vehicle, or Resident..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors active:opacity-70">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors active:opacity-70">
+<span class="material-symbols-outlined">qr_code_2</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-border-subtle cursor-pointer active:opacity-70">
+<div class="text-right">
+<p class="font-title-md text-body-md text-on-surface">Alex Rivera</p>
+<p class="text-label-md text-secondary">System Admin</p>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Map Workspace Area -->
+<section class="flex-1 relative flex overflow-hidden">
+<!-- Map Canvas Container -->
+<div class="flex-1 p-gutter relative overflow-auto bg-[#F1F5F9] pattern-dots">
+<!-- Floating Controls -->
+<div class="absolute top-6 left-6 z-20 flex flex-col gap-3">
+<!-- Selector Group -->
+<div class="flex bg-surface-container-lowest rounded-xl shadow-lg border border-border-subtle p-1.5 gap-1">
+<div class="flex flex-col px-3 py-1.5">
+<span class="text-label-md text-secondary uppercase tracking-wider">Building</span>
+<select class="border-none bg-transparent font-title-md text-body-md p-0 focus:ring-0 cursor-pointer">
+<option>North Tower (A)</option>
+<option>South Tower (B)</option>
+<option>Annex C</option>
+</select>
+</div>
+<div class="w-px bg-border-subtle my-2"></div>
+<div class="flex flex-col px-3 py-1.5">
+<span class="text-label-md text-secondary uppercase tracking-wider">Floor</span>
+<select class="border-none bg-transparent font-title-md text-body-md p-0 focus:ring-0 cursor-pointer">
+<option>Level P1</option>
+<option>Level P2</option>
+<option>Level P3</option>
+</select>
+</div>
+</div>
+<!-- Legend -->
+<div class="bg-surface-container-lowest rounded-xl shadow-lg border border-border-subtle p-3 flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-status-available"></div>
+<span class="text-body-md font-medium">Available (42)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-status-occupied"></div>
+<span class="text-body-md font-medium">Occupied (156)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-status-reserved"></div>
+<span class="text-body-md font-medium">Reserved (12)</span>
+</div>
+</div>
+</div>
+<!-- Zoom Controls -->
+<div class="absolute bottom-6 left-6 z-20 flex flex-col gap-2">
+<button class="w-10 h-10 bg-surface-container-lowest rounded-lg shadow-md border border-border-subtle flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="w-10 h-10 bg-surface-container-lowest rounded-lg shadow-md border border-border-subtle flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<button class="w-10 h-10 bg-surface-container-lowest rounded-lg shadow-md border border-border-subtle flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+</div>
+<!-- Interactive Map Visualization -->
+<div class="min-w-[1000px] bg-white rounded-3xl p-12 shadow-2xl border border-slate-200 relative mx-auto">
+<div class="flex items-center justify-between mb-8 border-b border-dashed border-slate-200 pb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">local_parking</span>
+<h2 class="font-title-md text-on-surface">NORTH TOWER - LEVEL P1</h2>
+</div>
+<div class="text-label-md text-secondary bg-slate-100 px-3 py-1 rounded-full">ENTRANCE A</div>
+</div>
+<div class="parking-grid">
+<!-- Column Labels -->
+<div class="col-span-12 flex justify-around mb-2">
+<div class="text-label-md text-slate-400 font-mono-sm">ZONE A</div>
+<div class="text-label-md text-slate-400 font-mono-sm">ZONE B</div>
+</div>
+<!-- Rows of Parking Slots -->
+<script>
+                            const grid = document.querySelector('.parking-grid');
+                            const statuses = ['available', 'occupied', 'occupied', 'reserved', 'occupied', 'available', 'occupied', 'occupied', 'occupied', 'available', 'occupied', 'occupied'];
+                            for (let i = 1; i <= 48; i++) {
+                                const status = statuses[Math.floor(Math.random() * statuses.length)];
+                                const slot = document.createElement('div');
+                                slot.className = `h-20 flex flex-col items-center justify-center rounded-lg cursor-pointer transition-all hover:scale-105 hover:z-10 slot-${status}`;
+                                slot.innerHTML = `
+                                    <span class="text-label-md font-mono-sm text-on-surface-variant">A-${i.toString().padStart(2, '0')}</span>
+                                    ${status === 'occupied' ? '<span class="material-symbols-outlined text-sm opacity-50">directions_car</span>' : ''}
+                                    ${status === 'reserved' ? '<span class="material-symbols-outlined text-sm opacity-50">lock</span>' : ''}
+                                `;
+                                slot.onclick = () => openSlotDetails(`A-${i.toString().padStart(2, '0')}`, status);
+                                grid.appendChild(slot);
+                            }
+                        </script>
+</div>
+<!-- Driveways -->
+<div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-20 bg-slate-50 border-y border-dashed border-slate-200 flex items-center justify-between px-10">
+<span class="material-symbols-outlined text-slate-200">arrow_forward</span>
+<span class="text-label-md text-slate-300 font-mono-sm">ONE WAY - FIRE LANE</span>
+<span class="material-symbols-outlined text-slate-200">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Stats & Activity -->
+<aside class="w-80 h-full border-l border-border-subtle bg-surface-container-lowest flex flex-col">
+<div class="p-6 flex-1 overflow-y-auto space-y-8">
+<!-- Stats Card -->
+<div>
+<h3 class="font-title-md text-on-surface mb-4">Floor Summary</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-4 rounded-xl">
+<p class="text-label-md text-secondary uppercase mb-1">Occupancy</p>
+<p class="text-headline-md font-headline-md">78%</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl">
+<p class="text-label-md text-secondary uppercase mb-1">Turnover</p>
+<p class="text-headline-md font-headline-md text-primary">12/h</p>
+</div>
+</div>
+</div>
+<!-- Activity Feed -->
+<div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-title-md text-on-surface">Recent Activity</h3>
+<button class="text-primary text-label-md font-bold">View All</button>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3 group">
+<div class="w-2 h-2 mt-2 rounded-full bg-status-available"></div>
+<div>
+<p class="text-body-md font-medium">Slot A-12 Vacated</p>
+<p class="text-label-md text-secondary">Tesla Model 3 • 2m ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-2 h-2 mt-2 rounded-full bg-status-occupied"></div>
+<div>
+<p class="text-body-md font-medium">New Arrival: A-42</p>
+<p class="text-label-md text-secondary">Audi e-tron • 5m ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-2 h-2 mt-2 rounded-full bg-status-reserved"></div>
+<div>
+<p class="text-body-md font-medium">Reservation Made</p>
+<p class="text-label-md text-secondary">Unit 402 • 12m ago</p>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Insights -->
+<div class="bg-primary/5 rounded-2xl p-5 border border-primary/10 ai-pulse">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-ai-accent">auto_awesome</span>
+<h3 class="font-title-md text-on-surface-variant">AI Recommendation</h3>
+</div>
+<p class="text-body-md text-secondary mb-4 leading-relaxed">
+                            Congestion detected near Entrance B. Recommend redirecting incoming traffic to Level P2.
+                        </p>
+<button class="w-full bg-primary text-on-primary py-2.5 rounded-xl font-bold text-body-md hover:shadow-lg transition-all active:scale-95">
+                            Apply Optimization
+                        </button>
+</div>
+</div>
+</aside>
+</section>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest border-t border-border-subtle shadow-lg z-50">
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-2 px-4 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-md text-label-md">Map</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-label-md text-label-md">Cars</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-md text-label-md">AI</span>
+</div>
+</nav>
+</main>
+<!-- Side Drawer (Details Panel) -->
+<div class="fixed top-0 right-0 w-[400px] h-full bg-surface-container-lowest shadow-2xl z-[60] drawer-transition translate-x-full border-l border-border-subtle flex flex-col" id="details-drawer">
+<div class="p-6 flex items-center justify-between border-b border-border-subtle">
+<h2 class="font-headline-md text-on-surface" id="drawer-title">Slot Details</h2>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors" onclick="closeDrawer()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-8">
+<!-- Header Section -->
+<div class="flex items-center gap-4">
+<div class="w-4 h-4 rounded-full" id="drawer-status-dot"></div>
+<div>
+<p class="font-title-md text-display text-2xl font-bold tracking-tight" id="drawer-slot-id"></p>
+<p class="text-body-md text-secondary" id="drawer-status-label"></p>
+</div>
+</div>
+<!-- Content Area (Conditional) -->
+<div class="space-y-6" id="drawer-content">
+<!-- Data populated via JS -->
+</div>
+<!-- Footer Actions -->
+<div class="pt-6 border-t border-border-subtle space-y-3">
+<button class="w-full bg-primary text-on-primary py-3 rounded-xl font-bold hover:shadow-lg transition-all active:scale-[0.98]">Reserve Next Block</button>
+<button class="w-full border border-outline-variant text-on-surface-variant py-3 rounded-xl font-bold hover:bg-surface-container-low transition-all active:scale-[0.98]">Report Issue</button>
+</div>
+</div>
+</div>
+<script>
+        function openSlotDetails(id, status) {
+            const drawer = document.getElementById('details-drawer');
+            const title = document.getElementById('drawer-slot-id');
+            const statusLabel = document.getElementById('drawer-status-label');
+            const dot = document.getElementById('drawer-status-dot');
+            const content = document.getElementById('drawer-content');
+
+            title.innerText = `Slot ${id}`;
+            statusLabel.innerText = status.charAt(0).toUpperCase() + status.slice(1);
+            
+            // Set Color Coding
+            if(status === 'available') dot.className = 'w-4 h-4 rounded-full bg-status-available';
+            if(status === 'occupied') dot.className = 'w-4 h-4 rounded-full bg-status-occupied';
+            if(status === 'reserved') dot.className = 'w-4 h-4 rounded-full bg-status-reserved';
+
+            // Mock Data Population
+            if(status === 'occupied') {
+                content.innerHTML = `
+                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                        <p class="text-label-md text-secondary uppercase mb-3">Current Resident</p>
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-4xl text-secondary">account_circle</span>
+                            <div>
+                                <p class="font-title-md text-body-lg">Michael Henderson</p>
+                                <p class="text-body-md text-secondary">Unit 1402 (Lease A)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                        <p class="text-label-md text-secondary uppercase mb-3">Vehicle</p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-title-md text-body-lg">Tesla Model Y</p>
+                                <p class="font-mono-sm text-primary">PLATE: CA 94105</p>
+                            </div>
+                            <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-secondary">ev_station</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 border border-primary/20 bg-primary/5 rounded-2xl">
+                        <div class="flex items-center gap-2 mb-2 text-primary font-bold">
+                            <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                            <span class="text-label-md uppercase">AI Recommendation</span>
+                        </div>
+                        <p class="text-body-md text-on-surface-variant">Michael typically leaves at 8:15 AM. Slot A-12 will be likely available in 2 hours.</p>
+                    </div>
+                `;
+            } else if (status === 'reserved') {
+                content.innerHTML = `
+                    <div class="bg-surface-container-low p-5 rounded-2xl text-center">
+                        <span class="material-symbols-outlined text-status-reserved text-4xl mb-2">lock_clock</span>
+                        <p class="font-title-md text-body-lg">Reserved for Arrival</p>
+                        <p class="text-body-md text-secondary mt-1">Expected: 4:30 PM (Today)</p>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-label-md text-secondary uppercase">Guest Details</p>
+                        <div class="flex items-center justify-between p-3 bg-white border border-border-subtle rounded-xl">
+                            <span class="text-body-md">Sarah Jenkins (Guest)</span>
+                            <span class="text-label-md bg-secondary-container px-2 py-0.5 rounded">VIP</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-10 opacity-40">
+                        <span class="material-symbols-outlined text-6xl mb-4">check_circle</span>
+                        <p class="font-title-md">This slot is ready for use.</p>
+                    </div>
+                    <div class="p-5 bg-status-available/5 border border-status-available/20 rounded-2xl">
+                        <div class="flex items-center gap-2 mb-2 text-status-available font-bold">
+                            <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                            <span class="text-label-md uppercase">AI Insight</span>
+                        </div>
+                        <p class="text-body-md text-on-surface-variant">Assign this slot to compact vehicles only due to pillar proximity in Zone A.</p>
+                    </div>
+                `;
+            }
+
+            drawer.classList.remove('translate-x-full');
+        }
+
+        function closeDrawer() {
+            document.getElementById('details-drawer').classList.add('translate-x-full');
+        }
+    </script>
+</body></html>

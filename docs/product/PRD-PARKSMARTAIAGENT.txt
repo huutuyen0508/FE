@@ -1,0 +1,1372 @@
+PARKSMART AI AGENT _ PRODUCTREQUIREMENTS DOCUMENT
+ GOALS &amp; OBJECTIVES
+
+ Mục tiêu chính
+G1
+Cho phép Resident tìm Slot phù hợp bằng yêu cầu ngôn ngữ tự nhiên.
+G2
+Chỉ đề xuất các Slot đáp ứng trạng thái hệ thống và Parking Rules.
+G3
+Hiển thị rõ Slot được đề xuất trên Layout của đúng tầng.
+G4
+Cho phép Resident chấp nhận đề xuất hoặc tự chọn Slot khác.
+G5
+Kiểm tra lại Slot ngay trước khi tạo Soft Reservation.
+G6
+Giữ Slot logic trong 5 phút và hỗ trợ gia hạn tối đa 1 lần.
+G7
+Hoàn tất quy trình đỗ xe thông qua xác minh xe vào và xe ra của Security Guard.
+G8
+Cho phép Parking Manager quản lý Layout, Floor, Zone, Slot, Parking Rules, Reservation và Activity Log.
+G9
+Chỉ cho phép phương tiện của Resident có trạng thái APPROVED tham gia tìm chỗ và tạo Reservation.
+G10
+Cho phép Resident đăng ký trước một hoặc nhiều xe khách mà không cần khách truy cập hệ thống.
+G11
+Cho phép một yêu cầu tìm chỗ dùng chung tiêu chí nhưng tạo kết quả và Reservation độc lập cho từng phương tiện.
+G12
+Đảm bảo Guest Vehicle Registration chỉ chuyển USED sau khi hoàn tất quy trình xe ra.
+G13
+Cho phép Parking Manager phê duyệt hoặc từ chối phương tiện vượt hạn mức căn hộ theo cơ chế Human-in-the-Loop.
+G14
+Giới hạn Security Guard ở các nghiệp vụ xác minh xe vào, xe ra và báo cáo bất thường.
+ Mục tiêu
+- Chứng minh end-to-end workflow hoạt động với Mock API.
+- Demo đăng ký phương tiện Resident và kiểm tra hạn mức căn hộ.
+- Demo trạng thái APPROVED, PENDING và REJECTED.
+- Demo Guest Vehicle Registration cho một hoặc nhiều xe khách.
+- Demo tìm chỗ cho một phương tiện và nhiều phương tiện trong cùng yêu cầu.
+- Demo luồng đề xuất tự động và phương án thay thế độc lập theo từng xe.
+- Demo luồng chọn Slot thủ công trên Layout.
+- Demo Soft Reservation, timeout, gia hạn và hủy theo từng xe.
+- Demo Security Guard xác minh biển số khi xe vào và xe ra.
+- Demo Parking Session từ WAITING_ENTRY đến PARKING và COMPLETED.
+- Demo thay đổi trạng thái AVAILABLE → RESERVED → OCCUPIED → AVAILABLE.
+- Demo Guest Vehicle Registration chuyển ACTIVE → USED sau khi xe ra.
+- Demo xử lý Slot không còn hợp lệ trước hoặc trong Reservation.
+ Không phải mục tiêu
+- Điều khiển barrier thật.
+- Tích hợp camera hoặc cảm biến thật.
+- Thanh toán.
+- Đặt chỗ theo lịch.
+- Indoor Navigation bằng BLE/UWB.
+- Tích hợp hệ thống tòa nhà.
+- Điều phối nhiều bãi xe.
+- Tự động nhận diện hoặc tự động xác minh biển số.
+
+TARGET USERS
+
+Resident — Cư dân
+Nhu cầu:
+- Đăng ký và quản lý phương tiện của mình.
+- Theo dõi trạng thái phê duyệt phương tiện.
+- Chỉ chọn phương tiện APPROVED để tìm chỗ.
+- Đăng ký trước một hoặc nhiều xe khách.
+- Gửi một yêu cầu tìm chỗ cho một hoặc nhiều phương tiện.
+- Nhận kết quả và quản lý Reservation riêng cho từng xe.
+- Chọn Slot theo sở thích hoặc điểm đến.
+- Xem lịch sử tìm chỗ, Reservation, Guest Vehicle Registration và Parking Session có liên quan.
+Security Guard — Bảo vệ
+Nhu cầu và quyền được phép:
+- Kiểm tra xe vào.
+- Kiểm tra xe ra.
+- Xác minh biển số.
+- Xác nhận xe vào.
+- Xác nhận xe ra.
+- Ghi nhận lịch sử xe vào.
+- Ghi nhận lịch sử xe ra.
+- Báo cáo bất thường.
+Giới hạn quyền:
+- Không quản lý Layout.
+- Không quản lý Slot theo cách thủ công.
+- Không quản lý Parking Rules.
+- Không phê duyệt Vehicle.
+Parking Manager — Ban quản lý
+Nhu cầu:
+- Theo dõi trạng thái bãi xe.
+- Quản lý Floor, Zone và Slot.
+- Cấu hình Parking Rules.
+- Cấu hình hạn mức phương tiện theo căn hộ.
+- Phê duyệt hoặc từ chối Vehicle vượt hạn mức.
+- Lock hoặc Unlock Slot.
+- Đánh dấu Slot OUT_OF_SERVICE.
+- Theo dõi và xử lý Reservation cùng Parking Session.
+- Xử lý các trường hợp bất thường do Security Guard báo cáo.
+- Xem báo cáo và Activity Log.
+-Khách không truy cập hệ thống trực tiếp. Mọi thông tin xe khách được Resident đăng ký và quản lý thông qua Guest Vehicle Registration.
+
+PRODUCT SCOPE
+
+In Scope
+- Đăng nhập bằng tài khoản mẫu hoặc session giả lập cho Resident, Security Guard và Parking Manager.
+- Resident đăng ký thêm phương tiện mới.
+- Kiểm tra hạn mức phương tiện theo căn hộ.
+- Tự động APPROVED khi không vượt hạn mức.
+- Chuyển PENDING khi vượt hạn mức.
+- Parking Manager phê duyệt hoặc từ chối Vehicle PENDING.
+- Chỉ hiển thị Vehicle APPROVED trong danh sách chọn để tìm chỗ.
+- Resident tạo một yêu cầu đăng ký gồm một hoặc nhiều xe khách.
+- Tạo một Guest Vehicle Registration riêng cho từng xe khách.
+- Resident gửi một bộ tiêu chí tìm chỗ dùng chung.
+- Chọn một hoặc nhiều đối tượng tìm chỗ gồm Vehicle APPROVED và Guest Vehicle Registration ACTIVE.
+- Lấy toàn bộ thông tin phương tiện đã chọn từ hệ thống.
+- Lấy Layout, Floor, Zone, Slot, Reservation, Parking Session và Parking Rules từ Mock API.
+- Lọc, xếp hạng và đề xuất Slot độc lập cho từng phương tiện.
+- Giải thích lý do đề xuất theo từng phương tiện.
+- Hiển thị Layout và highlight Slot đề xuất.
+- Đề xuất phương án thay thế riêng cho phương tiện không đáp ứng đủ yêu cầu.
+- Cho phép Resident chọn Slot thủ công và đổi tầng theo từng phương tiện.
+- Kiểm tra lại Slot và trạng thái phương tiện trước khi Reservation.
+- Tạo một Soft Reservation riêng cho mỗi phương tiện.
+- Cảnh báo khi từng Reservation còn 30 giây.
+- Gia hạn từng Reservation 1 lần, thêm 5 phút.
+- Hủy Reservation hoặc tìm Slot khác mà không ảnh hưởng các xe còn lại.
+- Security Guard xác minh xe Resident khi vào bằng Vehicle APPROVED.
+- Security Guard xác minh xe khách khi vào bằng Guest Vehicle Registration.
+- Chỉ cho phép Resident sửa biển số xe khách trước khi xác nhận xe vào.
+- Bắt đầu Parking Session khi xe vào hợp lệ.
+- Security Guard xác minh xe ra theo Parking Session.
+- Kết thúc Parking Session, giải phóng Slot và chuyển Guest Vehicle Registration sang USED khi xe ra hợp lệ.
+- Dashboard và chức năng quản lý cơ bản.
+- Activity Log và thông báo trong ứng dụng.
+Out of Scope
+- Camera và ANPR.
+- Cảm biến Slot thật.
+- Barrier Integration.
+- Thanh toán và hóa đơn.
+- Đặt chỗ theo ngày hoặc khung giờ tương lai.
+- Indoor Navigation.
+- Tự động xác nhận xe đã vào hoặc ra khỏi bãi.
+- Điều khiển thiết bị vật lý.
+- Multi-parking management.
+- Tích hợp tòa nhà.
+- Tài khoản hoặc giao diện trực tiếp dành cho khách.
+
+USER STORIES
+
+US-01
+Là Resident, tôi muốn gửi yêu cầu bằng ngôn ngữ tự nhiên để hệ thống đề xuất Slot phù hợp mà không cần tự lọc thủ công.
+US-02
+Là Resident, tôi muốn chọn phương tiện APPROVED đã lưu để AI sử dụng đúng biển số, loại xe, trạng thái xe điện và nhu cầu sạc.
+US-03
+Là Resident, tôi muốn đăng ký phương tiện mới và theo dõi trạng thái APPROVED, PENDING hoặc REJECTED.
+US-04
+Là Resident, tôi muốn biết Slot nào được đề xuất cho từng phương tiện và vì sao Slot đó phù hợp.
+US-05
+Là Resident, tôi muốn xem Layout của tầng và vị trí Slot đề xuất.
+US-06
+Là Resident, tôi muốn yêu cầu AI đề xuất Slot khác cho một phương tiện mà không làm thay đổi kết quả của các phương tiện còn lại.
+US-07
+Là Resident, tôi muốn nhận lựa chọn thay thế riêng khi một phương tiện không còn Slot đáp ứng đầy đủ yêu cầu.
+US-08
+Là Resident, tôi muốn tự chọn Slot trên Layout khi không đồng ý với phương án thay thế của AI.
+US-09
+Là Resident, tôi muốn xem số Slot còn trống theo tầng và chuyển sang Layout của tầng khác.
+US-10
+Là Resident, tôi muốn giữ Slot riêng cho từng phương tiện trong 5 phút để các xe di chuyển đến vị trí.
+US-11
+Là Resident, tôi muốn gia hạn từng Reservation một lần khi sắp hết hạn.
+US-12
+Là Resident, tôi muốn hủy một Reservation để Slot được giải phóng mà không ảnh hưởng các Reservation khác.
+US-13
+Là Resident, tôi muốn giải phóng Slot hiện tại và tìm Slot mới cho một phương tiện cụ thể.
+US-14
+Là Security Guard, tôi muốn xác minh xe vào để bắt đầu đúng Parking Session và cập nhật Slot sang OCCUPIED.
+US-15
+Là Parking Manager, tôi muốn Lock, Unlock hoặc đánh dấu OUT_OF_SERVICE để Slot không được đề xuất sai.
+US-16
+Là Parking Manager, tôi muốn cấu hình quyền đỗ theo loại phương tiện, tầng, khu vực, thời gian và loại đăng ký.
+US-17
+Là Resident, Security Guard hoặc Parking Manager có quyền, tôi muốn xem lịch sử hành động phù hợp với vai trò để kiểm tra quá trình tìm chỗ, xác minh xe và Parking Session.
+US-18
+Là Parking Manager, tôi muốn phê duyệt hoặc từ chối Vehicle vượt hạn mức căn hộ theo cơ chế Human-in-the-Loop.
+US-19
+Là Resident, tôi muốn đăng ký một yêu cầu gồm nhiều xe khách để không phải tạo từng yêu cầu từ đầu.
+US-20
+Là Resident, tôi muốn mỗi xe khách có Guest Vehicle Registration, Reservation, Parking Session và trạng thái riêng.
+US-21
+Là Resident, tôi muốn dùng một bộ tiêu chí chung để tìm chỗ cho một Vehicle của mình và một hoặc nhiều xe khách.
+US-22
+Là Resident, tôi muốn các phương tiện được AI xử lý độc lập để lỗi của một xe không làm gián đoạn các xe khác.
+US-23
+Là Security Guard, tôi muốn đối chiếu biển số xe Resident với Vehicle APPROVED trước khi cho xe vào.
+US-24
+Là Security Guard, tôi muốn đối chiếu biển số xe khách với Guest Vehicle Registration ACTIVE trước khi cho xe vào.
+US-25
+Là Resident, tôi muốn sửa biển số xe khách trước khi Security Guard xác nhận xe vào nếu phát hiện biển số đăng ký không chính xác.
+US-26
+Là Security Guard, tôi muốn xác minh biển số khi xe ra để kết thúc Parking Session và giải phóng Slot.
+US-27
+Là Security Guard, tôi muốn báo cáo trường hợp bất thường cho Ban quản lý mà không có quyền thay đổi cấu hình bãi xe.
+US-28
+Là Resident, tôi muốn Guest Vehicle Registration vẫn ACTIVE khi Reservation bị CANCELLED hoặc EXPIRED để có thể tìm và giữ Slot mới.
+US-29
+Là Resident, tôi muốn Guest Vehicle Registration chỉ chuyển USED sau khi xe khách hoàn tất quy trình ra bãi.
+
+FUNCTIONAL REQUIREMENTS
+
+Actors and Resident Vehicle Management
+FR-01
+Hệ thống phải hỗ trợ đúng ba vai trò Resident, Security Guard và Parking Manager.
+FR-02
+Resident phải có thể đăng ký và quản lý phương tiện của mình.
+FR-03
+Mỗi Vehicle phải lưu vehicle_id, user_id, apartment_id, plate_number, vehicle_type, is_electric, need_charging và approval_status.
+FR-04
+Danh sách phương tiện có thể chọn để tìm chỗ chỉ hiển thị các Vehicle có approval_status = APPROVED.
+FR-05
+Vehicle PENDING hoặc REJECTED không được AI sử dụng, không được tìm chỗ và không được tạo Reservation. Vehicle PENDING chỉ được hiển thị trong khu vực theo dõi yêu cầu đăng ký, không xuất hiện trong bộ chọn phương tiện tìm chỗ.
+AI Request Understanding
+FR-06
+Agent phải nhận một bộ tiêu chí tìm chỗ bằng văn bản từ giao diện chat.
+FR-06B
+Nếu nội dung không liên quan đến nghiệp vụ tìm chỗ, Agent không được tiếp tục xử lý và phải yêu cầu Resident nhập lại.
+FR-07
+Agent phải trích xuất và chuẩn hóa tiêu chí dùng chung:
+- Cổng vào hoặc vị trí hiện tại.
+- Ưu tiên gần cổng, gần thang máy, gần lối ra, tầng ưu tiên hoặc khu vực đích.
+- Thời gian dự kiến đến. Agent phải lấy biển số, loại xe, trạng thái xe điện, nhu cầu sạc và thông tin liên quan từ từng Vehicle hoặc Guest Vehicle Registration đã được Resident chọn.
+FR-08
+Agent không được tự tạo thông tin bắt buộc còn thiếu.
+FR-09
+Agent phải hỏi lại khi thiếu tiêu chí cần thiết và phải thông báo riêng nếu một phương tiện không đủ điều kiện tham gia tìm chỗ.
+Parking Data
+FR-10
+Hệ thống phải lấy Parking Layout, Parking Floors, Parking Zones, Parking Slots, Slot Status, Current Reservations, Parking Sessions, Parking Rules, trạng thái Vehicle và Guest Vehicle Registration từ Mock API hoặc nguồn dữ liệu Gate 1 tương ứng.
+FR-11
+Dữ liệu trả về phải đủ để hiển thị Layout, trạng thái từng Slot và trạng thái xử lý của từng phương tiện.
+Slot Filtering and Ranking
+FR-12
+Với từng phương tiện, hệ thống chỉ đưa vào danh sách ứng viên Slot AVAILABLE, không LOCKED, không OUT_OF_SERVICE, không có Reservation khác và phù hợp Parking Rules của chính phương tiện đó.
+FR-13
+Parking Rules phải được áp dụng độc lập cho từng Vehicle hoặc Guest Vehicle Registration trước khi xếp hạng.
+FR-14
+Hệ thống phải hỗ trợ cấu hình trọng số xếp hạng.
+FR-15
+Trọng số mặc định:
+- Near Entrance: 40%.
+- Near Elevator: 30%.
+- Easy Driving: 20%.
+- Near Destination: 10%.
+FR-16
+Agent phải trả về Slot có điểm phù hợp cao nhất và giải thích lý do riêng cho từng phương tiện.
+Multi-Vehicle Alternative Recommendation
+FR-17
+Khi một phương tiện không có Slot đáp ứng toàn bộ yêu cầu, Agent phải đề xuất phương án thay thế riêng cho phương tiện đó: dùng Slot thường, chuyển tầng, chờ hoặc hủy.
+FR-18
+Nếu Resident đồng ý phương án thay thế của một phương tiện, hệ thống cập nhật tiêu chí của phương tiện đó và xếp hạng lại mà không thay đổi các phương tiện khác.
+FR-19
+Nếu Resident không đồng ý, hệ thống hiển thị Layout để chọn thủ công cho phương tiện đó; các kết quả và Reservation khác vẫn tiếp tục.
+Recommendation and Layout
+FR-20
+Màn hình đề xuất phải hiển thị riêng cho từng phương tiện: biển số, loại đối tượng, Slot Code, Floor, Zone, Slot Type, lý do đề xuất và Layout của tầng.
+FR-21
+Slot AI đề xuất phải được highlight khác với các trạng thái còn lại.
+FR-22
+Layout phải phân biệt AI Recommended, AVAILABLE, OCCUPIED, RESERVED, LOCKED, OUT_OF_SERVICE và EV Charging.
+FR-23
+Với từng phương tiện, Resident có thể Accept Recommendation, Recommend Again hoặc Cancel.
+FR-24
+Recommend Again phải loại trừ hoặc giảm ưu tiên Slot vừa bị từ chối trong Recommendation Item tương ứng, không tác động Recommendation Item của phương tiện khác.
+Manual Slot Selection
+FR-25
+Trong luồng chọn thủ công của từng phương tiện, Resident có thể Select Another Slot, Change Floor hoặc Cancel.
+FR-26
+Hệ thống phải hiển thị số Slot AVAILABLE theo từng tầng.
+FR-27
+Resident phải có thể chọn trực tiếp một Slot hợp lệ trên Layout cho phương tiện đang xử lý.
+Slot and Subject Validation
+FR-28
+Trước khi tạo Reservation cho từng phương tiện, hệ thống phải kiểm tra lại trạng thái Slot, Reservation hiện tại, Parking Rules và trạng thái đủ điều kiện của Vehicle hoặc Guest Vehicle Registration.
+FR-29
+Nếu một Slot hoặc phương tiện không hợp lệ, hệ thống thông báo riêng cho Recommendation Item đó và đưa Resident trở lại màn hình đề xuất hoặc chọn Slot; các Recommendation Item khác không bị rollback.
+FR-30
+Việc kiểm tra và chuyển AVAILABLE → RESERVED phải là thao tác atomic. Các phương tiện trong cùng yêu cầu không được nhận cùng một Slot.
+Soft Reservation
+FR-31
+Mỗi phương tiện được chấp nhận phải tạo một Reservation riêng có thời hạn mặc định 5 phút.
+FR-32
+Khi từng Reservation được tạo:
+- Slot tương ứng chuyển AVAILABLE → RESERVED.
+- Hệ thống lưu Reservation gắn với đúng Vehicle hoặc Guest Vehicle Registration.
+- Hệ thống ghi Activity Log.
+- Hệ thống hiển thị thời gian còn lại riêng.
+FR-33
+Trong thời gian Reservation, Resident có thể chọn &quot;Tôi đã đến cổng&quot;, chọn Slot khác hoặc hủy từng Reservation.
+Reservation Expiry and Extension
+FR-34
+Khi một Reservation còn 30 giây, hệ thống phải gửi cảnh báo riêng.
+FR-35
+Resident có thể Extend Reservation, Find Another Slot hoặc Cancel cho Reservation đang được cảnh báo.
+FR-36
+Mỗi Reservation chỉ được gia hạn 1 lần.
+FR-37
+Mỗi lần gia hạn cộng thêm 5 phút.
+FR-38
+Chỉ cho phép gia hạn khi Reservation còn hiệu lực, thời gian còn lại nhỏ hơn hoặc bằng 30 giây và extend_count chưa đạt 1.
+FR-39
+Khi gia hạn thành công, cập nhật expired_time, tăng extend_count, ghi Activity Log và quay lại theo dõi Reservation tương ứng.
+FR-40
+Nếu không còn quyền gia hạn, hiển thị:
+&quot;Đã đạt số lần gia hạn tối đa.&quot;
+FR-41
+Nếu chọn Find Another Slot, Reservation hiện tại chuyển CANCELLED hoặc REPLACED, Slot trở lại AVAILABLE và Agent xếp hạng lại cho đúng phương tiện. Guest Vehicle Registration liên quan vẫn ACTIVE.
+FR-42
+Nếu Resident hủy, Reservation chuyển CANCELLED, Slot trở lại AVAILABLE và chỉ luồng của phương tiện đó kết thúc. Guest Vehicle Registration liên quan vẫn ACTIVE.
+FR-43
+Nếu không phản hồi đến khi hết thời gian, Reservation chuyển EXPIRED, Slot trở lại AVAILABLE và hệ thống thông báo hết hạn. Guest Vehicle Registration liên quan vẫn ACTIVE.
+Entry Verification and Parking Session
+FR-44
+Security Guard phải có giao diện kiểm tra xe vào, tìm theo biển số và xác minh với Vehicle APPROVED hoặc Guest Vehicle Registration ACTIVE có Reservation hợp lệ. Khi bắt đầu xác minh, hệ thống phải tạo hoặc tải Parking Session ở trạng thái WAITING_ENTRY cho Reservation đó.
+FR-45
+Khi Security Guard xác nhận xe vào thành công:
+- Reservation chuyển ACTIVE → CONFIRMED.
+- Parking Session chuyển WAITING_ENTRY → PARKING.
+- Slot chuyển RESERVED → OCCUPIED.
+- Hệ thống lưu entry_time, entry_guard_id và entry_verified = true.
+- Hệ thống ghi Activity Log.
+Invalid Slot During Reservation
+FR-46
+Nếu Slot chuyển LOCKED hoặc OUT_OF_SERVICE trong thời gian Reservation, hệ thống phải hủy hoặc thay thế đúng Reservation, giải phóng trạng thái liên quan khi phù hợp và Agent đề xuất Slot khác cho phương tiện đó.
+Management Functions
+FR-47
+Parking Manager phải có Dashboard tổng quan.
+FR-48
+Parking Manager phải quản lý Floor, Zone và Slot.
+FR-49
+Parking Manager phải cấu hình Parking Rules và hạn mức Vehicle theo căn hộ.
+FR-50
+Parking Manager phải có thể Lock và Unlock Slot.
+FR-51
+Parking Manager phải có thể chuyển Slot sang OUT_OF_SERVICE.
+FR-52
+Parking Manager phải xem được Reservation và Parking Session đang hoạt động.
+FR-53
+Parking Manager phải quản lý EV Zone.
+FR-54
+Parking Manager phải xem Reports, Activity Logs, hàng đợi Vehicle PENDING và báo cáo bất thường từ Security Guard.
+Resident Vehicle Approval
+FR-55
+Khi Resident đăng ký Vehicle mới, hệ thống phải kiểm tra số Vehicle APPROVED hiện tại so với hạn mức của căn hộ.
+FR-56
+Nếu không vượt hạn mức, Vehicle phải chuyển trực tiếp sang APPROVED và ghi rõ nguồn phê duyệt là SYSTEM.
+FR-57
+Nếu vượt hạn mức, Vehicle phải chuyển sang PENDING và đưa vào hàng đợi Human-in-the-Loop của Parking Manager.
+FR-58
+Chỉ Parking Manager được phê duyệt hoặc từ chối Vehicle PENDING.
+FR-59
+Khi Vehicle PENDING được APPROVED, Vehicle phải xuất hiện trong danh sách có thể chọn để tìm chỗ. Khi REJECTED, Vehicle không được sử dụng.
+FR-60
+Mọi thao tác đăng ký, kiểm tra hạn mức, phê duyệt và từ chối Vehicle phải được ghi Activity Log.
+Guest Vehicle Registration
+FR-61
+Resident phải có thể gửi một yêu cầu đăng ký chứa một hoặc nhiều xe khách.
+FR-62
+Hệ thống phải tạo một Guest Vehicle Registration riêng cho từng xe trong yêu cầu, với guest_registration_id và trạng thái độc lập.
+FR-63
+Mỗi Guest Vehicle Registration phải có tối thiểu plate_number, vehicle_type, is_electric và need_charging.
+FR-64
+Chỉ Guest Vehicle Registration có status = ACTIVE mới được chọn để tìm chỗ và tạo Reservation.
+FR-65
+Mỗi lần giữ chỗ của mỗi xe khách phải tạo Reservation riêng. Mỗi xe khách phải có Parking Session riêng và không được chia sẻ trạng thái với xe khách khác.
+FR-66
+Reservation CANCELLED hoặc EXPIRED không được chuyển Guest Vehicle Registration sang USED, CANCELLED hoặc EXPIRED.
+FR-67
+Guest Vehicle Registration chỉ chuyển ACTIVE → USED sau khi Parking Session liên quan chuyển COMPLETED tại bước xác nhận xe ra.
+FR-68
+Một Guest Vehicle Registration chỉ được có tối đa một Reservation ACTIVE tại một thời điểm và tối đa một Parking Session đạt trạng thái PARKING hoặc COMPLETED.
+FR-69
+Resident chỉ được sửa plate_number của Guest Vehicle Registration khi status = ACTIVE và trước khi Security Guard xác nhận xe vào. Mọi lần sửa phải được ghi Activity Log.
+Multi-Vehicle Search
+FR-70
+Một yêu cầu tìm chỗ có thể bao gồm một Vehicle APPROVED của Resident, một hoặc nhiều Guest Vehicle Registration ACTIVE hoặc kết hợp cả hai.
+FR-71
+Agent phải áp dụng cùng bộ tiêu chí tìm kiếm chung cho tất cả phương tiện được chọn.
+FR-72
+Agent phải xử lý kiểm tra rule, lọc Slot, xếp hạng và đề xuất độc lập cho từng phương tiện.
+FR-73
+Mỗi phương tiện được chấp nhận phải tạo một Reservation riêng và liên kết với một Recommendation Item riêng.
+FR-74
+Nếu một phương tiện không tìm được Slot hoặc Reservation thất bại, chỉ phương tiện đó nhận thông báo và phương án thay thế; các phương tiện còn lại tiếp tục bình thường.
+FR-75
+Trong cùng Recommendation Session, hệ thống phải loại các Slot đã được giữ hoặc cấp cho Recommendation Item khác khỏi danh sách ứng viên.
+Security Guard Entry and Exit
+FR-76
+Khi xe Resident vào, Security Guard phải đối chiếu plate_number với Vehicle có approval_status = APPROVED và Reservation hợp lệ.
+FR-77
+Nếu đối chiếu xe Resident không hợp lệ, Security Guard phải từ chối xe vào, chuyển Parking Session WAITING_ENTRY sang CANCELLED nếu đã tạo và hệ thống thông báo Resident hoặc Parking Manager theo cấu hình.
+FR-78
+Khi xe khách vào, Security Guard phải đối chiếu plate_number với Guest Vehicle Registration ACTIVE và Reservation hợp lệ.
+FR-79
+Nếu đối chiếu xe khách không hợp lệ, Security Guard phải từ chối xe vào, chuyển Parking Session WAITING_ENTRY sang CANCELLED nếu đã tạo, hệ thống thông báo Resident và cho phép Resident sửa biển số trước khi có xác nhận xe vào.
+FR-80
+Security Guard không được sửa plate_number, thông tin Vehicle hoặc Guest Vehicle Registration trong màn hình xác minh.
+FR-81
+Khi xe ra, Security Guard phải đối chiếu plate_number với Parking Session có status = PARKING.
+FR-82
+Khi xác nhận xe ra thành công:
+- Parking Session chuyển PARKING → COMPLETED.
+- Lưu exit_time, exit_guard_id và exit_verified = true.
+- Slot chuyển OCCUPIED → AVAILABLE.
+- Nếu là xe khách, Guest Vehicle Registration chuyển ACTIVE → USED và lưu used_at.
+- Hệ thống ghi Activity Log.
+FR-83
+Nếu xác minh xe ra không hợp lệ, Security Guard phải giữ trạng thái Parking Session và Slot hiện tại, ghi nhận bất thường và chuyển xử lý theo quy trình của Parking Manager.
+FR-84
+Security Guard không được quản lý Layout, quản lý Slot thủ công, quản lý Parking Rules hoặc phê duyệt Vehicle.
+FR-85
+Mọi thao tác tra cứu, xác minh thành công, xác minh thất bại, xác nhận xe vào, xác nhận xe ra và báo cáo bất thường phải được ghi Activity Log.
+
+MAIN WORKFLOW
+
+Step 1.
+Resident Request
+- Resident gửi một bộ tiêu chí tìm chỗ qua chat hoặc ứng dụng.
+- Ví dụ: &quot;Gần thang máy lên tầng 10.&quot;
+Step 2.
+Select Eligible Vehicles
+- Resident chọn một Vehicle APPROVED, một hoặc nhiều Guest Vehicle Registration ACTIVE hoặc kết hợp cả hai.
+- Vehicle PENDING hoặc REJECTED không xuất hiện trong bộ chọn.
+- Guest Vehicle Registration USED, CANCELLED hoặc EXPIRED không xuất hiện trong bộ chọn.
+Step 3.
+AI Understands and Normalizes the Shared Request
+- Cổng vào hoặc vị trí hiện tại.
+- Ưu tiên đỗ xe.
+- Thời gian dự kiến đến.
+- AI lấy biển số, loại xe, xe điện, nhu cầu sạc và dữ liệu liên quan từ từng phương tiện đã chọn.
+Step 4.
+Load Parking and Eligibility Data
+- Parking Layout.
+- Parking Floors.
+- Parking Zones.
+- Parking Slots.
+- Slot Status.
+- Current Reservations.
+- Parking Sessions.
+- Parking Rules.
+- Vehicle approval status.
+- Guest Vehicle Registration status.
+Step 5.
+Apply Parking Rules and Validate Candidate Slots Per Vehicle Với từng phương tiện, hệ thống loại Slot không AVAILABLE, Slot LOCKED, OUT_OF_SERVICE, Slot có Reservation khác hoặc không phù hợp Parking Rules.
+Step 6.
+Rank and Resolve Requirements Per Vehicle
+- AI tính điểm, xếp hạng và chọn Slot phù hợp nhất cho từng phương tiện.
+- Nếu một phương tiện không đáp ứng đầy đủ yêu cầu, Agent hiển thị phương án thay thế riêng cho phương tiện đó.
+- Resident đồng ý → cập nhật tiêu chí của phương tiện đó và xếp hạng lại.
+- Resident không đồng ý → chuyển phương tiện đó sang Step 8.
+- Các phương tiện khác tiếp tục bình thường.
+Step 7.
+Show Recommendations Hệ thống hiển thị một kết quả riêng cho từng phương tiện, ví dụ:
+Resident Vehicle 51A-12345 → B2-A08 Guest Vehicle Registration 30K-11111 → B2-A09 29A-88888 → B1-C15 59H-12345 → B2-A10 Với từng phương tiện, Resident chọn:
+- Accept Recommendation → Step 9.
+- Recommend Again → Step 6 của phương tiện đó.
+- Selects Slot Manually → Step 8.
+- Cancel → Kết thúc riêng luồng của phương tiện đó.
+Step 8.
+Resident Selects Slot Manually
+- Chọn Slot trực tiếp → Step 9.
+- Chuyển tầng → xem Layout tầng mới → chọn Slot → Step 9.
+- Cancel → Kết thúc riêng luồng của phương tiện đó.
+Step 9.
+Validate Each Selected Slot and Vehicle
+- Kiểm tra lại Slot, Parking Rules và trạng thái Vehicle hoặc Guest Vehicle Registration cho từng phương tiện.
+- Nếu một mục không hợp lệ: thông báo riêng và quay lại Step 7 hoặc Step 8.
+- Các mục hợp lệ khác không bị rollback.
+Step 10.
+Create Separate Soft Reservations Với từng phương tiện hợp lệ:
+- Slot: AVAILABLE → RESERVED.
+- Reservation: ACTIVE.
+- Thời hạn: 5 phút.
+- Liên kết đúng Vehicle hoặc Guest Vehicle Registration.
+- Lưu Activity Log.
+- Hiển thị countdown riêng 05:00.
+Step 11.
+Reservation Monitoring Với từng Reservation, Resident có thể:
+- Tôi đã đến cổng.
+- Chọn Slot khác.
+- Hủy Reservation.
+Step 12.
+Reservation Expiring Khi một Reservation còn 30 giây, gửi cảnh báo riêng.
+A. Extend Reservation
+- Kiểm tra điều kiện.
+- Gia hạn 5 phút.
+- extend_count + 1.
+- Quay lại Step 11 của Reservation đó.
+B. Find Another Slot
+- Giải phóng Slot cũ.
+- Guest Vehicle Registration, nếu có, vẫn ACTIVE.
+- Quay lại Step 6 cho phương tiện đó.
+C. Cancel Reservation
+- Giải phóng Slot.
+- Guest Vehicle Registration, nếu có, vẫn ACTIVE.
+- Kết thúc riêng luồng của phương tiện đó.
+D. No Response
+- Reservation chuyển EXPIRED.
+- Slot trở lại AVAILABLE.
+- Guest Vehicle Registration, nếu có, vẫn ACTIVE.
+- Thông báo Resident.
+Step 13.
+Security Guard Verifies Vehicle Entry
+- Hệ thống tạo hoặc tải Parking Session WAITING_ENTRY gắn với Reservation.
+A. Resident Vehicle
+- Security Guard kiểm tra biển số.
+- Đối chiếu Vehicle APPROVED và Reservation hợp lệ.
+- Hợp lệ → chuyển Step 14.
+- Không hợp lệ → từ chối xe vào, chuyển Parking Session sang CANCELLED và thông báo Resident hoặc Parking Manager.
+B. Guest Vehicle
+- Security Guard kiểm tra biển số.
+- Đối chiếu Guest Vehicle Registration ACTIVE và Reservation hợp lệ.
+- Hợp lệ → chuyển Step 14.
+- Không hợp lệ → từ chối xe vào, chuyển Parking Session sang CANCELLED và thông báo Resident.
+- Resident chỉ được sửa biển số trước khi Security Guard xác nhận xe vào.
+Step 14.
+Start Parking Session
+- Parking Session: WAITING_ENTRY → PARKING.
+- Reservation: ACTIVE → CONFIRMED.
+- Slot: RESERVED → OCCUPIED.
+- Lưu entry_time, entry_guard_id và entry_verified = true.
+- Ghi Activity Log.
+Step 15.
+Security Guard Verifies Vehicle Exit
+- Security Guard kiểm tra biển số.
+- Đối chiếu Parking Session có status = PARKING.
+- Nếu hợp lệ → Step 16.
+- Nếu không hợp lệ → giữ nguyên trạng thái, ghi báo cáo bất thường và chuyển quy trình xử lý cho Parking Manager.
+Step 16.
+Finish Parking Session
+- Parking Session: PARKING → COMPLETED.
+- Slot: OCCUPIED → AVAILABLE.
+- Lưu exit_time, exit_guard_id và exit_verified = true.
+- Nếu là xe khách: Guest Vehicle Registration ACTIVE → USED và lưu used_at.
+- Ghi Activity Log.
+- Hiển thị trạng thái hoàn tất cho Resident và Security Guard.
+Supporting Workflow A.
+Resident Vehicle Approval Resident đăng ký Vehicle
+↓
+Hệ thống kiểm tra hạn mức căn hộ Không vượt hạn mức
+↓
+Vehicle = APPROVED
+↓
+Xuất hiện trong danh sách phương tiện có thể tìm chỗ Vượt hạn mức
+↓
+Vehicle = PENDING
+↓
+Không xuất hiện trong bộ chọn phương tiện tìm chỗ
+↓
+Parking Manager xem xét
+↓
+APPROVED hoặc REJECTED
+Supporting Workflow B.
+Guest Vehicle Registration Resident gửi một yêu cầu gồm một hoặc nhiều xe khách
+↓
+Hệ thống tạo một Guest Vehicle Registration riêng cho từng xe
+↓
+Guest Vehicle Registration = ACTIVE
+↓
+Resident có thể chọn từng xe trong yêu cầu tìm chỗ
+↓
+Mỗi xe có Recommendation Item, Reservation và Parking Session riêng
+↓
+Chỉ sau khi xe ra hợp lệ: Guest Vehicle Registration = USED
+
+NON-FUNCTIONAL REQUIREMENTS
+
+NFR-01
+Performance
+- Thời gian từ lúc gửi yêu cầu hợp lệ đến lúc hiển thị đề xuất đầu tiên phải nhỏ hơn hoặc bằng 20 giây trong môi trường demo.
+- Kiểm tra lại và tạo từng Reservation phải phản hồi trong tối đa 10 giây.
+- Tra cứu biển số tại cổng phải phản hồi trong tối đa 10 giây trong môi trường demo.
+NFR-02
+Consistency
+- Một Slot không được có hơn một Reservation ACTIVE cùng thời điểm.
+- Trạng thái Reservation, Parking Session, Slot, Vehicle và Guest Vehicle Registration phải được cập nhật nhất quán.
+- Một Guest Vehicle Registration không được có hơn một Parking Session ở trạng thái PARKING hoặc COMPLETED.
+NFR-03
+Reliability
+- Không tạo Reservation nếu bước kiểm tra cuối cùng thất bại.
+- Khi tạo Reservation lỗi, không để Slot RESERVED mà không có Reservation.
+- Khi xác nhận xe vào hoặc xe ra lỗi giữa chừng, hệ thống phải rollback hoặc khôi phục trạng thái nhất quán.
+NFR-04
+Usability
+- Trạng thái Slot và từng phương tiện phải rõ bằng màu, ký hiệu và nhãn.
+- Không chỉ dùng màu sắc; mỗi trạng thái phải có label hoặc icon.
+- Các nút Accept, Recommend Again, Cancel, Extend, Verify Entry và Verify Exit phải rõ ràng.
+- Kết quả nhiều phương tiện phải tách thành các thẻ hoặc dòng độc lập.
+NFR-05
+Accessibility
+- Nội dung chính phải đọc được trên desktop và mobile.
+- Màu chữ và nền có độ tương phản phù hợp.
+- Countdown, trạng thái phê duyệt và cảnh báo xác minh phải hiển thị bằng văn bản.
+NFR-06
+Auditability
+- Mọi hành động thay đổi Vehicle, Guest Vehicle Registration, Slot, Reservation, Parking Session và Parking Rules phải được ghi log.
+- Mọi lần Security Guard tra cứu, xác minh, từ chối, xác nhận xe vào, xác nhận xe ra hoặc báo cáo bất thường phải được ghi log.
+- Log có timestamp, actor, action, object và detail.
+NFR-07
+Security and Authorization
+- Chỉ Parking Manager được sửa Floor, Zone, Slot, Parking Rules, hạn mức căn hộ và phê duyệt Vehicle PENDING.
+- Resident chỉ thao tác với Vehicle, Guest Vehicle Registration, Reservation và lịch sử thuộc phạm vi tài khoản của mình.
+- Security Guard chỉ được tra cứu và xác minh xe vào, xe ra, ghi lịch sử và báo cáo bất thường.
+- Security Guard không được sửa cấu hình bãi xe hoặc dữ liệu đăng ký phương tiện.
+- Quyền xem lịch sử được giới hạn theo vai trò.
+NFR-08
+Maintainability
+- Trọng số xếp hạng, thời gian Reservation, giới hạn gia hạn và hạn mức Vehicle phải cấu hình được, không hard-code trong UI.
+- Parking Rules phải tách khỏi logic hội thoại.
+- Luồng xử lý từng phương tiện phải dùng chung một contract dữ liệu để hỗ trợ Vehicle và Guest Vehicle Registration.
+NFR-09
+Observability
+- Ghi nhận lỗi Mock API, lỗi Reservation, lỗi Parking Session, lỗi xác minh và lỗi chuyển trạng thái.
+- Thông báo lỗi phải đủ rõ để demo và debug theo từng phương tiện.
+NFR-10
+Data Integrity
+- plate_number phải được chuẩn hóa trước khi lưu và so sánh.
+- Timestamp phải sử dụng cùng timezone hoặc lưu UTC và hiển thị theo timezone người dùng.
+- plate_number của Guest Vehicle Registration không được thay đổi sau khi xác nhận xe vào.
+- Mỗi Reservation phải liên kết đúng một Vehicle hoặc một Guest Vehicle Registration, không đồng thời cả hai.
+NFR-11
+Failure Isolation
+- Lỗi lọc Slot, đề xuất, xác thực hoặc tạo Reservation của một phương tiện không được rollback kết quả thành công của phương tiện khác trong cùng Recommendation Session.
+NFR-12
+Idempotency
+- Thao tác phê duyệt Vehicle, xác nhận xe vào và xác nhận xe ra phải idempotent.
+- Gửi lặp cùng một yêu cầu xác nhận không được tạo Parking Session trùng hoặc chuyển trạng thái hai lần.
+
+DATA MODEL
+
+User
+user_id
+name
+role
+phone
+email
+apartment_id
+created_at
+updated_at
+role:
+- RESIDENT
+- SECURITY_GUARD
+- PARKING_MANAGER
+Ghi chú:
+- apartment_id bắt buộc đối với Resident và có thể null với các vai trò khác.
+Vehicle
+vehicle_id
+user_id
+apartment_id
+plate_number
+vehicle_type
+is_electric
+need_charging
+approval_status
+submitted_at
+approved_by
+approved_at
+rejected_by
+rejected_at
+rejection_reason
+created_at
+updated_at
+vehicle_type:
+- CAR
+- MOTORBIKE
+approval_status:
+- PENDING
+- APPROVED
+- REJECTED
+ParkingFloor
+floor_id
+floor_name
+layout_file
+total_slots
+available_slots
+is_active
+ParkingZone
+zone_id
+floor_id
+zone_name
+zone_type
+is_active
+ParkingSlot
+slot_id
+floor_id
+zone_id
+slot_code
+slot_type
+status
+reserved_until
+created_at
+updated_at
+slot_type:
+- NORMAL
+- EV_CHARGING
+status:
+- AVAILABLE
+- RESERVED
+- OCCUPIED
+- LOCKED
+- OUT_OF_SERVICE
+ParkingRule
+rule_id
+rule_name
+scope
+condition
+action
+priority
+is_active
+created_at
+updated_at
+Reservation
+reservation_id
+user_id
+vehicle_id
+guest_registration_id
+recommendation_item_id
+slot_id
+created_time
+expired_time
+extend_count
+status
+cancel_reason
+replaced_by_reservation_id
+confirmed_time
+created_at
+updated_at
+status:
+- ACTIVE
+- CONFIRMED
+- EXPIRED
+- CANCELLED
+- REPLACED
+Constraints:
+- user_id là Resident tạo Reservation.
+- Chính xác một trong hai trường vehicle_id hoặc guest_registration_id phải
+có giá trị.
+- Mỗi Reservation chỉ liên kết với một Slot.
+ActivityLog
+log_id
+actor_id
+actor_role
+action
+object_type
+object_id
+timestamp
+detail
+RecommendationSession
+session_id
+resident_id
+request_text
+normalized_request
+status
+created_at
+updated_at
+Ghi chú:
+- RecommendationSession chứa bộ tiêu chí dùng chung.
+- Kết quả từng phương tiện được lưu ở RecommendationItem.
+ SecurityGuard
+guard_id
+user_id
+name
+phone
+status
+created_at
+updated_at
+status:
+- ACTIVE
+- INACTIVE
+- SUSPENDED
+GuestVehicleRegistration
+guest_registration_id
+registration_request_id
+resident_id
+plate_number
+vehicle_type
+is_electric
+need_charging
+status
+valid_until
+created_at
+updated_at
+used_at
+cancelled_at
+expired_at
+status:
+- ACTIVE
+- USED
+- CANCELLED
+- EXPIRED
+Ghi chú:
+- registration_request_id dùng để liên kết nhiều xe được tạo trong cùng một
+yêu cầu đăng ký.
+- Reservation CANCELLED hoặc EXPIRED không làm thay đổi status của bản ghi này.
+ParkingSession
+session_id
+reservation_id
+vehicle_id
+guest_registration_id
+entry_time
+exit_time
+entry_guard_id
+exit_guard_id
+entry_verified
+exit_verified
+status
+created_at
+updated_at
+status:
+- WAITING_ENTRY
+- PARKING
+- COMPLETED
+- CANCELLED
+Constraints:
+- Chính xác một trong hai trường vehicle_id hoặc guest_registration_id phải
+có giá trị.
+- Parking Session chỉ chuyển PARKING sau xác nhận xe vào của Security Guard.
+- Parking Session chỉ chuyển COMPLETED sau xác nhận xe ra của Security Guard.
+RecommendationItem
+recommendation_item_id
+session_id
+subject_type
+vehicle_id
+guest_registration_id
+selected_floor_id
+recommended_slot_id
+rejected_slot_ids
+status
+failure_reason
+created_at
+updated_at
+subject_type:
+- RESIDENT_VEHICLE
+- GUEST_REGISTRATION
+status:
+- PENDING
+- RECOMMENDED
+- ALTERNATIVE_REQUIRED
+- RESERVED
+- FAILED
+- CANCELLED
+Constraints:
+- Chính xác một trong hai trường vehicle_id hoặc guest_registration_id phải
+có giá trị.
+- Mỗi RecommendationItem được xử lý độc lập.
+ApartmentParkingQuota
+apartment_id
+vehicle_limit
+is_active
+created_at
+updated_at
+Ghi chú:
+- Số Vehicle APPROVED hiện tại được tính từ dữ liệu Vehicle của apartment_id.
+- Vehicle mới chỉ tự động APPROVED khi số lượng sau đăng ký không vượt
+vehicle_limit.
+
+BUSINESS RULES
+
+BR-01
+AI chỉ đánh giá các Slot ở trạng thái AVAILABLE.
+BR-02
+Slot LOCKED và OUT_OF_SERVICE không được đưa vào danh sách đề xuất.
+BR-03
+Parking Rules phải được áp dụng trước khi xếp hạng Slot.
+BR-04
+Chỉ Slot đáp ứng Parking Rules của phương tiện đang xử lý mới được AI xem xét.
+BR-05
+Một Slot chỉ có một Reservation ACTIVE tại cùng một thời điểm.
+BR-06
+Soft Reservation mặc định có thời hạn 5 phút.
+BR-07
+Nếu một phương tiện không còn Slot đáp ứng đầy đủ yêu cầu, AI đề xuất phương án thay thế riêng cho phương tiện đó.
+BR-08
+AI luôn hiển thị Layout của tầng chứa Slot đề xuất và highlight Slot.
+BR-09
+Resident có thể chọn Slot khác trên Layout hoặc chuyển tầng cho từng phương tiện.
+BR-10
+Hệ thống kiểm tra lại trạng thái Slot, Parking Rules và trạng thái đủ điều kiện của phương tiện ngay trước khi tạo Reservation.
+BR-11
+Khi một Reservation còn 30 giây, Resident có thể gia hạn, tìm Slot khác hoặc hủy Reservation đó.
+BR-12
+Chỉ được gia hạn khi Reservation vẫn còn hiệu lực.
+BR-13
+Mỗi Reservation chỉ được gia hạn 1 lần.
+BR-14
+Mỗi lần gia hạn thêm 5 phút.
+BR-15
+Chỉ cho phép gia hạn khi thời gian còn lại ≤ 30 giây.
+BR-16
+Khi Reservation hết hạn hoặc bị hủy, Slot chuyển RESERVED → AVAILABLE. Guest Vehicle Registration liên quan vẫn ACTIVE.
+BR-17
+Nếu Slot chuyển LOCKED hoặc OUT_OF_SERVICE trong thời gian Reservation, hệ thống phải hủy hoặc thay thế đúng Reservation và AI đề xuất Slot khác cho phương tiện đó.
+BR-18
+Hệ thống chỉ có các actor Resident, Security Guard và Parking Manager. Khách không truy cập hệ thống trực tiếp; Resident đại diện đăng ký xe khách bằng Guest Vehicle Registration.
+BR-19
+AI lấy biển số, loại xe, trạng thái xe điện, nhu cầu sạc và dữ liệu liên quan từ Vehicle hoặc Guest Vehicle Registration đã chọn; không tự suy đoán dữ liệu phương tiện.
+BR-20
+Recommend Again phải loại khỏi lần đề xuất kế tiếp hoặc giảm ưu tiên Slot vừa bị từ chối trong RecommendationItem tương ứng.
+BR-21
+Khi chọn Slot mới trong lúc giữ Slot cũ, hệ thống phải giải phóng Reservation cũ trước hoặc thay thế trong transaction; các Reservation khác không bị ảnh hưởng.
+BR-22
+AI không tự ý thay đổi trạng thái Slot, Vehicle, Guest Vehicle Registration hoặc Parking Session; cập nhật phải đi qua Parking Management System và rule xác định.
+BR-23
+Dữ liệu Mock API phải được ghi rõ là dữ liệu mô phỏng.
+BR-24
+Resident chỉ được chọn Vehicle có approval_status = APPROVED để tìm chỗ và tạo Reservation.
+BR-25
+Khi đăng ký Vehicle mới, nếu tổng số Vehicle APPROVED sau đăng ký không vượt hạn mức căn hộ, Vehicle chuyển trực tiếp APPROVED.
+BR-26
+Nếu vượt hạn mức căn hộ, Vehicle chuyển PENDING và phải được Parking Manager xem xét theo Human-in-the-Loop.
+BR-27
+Vehicle PENDING hoặc REJECTED không xuất hiện trong bộ chọn phương tiện, không được AI sử dụng, không được tìm chỗ và không được Reservation.
+BR-28
+Chỉ Parking Manager có quyền chuyển Vehicle PENDING sang APPROVED hoặc REJECTED.
+BR-29
+Resident có thể tạo một yêu cầu đăng ký nhiều xe khách, nhưng hệ thống phải tạo một Guest Vehicle Registration riêng cho từng xe.
+BR-30
+Mỗi Guest Vehicle Registration có định danh, trạng thái, Reservation và Parking Session độc lập; không chia sẻ các bản ghi này giữa nhiều xe.
+BR-31
+Chỉ Guest Vehicle Registration ACTIVE được tìm chỗ hoặc tạo Reservation.
+BR-32
+Reservation CANCELLED hoặc EXPIRED không làm Guest Vehicle Registration mất hiệu lực; Resident có thể tạo Reservation mới nếu registration vẫn ACTIVE.
+BR-33
+Một Guest Vehicle Registration chỉ được có một Reservation ACTIVE tại một thời điểm.
+BR-34
+Một Guest Vehicle Registration chỉ được sử dụng cho tối đa một Parking Session đạt PARKING hoặc COMPLETED.
+BR-35
+Guest Vehicle Registration chỉ chuyển USED sau khi Security Guard xác nhận xe ra và Parking Session chuyển COMPLETED.
+BR-36
+Trạng thái CANCELLED hoặc EXPIRED của Guest Vehicle Registration chỉ phát sinh do Resident hủy registration hoặc registration hết thời hạn; không phát sinh từ trạng thái của Reservation.
+BR-37
+Một yêu cầu tìm chỗ có thể áp dụng cùng bộ tiêu chí cho một Vehicle APPROVED, một hoặc nhiều Guest Vehicle Registration ACTIVE hoặc kết hợp.
+BR-38
+AI phải xử lý Parking Rules, loại xe, xe điện, nhu cầu sạc, lọc Slot, xếp hạng và đề xuất độc lập cho từng phương tiện.
+BR-39
+Mỗi phương tiện tạo một RecommendationItem và một Reservation riêng. Kết quả thất bại của một phương tiện không làm rollback kết quả của xe khác.
+BR-40
+Hai phương tiện trong cùng RecommendationSession không được nhận cùng một Slot.
+BR-41
+Khi xe Resident vào, Security Guard chỉ xác nhận nếu biển số khớp Vehicle APPROVED và có Reservation hợp lệ.
+BR-42
+Khi xe khách vào, Security Guard chỉ xác nhận nếu biển số khớp Guest Vehicle Registration ACTIVE và có Reservation hợp lệ.
+BR-43
+Nếu biển số xe khách không khớp, xe bị từ chối vào. Resident chỉ được sửa biển số trước xác nhận xe vào; Security Guard không được sửa dữ liệu.
+BR-44
+Xác nhận xe vào thành công phải chuyển Reservation sang CONFIRMED, Parking Session sang PARKING và Slot sang OCCUPIED trong cùng một giao dịch nhất quán.
+BR-45
+Khi xe ra, Security Guard phải đối chiếu biển số với Parking Session PARKING trước khi xác nhận.
+BR-46
+Xác nhận xe ra thành công phải chuyển Parking Session sang COMPLETED và Slot sang AVAILABLE. Với xe khách, Guest Vehicle Registration chuyển USED trong cùng một giao dịch nhất quán.
+BR-47
+Nếu xác minh xe ra thất bại, Parking Session và Slot giữ nguyên; Security Guard phải báo cáo bất thường để Parking Manager xử lý.
+BR-48
+Security Guard không có quyền quản lý Layout, quản lý Slot thủ công, quản lý Parking Rules hoặc phê duyệt Vehicle.
+BR-49
+Mọi thao tác xác minh xe vào, xác minh xe ra, xác nhận, từ chối và báo cáo bất thường phải được ghi Activity Log.
+BR-50
+Mọi thao tác phê duyệt hoặc từ chối Vehicle phải ghi Parking Manager, timestamp và lý do nếu REJECTED.
+BR-51
+Agent chỉ xử lý các yêu cầu liên quan đến nghiệp vụ tìm chỗ. Nếu nội dung không chứa tiêu chí tìm chỗ hoặc không xác định được ý định của Resident, Agent phải từ chối xử lý và yêu cầu nhập lại.
+
+ACCEPTANCE CRITERIA
+
+AC-01
+Shared Request Understanding
+Given Resident đã chọn ít nhất một Vehicle APPROVED hoặc Guest Vehicle Registration ACTIVE,
+When Resident nhập một bộ tiêu chí tìm chỗ chung,
+Then Agent chuẩn hóa tiêu chí chung và sử dụng đúng dữ liệu phương tiện của từng mục mà không yêu cầu nhập lại.
+AC-02
+Approved Vehicle Selection
+Given Resident có Vehicle APPROVED, PENDING và REJECTED,
+When mở bộ chọn phương tiện để tìm chỗ,
+Then chỉ Vehicle APPROVED xuất hiện.
+AC-03
+Rule Filtering
+Given có Slot AVAILABLE nhưng vi phạm Parking Rules của một phương tiện,
+When hệ thống lọc ứng viên cho phương tiện đó,
+Then Slot không xuất hiện trong danh sách đề xuất của phương tiện đó.
+AC-04
+Valid Recommendation
+Given có ít nhất một Slot hợp lệ cho từng phương tiện,
+When Agent hoàn tất xếp hạng,
+Then hệ thống hiển thị một kết quả riêng gồm biển số, Slot có điểm cao nhất, lý do và Layout đúng tầng cho từng phương tiện.
+AC-05
+Alternative Recommendation
+Given một phương tiện không có Slot đáp ứng đầy đủ yêu cầu,
+When Agent xử lý kết quả,
+Then chỉ phương tiện đó nhận phương án thay thế hoặc lựa chọn chờ/hủy và các phương tiện khác vẫn tiếp tục.
+AC-06
+Manual Selection
+Given Resident từ chối phương án thay thế của một phương tiện,
+When hệ thống hiển thị Layout,
+Then Resident có thể chọn một Slot hợp lệ hoặc chuyển tầng cho phương tiện đó.
+AC-07
+Final Validation
+Given Slot đã được đề xuất hoặc chọn thủ công,
+When Resident xác nhận chọn Slot,
+Then hệ thống kiểm tra lại Slot, Parking Rules và trạng thái APPROVED hoặc ACTIVE của đối tượng trước khi tạo Reservation.
+AC-08
+Concurrent Reservation
+Given hai yêu cầu hoặc hai phương tiện cùng chọn một Slot,
+When các yêu cầu Reservation được gửi gần như đồng thời,
+Then chỉ một Reservation ACTIVE được tạo cho Slot đó.
+AC-09
+Separate Reservation Creation
+Given nhiều phương tiện có Slot hợp lệ,
+When Resident chấp nhận các đề xuất,
+Then mỗi phương tiện có một Reservation và countdown riêng; lỗi của một Reservation không rollback Reservation đã thành công của phương tiện khác.
+AC-10
+Expiry Warning
+Given một Reservation còn 30 giây,
+When countdown cập nhật,
+Then cảnh báo và các hành động Extend, Find Another Slot, Cancel xuất hiện cho đúng Reservation.
+AC-11
+Extension Success
+Given Reservation ACTIVE, còn tối đa 30 giây và extend_count = 0,
+When Resident chọn Extend,
+Then expired_time tăng thêm 5 phút và extend_count = 1.
+AC-12
+Extension Rejected
+Given extend_count = 1,
+When Resident tiếp tục chọn Extend,
+Then hệ thống từ chối và hiển thị thông báo đạt giới hạn.
+AC-13
+Reservation Expiration
+Given Reservation của xe khách hết thời gian mà không được xác nhận xe vào,
+When expired_time được đạt tới,
+Then Reservation chuyển EXPIRED, Slot trở lại AVAILABLE và Guest Vehicle Registration vẫn ACTIVE.
+AC-14
+Reservation Cancellation
+Given Reservation ACTIVE của một phương tiện,
+When Resident chọn Cancel,
+Then Reservation chuyển CANCELLED, Slot trở lại AVAILABLE, Guest Vehicle Registration nếu có vẫn ACTIVE và các Reservation khác không bị ảnh hưởng.
+AC-15
+Find Another Slot
+Given một Reservation ACTIVE,
+When Resident chọn Find Another Slot,
+Then Slot cũ được giải phóng và Agent chỉ xếp hạng lại cho phương tiện đó.
+AC-16
+Resident Vehicle Entry Confirmation
+Given Vehicle APPROVED có Reservation ACTIVE và biển số khớp,
+When Security Guard xác nhận xe vào,
+Then Reservation chuyển CONFIRMED, Parking Session chuyển WAITING_ENTRY →
+PARKING, Slot chuyển OCCUPIED và thông tin entry verification được lưu.
+AC-17
+Slot Becomes Invalid
+Given Reservation ACTIVE,
+When Parking Manager chuyển Slot sang OUT_OF_SERVICE hoặc LOCKED,
+Then đúng Reservation được hủy hoặc thay thế, Agent đề xuất Slot khác cho phương tiện đó và các phương tiện khác không bị ảnh hưởng.
+AC-18
+Role Authorization
+Given actor không có quyền Parking Manager,
+When gọi chức năng sửa Parking Rules, quản lý Slot thủ công, cấu hình hạn mức hoặc phê duyệt Vehicle,
+Then hệ thống từ chối thao tác.
+AC-19
+Activity Log
+Given có thao tác đăng ký, phê duyệt, tạo, gia hạn, hủy, hết hạn, xác minh xe vào, xác minh xe ra hoặc thay đổi trạng thái,
+When thao tác hoàn tất hoặc thất bại,
+Then Activity Log chứa actor, action, object, timestamp, kết quả và detail.
+AC-20
+Gate 1 Scope Disclosure
+Given hệ thống đang chạy bản demo Gate 1,
+When hiển thị trạng thái thời gian thực,
+Then giao diện hoặc tài liệu ghi rõ dữ liệu đến từ Mock API và xác minh biển số được thực hiện thủ công bởi Security Guard.
+AC-21
+Vehicle Within Quota
+Given số Vehicle APPROVED của căn hộ chưa đạt hạn mức,
+When Resident đăng ký Vehicle mới hợp lệ,
+Then Vehicle chuyển APPROVED và có thể xuất hiện trong bộ chọn tìm chỗ.
+AC-22
+Vehicle Over Quota
+Given số Vehicle APPROVED của căn hộ đã đạt hạn mức,
+When Resident đăng ký Vehicle mới,
+Then Vehicle chuyển PENDING, không xuất hiện trong bộ chọn và không được tạo Reservation.
+AC-23
+Human-in-the-Loop Approval
+Given Vehicle PENDING,
+When Parking Manager chọn APPROVE hoặc REJECT,
+Then Vehicle chuyển đúng trạng thái, lưu actor và timestamp; Vehicle APPROVED xuất hiện trong bộ chọn còn Vehicle REJECTED không được sử dụng.
+AC-24
+Guest Registration Batch
+Given Resident gửi một yêu cầu có ba xe khách hợp lệ,
+When hệ thống xử lý yêu cầu,
+Then tạo ba Guest Vehicle Registration khác guest_registration_id, cùng registration_request_id và có trạng thái độc lập.
+AC-25
+Multi-Vehicle Independent Processing
+Given một yêu cầu gồm một Vehicle APPROVED và ba Guest Vehicle Registration ACTIVE,
+When AI tìm chỗ,
+Then tạo bốn Recommendation Item độc lập và mỗi mục có thể nhận Slot hoặc lỗi riêng.
+AC-26
+Guest Reservation Reuse
+Given Reservation của Guest Vehicle Registration ACTIVE bị CANCELLED hoặc EXPIRED,
+When Resident gửi yêu cầu tìm chỗ mới cho registration đó,
+Then hệ thống cho phép tạo Reservation mới nếu không có Reservation ACTIVE.
+AC-27
+Guest Entry Verification Success
+Given Guest Vehicle Registration ACTIVE, Reservation ACTIVE và biển số khớp,
+When Security Guard xác nhận xe vào,
+Then Parking Session chuyển WAITING_ENTRY → PARKING, Slot chuyển OCCUPIED và Guest Vehicle Registration vẫn ACTIVE.
+AC-28
+Guest Entry Verification Failure
+Given biển số xe khách không khớp Guest Vehicle Registration,
+When Security Guard kiểm tra xe vào,
+Then hệ thống từ chối xác nhận, chuyển Parking Session WAITING_ENTRY sang CANCELLED, thông báo Resident, giữ Guest Vehicle Registration ACTIVE và không chuyển Slot sang OCCUPIED.
+AC-29
+Guest Plate Correction Before Entry
+Given Guest Vehicle Registration ACTIVE chưa được xác nhận xe vào,
+When Resident sửa plate_number và gửi lại,
+Then hệ thống lưu biển số mới, ghi Activity Log và cho phép Security Guard xác minh lại.
+AC-30
+Guest Plate Locked After Entry
+Given Parking Session của xe khách đang PARKING,
+When Resident hoặc Security Guard cố sửa plate_number,
+Then hệ thống từ chối thao tác.
+AC-31
+Resident Vehicle Entry Failure
+Given biển số xe Resident không khớp Vehicle APPROVED hoặc không có Reservation hợp lệ,
+When Security Guard kiểm tra xe vào,
+Then xe bị từ chối, Parking Session WAITING_ENTRY chuyển CANCELLED và hệ thống thông báo Resident hoặc Parking Manager.
+AC-32
+Vehicle Exit Success
+Given Parking Session PARKING và biển số khớp,
+When Security Guard xác nhận xe ra,
+Then Parking Session chuyển COMPLETED, Slot chuyển AVAILABLE và thông tin exit verification được lưu.
+AC-33
+Guest Registration Used After Exit
+Given Parking Session PARKING của xe khách,
+When Security Guard xác nhận xe ra hợp lệ,
+Then Parking Session chuyển COMPLETED và Guest Vehicle Registration chuyển USED, không thể tạo Reservation mới.
+AC-34
+Guest Registration Not Used At Entry
+Given Security Guard vừa xác nhận xe khách vào,
+When Parking Session chuyển PARKING,
+Then Guest Vehicle Registration vẫn ACTIVE và chưa có used_at.
+AC-35
+One Complete Guest Parking Session
+Given Guest Vehicle Registration đã có Parking Session COMPLETED,
+When Resident cố tạo Reservation mới cho registration đó,
+Then hệ thống từ chối vì registration đã USED.
+AC-36
+Exit Verification Failure
+Given biển số không khớp Parking Session PARKING,
+When Security Guard kiểm tra xe ra,
+Then Parking Session và Slot giữ nguyên, Activity Log ghi thất bại và một báo cáo bất thường được tạo cho Parking Manager.
+AC-37
+Security Guard Permission Boundary
+Given Security Guard đã đăng nhập,
+When cố quản lý Layout, sửa Slot thủ công, sửa Parking Rules hoặc phê duyệt Vehicle,
+Then hệ thống từ chối tất cả thao tác đó.
+AC-38
+Idempotent Entry and Exit
+Given một yêu cầu xác nhận xe vào hoặc xe ra đã thành công,
+When cùng yêu cầu được gửi lại với cùng idempotency key,
+Then hệ thống trả lại kết quả trước đó và không tạo Parking Session hoặc thay đổi trạng thái lần thứ hai.
+AC-39
+Invalid Request
+Given Resident nhập &quot;1+1&quot; When Agent phân tích yêu cầu Then Agent không tạo Recommendation Session và hiển thị thông báo yêu cầu nhập lại tiêu chí tìm chỗ.
+
+FUTURE ENHANCEMENTS
+
+FE-01
+Indoor Navigation bằng BLE/UWB.
+FE-02
+Barrier Integration.
+FE-03
+Online Payment.
+FE-04
+Scheduled Reservation.
+FE-05
+AI Learning User Preference.
+FE-06
+Favorite Slot.
+FE-07
+Demand Prediction.
+FE-08
+Building Integration.
+FE-09
+Multi Parking Management. Ghi chú:
+Camera/ANPR không được đưa vào Future Enhancements của phiên bản này theo yêu cầu hiện tại.
+
+SUCCESS METRICS
+
+M-01
+AI Recommendation Acceptance Rate Số đề xuất AI được chấp nhận / Tổng số đề xuất AI hợp lệ.
+M-02
+Manual Slot Selection Rate Số Recommendation Item được chọn Slot thủ công / Tổng số Recommendation Item được hiển thị đề xuất.
+M-03
+Reservation Success Rate Số Reservation tạo thành công / Tổng số lần Resident xác nhận Slot.
+M-04
+Reservation-to-Entry Conversion Rate Số Reservation chuyển CONFIRMED / Tổng số Reservation ACTIVE đã tạo.
+M-05
+Reservation Extension Rate Số Reservation được gia hạn / Tổng số Reservation hiển thị cảnh báo 30 giây.
+M-06
+Reservation Expiration Rate Số Reservation EXPIRED / Tổng số Reservation đã tạo.
+M-07
+Alternative Recommendation Acceptance Rate Số phương án thay thế được chấp nhận / Tổng số lần đưa phương án thay thế.
+M-08
+AI Response Time Từ lúc gửi yêu cầu hợp lệ đến khi nhận đề xuất đầu tiên cho từng phương tiện.
+M-09
+Average Parking Search Time Từ lúc bắt đầu Recommendation Session đến khi các Reservation được tạo hoặc các Recommendation Item kết thúc.
+M-10
+Parking Slot Utilization Thời gian Slot OCCUPIED / Tổng thời gian Slot có thể sử dụng.
+M-11
+Slot Conflict Rate Số lần tạo Reservation thất bại do xung đột / Tổng số lần xác nhận Slot.
+M-12
+User Satisfaction Score Đánh giá của Resident sau phiên theo thang 1–5 sao.
+M-13
+Vehicle Approval Turnaround Time Thời gian trung bình từ lúc Vehicle chuyển PENDING đến khi Parking Manager APPROVED hoặc REJECTED.
+M-14
+Vehicle Approval Rate Số Vehicle PENDING được APPROVED / Tổng số Vehicle PENDING đã được xử lý.
+M-15
+Multi-Vehicle Independent Completion Rate Số Recommendation Item hoàn tất mà không bị ảnh hưởng bởi lỗi mục khác / Tổng số Recommendation Item trong yêu cầu nhiều phương tiện.
+M-16
+Entry Verification Success Rate Số lần xác nhận xe vào thành công / Tổng số lần Security Guard kiểm tra xe vào.
+M-17
+Exit Verification Success Rate Số lần xác nhận xe ra thành công / Tổng số lần Security Guard kiểm tra xe ra.
+M-18
+Average Gate Verification Time Thời gian trung bình từ lúc Security Guard bắt đầu tra cứu đến khi xác nhận hoặc từ chối xe vào hoặc xe ra.
+M-19
+Guest Registration Utilization Rate Số Guest Vehicle Registration chuyển USED / Tổng số Guest Vehicle Registration đã tạo và hết vòng đời quan sát.
+M-20
+Gate Anomaly Rate Số báo cáo bất thường tại cổng / Tổng số lượt kiểm tra xe vào và xe ra.
+
+APPENDIX
+
+16.1. Default Ranking Weights
+Near Entrance     : 40% Near Elevator     : 30% Easy Driving      : 20% Near Destination  : 10% Total             : 100%
+16.2. Slot Status Definitions
+AVAILABLE
+- Slot có thể được lọc và lựa chọn.
+RESERVED
+- Slot đang được giữ logic bởi một Reservation ACTIVE.
+OCCUPIED
+- Security Guard đã xác nhận xe vào và Parking Session đang PARKING.
+LOCKED
+- Slot bị khóa bởi hệ thống hoặc Parking Manager.
+OUT_OF_SERVICE
+- Slot không thể sử dụng.
+Reservation Status Definitions
+ACTIVE
+- Reservation còn hiệu lực và xe chưa được xác nhận vào.
+CONFIRMED
+- Security Guard đã xác nhận xe vào.
+EXPIRED
+- Reservation hết hạn mà xe chưa được xác nhận vào.
+CANCELLED
+- Resident hoặc hệ thống hủy Reservation.
+REPLACED
+- Reservation được thay bằng Reservation cho Slot khác.
+Example Parking Rules
+Rule A — Approved Resident Vehicle Only
+- Scope: Resident Vehicle Search.
+- Condition: Vehicle approval_status is not APPROVED.
+- Action: DENY.
+Rule B — EV Priority
+- Scope: EV Zone.
+- Condition: Vehicle needs charging.
+- Action: PRIORITIZE.
+Rule C — Active Guest Registration Only
+- Scope: Guest Vehicle Search.
+- Condition: Guest Vehicle Registration status is not ACTIVE.
+- Action: DENY.
+Rule D — Staff Area
+- Scope: Zone A.
+- Condition: Vehicle is not authorized for staff area.
+- Action: DENY.
+Example Recommendation
+Shared Request:
+&quot;Gần thang máy lên tầng 10.&quot; Resident Vehicle Plate     : 51A-12345 Slot Code : B2-A08 Reason    : Near Elevator, valid for vehicle type. Guest Vehicle Registration 1 Plate     : 30K-11111 Slot Code : B2-A09 Reason    : Near Elevator, normal charging requirement. Guest Vehicle Registration 2 Plate     : 29A-88888 Slot Code : B1-C15 Reason    : Best available Slot after Parking Rules. Guest Vehicle Registration 3 Plate     : 59H-12345 Slot Code : B2-A10 Reason    : Near Elevator, easy driving.
+Layout Legend
+AI Recommended   : Slot được AI khuyến nghị. AVAILABLE        : Slot còn trống. OCCUPIED         : Slot đã có xe và Parking Session đang PARKING. RESERVED         : Slot đang được giữ. LOCKED           : Slot bị khóa. OUT_OF_SERVICE   : Slot không sử dụng. EV Charging      : Slot có sạc xe điện.
+Gate 1 Demo Scenarios
+Scenario A — Approved Resident Vehicle Happy Path
+- Resident chọn Vehicle APPROVED.
+- AI đề xuất Slot.
+- Resident chấp nhận và tạo Reservation.
+- Security Guard xác nhận xe vào.
+- Parking Session chuyển PARKING, Slot chuyển OCCUPIED.
+- Security Guard xác nhận xe ra.
+- Parking Session chuyển COMPLETED, Slot chuyển AVAILABLE.
+Scenario B — Vehicle Over Apartment Quota
+- Resident đăng ký Vehicle mới khi đã đạt hạn mức.
+- Vehicle chuyển PENDING.
+- Vehicle không xuất hiện trong bộ chọn tìm chỗ.
+- Parking Manager APPROVED hoặc REJECTED.
+Scenario C — Guest Registration Batch
+- Resident gửi một yêu cầu gồm ba xe khách.
+- Hệ thống tạo ba Guest Vehicle Registration ACTIVE độc lập.
+- Mỗi registration có ID và trạng thái riêng.
+Scenario D — Multi-Vehicle Search With Partial Failure
+- Resident chọn một Vehicle APPROVED và ba Guest Vehicle Registration ACTIVE.
+- Ba phương tiện nhận Slot.
+- Một phương tiện không có Slot phù hợp và nhận phương án thay thế.
+- Ba kết quả còn lại tiếp tục tạo Reservation bình thường.
+Scenario E — Reservation Extension
+- Một Reservation còn 30 giây.
+- Resident gia hạn.
+- Hệ thống cộng thêm 5 phút cho đúng Reservation.
+Scenario F — Guest Reservation Expired
+- Reservation của xe khách chuyển EXPIRED.
+- Slot trở lại AVAILABLE.
+- Guest Vehicle Registration vẫn ACTIVE và có thể tạo Reservation mới.
+Scenario G — Guest Entry and Exit
+- Security Guard xác minh xe khách bằng registration ACTIVE.
+- Xe vào, Parking Session chuyển PARKING.
+- Registration vẫn ACTIVE.
+- Xe ra, Parking Session chuyển COMPLETED.
+- Registration chuyển USED.
+Scenario H — Slot Conflict
+- Hai phương tiện cùng chọn một Slot.
+- Chỉ một Reservation được tạo.
+- Phương tiện còn lại nhận thông báo Slot không còn khả dụng.
+Scenario I — Gate Verification Failure
+- Biển số không khớp dữ liệu hợp lệ.
+- Security Guard từ chối xác nhận.
+- Trạng thái Slot và Parking Session không thay đổi.
+- Activity Log và báo cáo bất thường được tạo.
+Terminology
+AI Agent
+- Thành phần hội thoại, chuẩn hóa yêu cầu và điều phối tìm Slot.
+Parking Management System
+- Thành phần quản lý dữ liệu, rule, trạng thái, Reservation và Parking Session.
+Soft Reservation
+- Giữ chỗ logic trong hệ thống; không khóa vật lý Slot.
+Parking Rules
+- Tập quy tắc xác định phương tiện có quyền sử dụng Slot.
+Approved Resident Vehicle
+- Vehicle của Resident có approval_status = APPROVED và đủ điều kiện tìm chỗ.
+Guest Vehicle Registration
+- Bản đăng ký xe khách do Resident tạo; khách không truy cập hệ thống trực tiếp.
+Recommendation Session
+- Một yêu cầu tìm chỗ chứa bộ tiêu chí chung cho một hoặc nhiều phương tiện.
+Recommendation Item
+- Đơn vị xử lý độc lập của một Vehicle hoặc Guest Vehicle Registration trong
+Recommendation Session. Parking Session
+- Phiên bắt đầu khi Security Guard xác nhận xe vào và kết thúc khi xác nhận xe ra.
+Security Guard
+- Actor xác minh xe vào, xe ra và báo cáo bất thường trong phạm vi quyền hạn.
+Activity Log
+- Nhật ký hành động phục vụ kiểm tra và truy vết.
+Resident Vehicle Approval Status Definitions
+PENDING
+- Vehicle vượt hạn mức căn hộ và đang chờ Parking Manager xem xét.
+APPROVED
+- Vehicle đủ điều kiện xuất hiện trong bộ chọn và tham gia tìm chỗ.
+REJECTED
+- Vehicle bị từ chối và không được tham gia tìm chỗ.
+Guest Vehicle Registration Status Definitions
+ACTIVE
+- Registration còn hiệu lực, chưa hoàn tất Parking Session và có thể tạo
+Reservation nếu không có Reservation ACTIVE. USED
+- Xe đã hoàn tất quy trình ra bãi; registration không thể tái sử dụng.
+CANCELLED
+- Resident đã hủy registration trước khi được sử dụng hoàn chỉnh.
+EXPIRED
+- Registration hết thời hạn hiệu lực mà chưa hoàn tất Parking Session.
+Parking Session Status Definitions
+WAITING_ENTRY
+- Phiên đang chờ hoặc đang thực hiện xác minh xe vào.
+PARKING
+- Security Guard đã xác nhận xe vào; xe đang ở trong bãi.
+COMPLETED
+- Security Guard đã xác nhận xe ra và phiên đã kết thúc.
+CANCELLED
+- Quá trình vào bãi bị hủy hoặc từ chối trước khi chuyển PARKING.
+

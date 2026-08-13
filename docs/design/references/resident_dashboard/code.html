@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resident Dashboard - Smart Parking AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#d3e4fe",
+                    "on-primary-fixed": "#00174b",
+                    "on-tertiary-fixed": "#360f00",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#434655",
+                    "status-reserved": "#F59E0B",
+                    "tertiary-fixed": "#ffdbcd",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "outline-variant": "#c3c6d7",
+                    "on-surface": "#191b23",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf8ff",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "ai-accent": "#8B5CF6",
+                    "outline": "#737686",
+                    "surface-container-low": "#f3f3fe",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-container": "#2563eb",
+                    "on-background": "#191b23",
+                    "background": "#faf8ff",
+                    "inverse-surface": "#2e3039",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container": "#ededf9",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-container": "#d0e1fb",
+                    "on-tertiary-container": "#ffede6",
+                    "tertiary": "#943700",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "surface-tint": "#0053db",
+                    "on-primary-container": "#eeefff",
+                    "surface-container-high": "#e7e7f3",
+                    "on-tertiary": "#ffffff",
+                    "border-subtle": "#E2E8F0",
+                    "primary": "#004ac6",
+                    "surface-container-lowest": "#ffffff",
+                    "bg-main": "#F8FAFC",
+                    "status-occupied": "#EF4444",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#bc4800",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d9d9e5",
+                    "secondary": "#505f76",
+                    "status-available": "#10B981",
+                    "inverse-on-surface": "#f0f0fb",
+                    "on-secondary-fixed-variant": "#38485d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px",
+                    "stack-lg": "32px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .ai-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .parking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 4px;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    </style>
+</head>
+<body class="bg-bg-main font-body-md text-on-surface antialiased">
+<!-- SideNavBar (Permanent Desktop) -->
+<aside class="fixed left-0 top-0 bottom-0 z-50 py-stack-lg px-gutter w-[240px] h-screen hidden lg:flex flex-col bg-surface-container-lowest border-r border-border-subtle">
+<div class="mb-stack-lg">
+<h1 class="text-headline-md font-headline-md text-primary tracking-tight">Smart Parking AI</h1>
+<p class="font-label-md text-label-md text-secondary mt-1">Resident Console</p>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-primary font-bold bg-primary-container/10 transition-all scale-100 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-secondary hover:bg-surface-container-high transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-body-md">Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-secondary hover:bg-surface-container-high transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-body-md">Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-secondary hover:bg-surface-container-high transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-secondary hover:bg-surface-container-high transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full text-left flex items-center gap-3 px-4 py-2 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help_center</span>
+<span class="font-label-md">Help Center</span>
+</button>
+<div class="pt-4 border-t border-border-subtle">
+<a class="flex items-center gap-3 px-4 py-2 text-secondary hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="lg:ml-[240px] flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 right-0 z-40 h-16 flex items-center justify-between px-gutter bg-surface-container-lowest/80 backdrop-blur-md shadow-sm border-b border-border-subtle">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-transparent focus:border-primary focus:ring-0 rounded-xl font-body-md transition-all" placeholder="Search slots, floors, or vehicles..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6 ml-gutter">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer relative active:opacity-70">
+                    notifications
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-surface-container-lowest"></span>
+</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-70">chat_sparkle</button>
+<div class="flex items-center gap-3 pl-4 border-l border-border-subtle">
+<div class="text-right hidden sm:block">
+<p class="font-title-md text-primary">Alex Rivera</p>
+<p class="text-label-md text-secondary">Resident • Apt 402</p>
+</div>
+<span class="material-symbols-outlined text-4xl text-outline-variant cursor-pointer active:opacity-70">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-gutter flex flex-col lg:flex-row gap-6 max-w-container-max mx-auto w-full flex-grow">
+<!-- Main Column -->
+<div class="flex-1 space-y-6">
+<!-- Welcome Section -->
+<section>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Welcome back, Alex</h2>
+<p class="text-body-lg text-secondary">Your AI assistant has secured a spot for your evening arrival.</p>
+</section>
+<!-- Bento Grid Dashboard Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Current Slot -->
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-md text-secondary uppercase tracking-wider">Current Slot</span>
+<span class="material-symbols-outlined text-status-available">verified</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-display text-primary">B2-42</span>
+<span class="text-label-md text-secondary">Level B2</span>
+</div>
+<div class="mt-4 flex items-center gap-2 text-status-available">
+<span class="material-symbols-outlined text-sm">electric_bolt</span>
+<span class="font-label-md">EV Charging Active</span>
+</div>
+</div>
+<!-- Vehicles -->
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-md text-secondary uppercase tracking-wider">Vehicles</span>
+<span class="material-symbols-outlined text-primary">directions_car</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-mono-sm text-on-surface">ABC-1234</span>
+<span class="text-label-md bg-secondary-container px-2 py-0.5 rounded text-on-secondary-container">Tesla Model 3</span>
+</div>
+<div class="flex items-center justify-between opacity-50">
+<span class="font-mono-sm text-on-surface">XYZ-9876</span>
+<span class="text-label-md bg-surface-container-high px-2 py-0.5 rounded text-secondary">Guest - Offsite</span>
+</div>
+</div>
+</div>
+<!-- Expiration / Status -->
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-md text-secondary uppercase tracking-wider">Reservation</span>
+<span class="material-symbols-outlined text-status-reserved">schedule</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-headline-lg text-on-surface">14h 22m</span>
+</div>
+<p class="text-label-md text-secondary mt-2">Ends Tomorrow, 10:00 AM</p>
+<button class="mt-4 w-full py-2 bg-secondary-fixed text-on-secondary-fixed rounded-lg font-label-md hover:bg-secondary-container transition-colors">Extend Stay</button>
+</div>
+</div>
+<!-- Parking Map Preview -->
+<section class="bg-surface-container-lowest p-6 rounded-xl border border-border-subtle">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="font-title-md text-on-surface">Live Floor Map</h3>
+<p class="text-label-md text-secondary">Real-time availability monitoring</p>
+</div>
+<div class="flex bg-surface-container-low p-1 rounded-lg">
+<button class="px-4 py-1 text-label-md font-bold bg-white shadow-sm rounded-md">B1</button>
+<button class="px-4 py-1 text-label-md text-secondary hover:text-on-surface">B2</button>
+<button class="px-4 py-1 text-label-md text-secondary hover:text-on-surface">B3</button>
+</div>
+</div>
+<div class="flex flex-col md:flex-row gap-8">
+<!-- Visual Map Representative -->
+<div class="flex-grow grid grid-cols-8 gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant/30">
+<!-- Generate a representative parking grid -->
+<script>
+                                document.currentScript.insertAdjacentHTML('afterend', 
+                                    Array(32).fill(0).map((_, i) => {
+                                        const status = Math.random() > 0.4 ? 'status-occupied' : (Math.random() > 0.2 ? 'status-available' : 'status-reserved');
+                                        const isUser = i === 18;
+                                        return `<div class="aspect-square rounded-sm border-2 ${isUser ? 'border-primary ring-2 ring-primary/20 bg-primary/10' : 'border-transparent bg-' + status + '/20'} flex items-center justify-center relative group">
+                                            <div class="w-2 h-4 rounded-full bg-${isUser ? 'primary' : status}"></div>
+                                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded hidden group-hover:block z-10 whitespace-nowrap">Slot ${i+1}</div>
+                                        </div>`;
+                                    }).join('')
+                                );
+                            </script>
+</div>
+<!-- Legend -->
+<div class="w-full md:w-48 space-y-4">
+<h4 class="font-label-md text-secondary uppercase">Legend</h4>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-status-available"></span>
+<span class="text-body-md">Available</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-status-occupied"></span>
+<span class="text-body-md">Occupied</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-status-reserved"></span>
+<span class="text-body-md">Reserved</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-body-md font-bold">Your Car</span>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-border-subtle">
+<button class="flex items-center gap-2 text-primary font-bold hover:underline">
+<span class="material-symbols-outlined text-sm">fullscreen</span>
+<span class="text-label-md">View Full Map</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Activities -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-title-md text-on-surface">Recent Activity</h3>
+<button class="text-label-md text-primary font-bold">View History</button>
+</div>
+<div class="bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden">
+<div class="divide-y divide-border-subtle">
+<div class="p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-status-available/10 flex items-center justify-center text-status-available">
+<span class="material-symbols-outlined">login</span>
+</div>
+<div>
+<p class="font-body-md font-medium text-on-surface">Vehicle Entered</p>
+<p class="text-label-md text-secondary">Gate 2 • Tesla Model 3</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md text-on-surface">Today, 5:42 PM</p>
+<p class="text-label-md text-status-available">Success</p>
+</div>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-ai-accent/10 flex items-center justify-center text-ai-accent">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div>
+<p class="font-body-md font-medium text-on-surface">AI Reservation Updated</p>
+<p class="text-label-md text-secondary">Switched to B2-42 for EV charge</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md text-on-surface">Today, 2:15 PM</p>
+<p class="text-label-md text-secondary">System Auto</p>
+</div>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-status-reserved/10 flex items-center justify-center text-status-reserved">
+<span class="material-symbols-outlined">payment</span>
+</div>
+<div>
+<p class="font-body-md font-medium text-on-surface">Monthly Payment Processed</p>
+<p class="text-label-md text-secondary">Invoice #INV-2024-001</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md text-on-surface">Oct 1, 9:00 AM</p>
+<p class="text-label-md text-primary">$185.00</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Panel: AI Chat Assistant -->
+<aside class="lg:w-[320px] flex flex-col h-[calc(100vh-120px)] sticky top-[88px]">
+<div class="glass-panel flex-grow rounded-2xl flex flex-col overflow-hidden shadow-xl shadow-ai-accent/5">
+<!-- AI Header -->
+<div class="p-4 bg-white/50 border-b border-border-subtle flex items-center justify-between ai-shimmer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-ai-accent flex items-center justify-center text-white shadow-lg shadow-ai-accent/20">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+</div>
+<div>
+<h4 class="font-title-md text-on-surface text-sm">Parking AI</h4>
+<p class="text-[10px] text-ai-accent font-bold uppercase tracking-widest">Active Assistant</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-on-surface text-sm">more_vert</button>
+</div>
+<!-- Chat History -->
+<div class="flex-grow p-4 space-y-4 overflow-y-auto">
+<div class="flex flex-col gap-1 items-start max-w-[85%]">
+<div class="bg-surface-container-high p-3 rounded-2xl rounded-tl-sm text-body-md text-on-surface">
+                                Hello Alex! I noticed you have a guest arriving at 8 PM. Shall I reserve a temporary spot on B1?
+                            </div>
+<span class="text-[10px] text-secondary ml-1">2:30 PM</span>
+</div>
+<div class="flex flex-col gap-1 items-end ml-auto max-w-[85%]">
+<div class="bg-primary text-white p-3 rounded-2xl rounded-tr-sm text-body-md shadow-md">
+                                Yes please, for a Silver SUV.
+                            </div>
+<span class="text-[10px] text-secondary mr-1">2:31 PM</span>
+</div>
+<div class="flex flex-col gap-1 items-start max-w-[85%]">
+<div class="bg-surface-container-high p-3 rounded-2xl rounded-tl-sm text-body-md text-on-surface">
+                                Done! I've reserved B1-12 for your guest. A digital entry pass has been sent to your primary mobile number.
+                            </div>
+<span class="text-[10px] text-secondary ml-1">2:31 PM</span>
+</div>
+<!-- Live typing indicator -->
+<div class="flex items-center gap-2 text-ai-accent/60">
+<span class="material-symbols-outlined text-sm animate-pulse">edit</span>
+<span class="text-xs font-mono-sm">Analyzing occupancy...</span>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 bg-white/30 border-t border-border-subtle">
+<div class="flex flex-wrap gap-2 mb-4">
+<button class="text-[10px] font-bold px-3 py-1.5 bg-white border border-border-subtle rounded-full hover:bg-ai-accent/5 hover:border-ai-accent transition-colors">Find EV Slot</button>
+<button class="text-[10px] font-bold px-3 py-1.5 bg-white border border-border-subtle rounded-full hover:bg-ai-accent/5 hover:border-ai-accent transition-colors">Report Issue</button>
+</div>
+<div class="relative">
+<input class="w-full pl-4 pr-12 py-3 bg-white border-border-subtle focus:border-ai-accent focus:ring-0 rounded-xl text-sm shadow-inner transition-all" placeholder="Type a command..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-ai-accent text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Spacer for BottomNavBar Mobile -->
+<div class="h-20 lg:hidden"></div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest border-t border-border-subtle shadow-lg z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-md text-label-md">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-label-md text-label-md">Cars</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-md text-label-md">AI</span>
+</a>
+</nav>
+<!-- Floating Action Button (Only Mobile contextually) -->
+<button class="lg:hidden fixed bottom-24 right-6 w-14 h-14 rounded-full bg-ai-accent text-white shadow-2xl flex items-center justify-center z-50 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl">arrow_back_ios_new</span>
+</button>
+<script>
+        // Subtle micro-interactions
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                // Potential sound effect or haptic feedback hook
+            });
+        });
+
+        // Search Bar Focus Effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/10');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/10');
+        });
+    </script>
+</body></html>

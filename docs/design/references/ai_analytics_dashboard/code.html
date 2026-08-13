@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Analytics | Smart Parking AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary-fixed": "#00174b",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#434655",
+                        "status-reserved": "#F59E0B",
+                        "tertiary-fixed": "#ffdbcd",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "outline-variant": "#c3c6d7",
+                        "on-surface": "#191b23",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#faf8ff",
+                        "on-secondary-container": "#54647a",
+                        "surface-container-highest": "#e1e2ed",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "ai-accent": "#8B5CF6",
+                        "outline": "#737686",
+                        "surface-container-low": "#f3f3fe",
+                        "primary-fixed": "#dbe1ff",
+                        "primary-container": "#2563eb",
+                        "on-background": "#191b23",
+                        "background": "#faf8ff",
+                        "inverse-surface": "#2e3039",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-variant": "#e1e2ed",
+                        "surface-container": "#ededf9",
+                        "inverse-primary": "#b4c5ff",
+                        "secondary-container": "#d0e1fb",
+                        "on-tertiary-container": "#ffede6",
+                        "tertiary": "#943700",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-tint": "#0053db",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-high": "#e7e7f3",
+                        "on-tertiary": "#ffffff",
+                        "border-subtle": "#E2E8F0",
+                        "primary": "#004ac6",
+                        "surface-container-lowest": "#ffffff",
+                        "bg-main": "#F8FAFC",
+                        "status-occupied": "#EF4444",
+                        "surface": "#faf8ff",
+                        "tertiary-container": "#bc4800",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d9d9e5",
+                        "secondary": "#505f76",
+                        "status-available": "#10B981",
+                        "inverse-on-surface": "#f0f0fb",
+                        "on-secondary-fixed-variant": "#38485d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "stack-sm": "8px",
+                        "container-max": "1280px",
+                        "stack-lg": "32px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .ai-gradient-border {
+            position: relative;
+            background: #ffffff;
+            border-radius: 12px;
+        }
+        .ai-gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            z-index: -1;
+            background: linear-gradient(135deg, #8B5CF6, #2563EB);
+            border-radius: 13px;
+            opacity: 0.3;
+        }
+        .chart-glow {
+            filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.2));
+        }
+    </style>
+</head>
+<body class="bg-bg-main font-body-md text-on-surface antialiased">
+<!-- SideNavBar (Desktop) -->
+<aside class="fixed left-0 top-0 bottom-0 z-50 py-stack-lg px-gutter w-[240px] h-screen hidden lg:flex flex-col bg-surface-container-lowest border-r border-border-subtle">
+<div class="mb-stack-lg">
+<h1 class="text-headline-md font-headline-md text-primary">Smart Parking AI</h1>
+<p class="text-label-md font-label-md text-secondary mt-1">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-secondary hover:bg-surface-container-high transition-colors active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-secondary hover:bg-surface-container-high transition-colors active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-body-md">Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-secondary hover:bg-surface-container-high transition-colors active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+<span class="font-body-md">Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-primary font-bold bg-primary-container/10 active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-secondary hover:bg-surface-container-high transition-colors active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full py-2 px-4 border border-outline-variant rounded-lg text-body-md font-medium text-secondary hover:bg-surface-container-high transition-all">
+                Help Center
+            </button>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-[240px] min-h-screen pb-24 lg:pb-8">
+<!-- TopNavBar -->
+<header class="sticky top-0 right-0 z-40 flex items-center justify-between px-gutter w-full h-16 bg-surface-container-lowest/80 backdrop-blur-md border-b border-border-subtle shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-body-md" placeholder="Search analytics..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:text-primary active:opacity-70 transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary active:opacity-70 transition-all">
+<span class="material-symbols-outlined" data-icon="chat_sparkle">qr_code_2</span>
+</button>
+<div class="flex items-center gap-2 pl-2 border-l border-outline-variant">
+<span class="material-symbols-outlined text-3xl" data-icon="account_circle">account_circle</span>
+<div class="hidden sm:block">
+<p class="text-label-md font-bold leading-tight">Admin</p>
+<p class="text-[10px] text-secondary">Super User</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-gutter max-w-container-max mx-auto">
+<!-- Header Section -->
+<div class="mb-stack-lg flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">AI Analytics Dashboard</h2>
+<p class="text-body-lg text-secondary">Real-time predictive insights for Building A-12.</p>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-lowest p-1 rounded-xl shadow-sm border border-border-subtle">
+<button class="px-4 py-1.5 rounded-lg bg-primary text-on-primary font-medium text-body-md">Real-time</button>
+<button class="px-4 py-1.5 rounded-lg text-secondary font-medium text-body-md hover:bg-surface-container-low">Weekly</button>
+<button class="px-4 py-1.5 rounded-lg text-secondary font-medium text-body-md hover:bg-surface-container-low">Monthly</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Prediction Accuracy Widget -->
+<div class="md:col-span-8 bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-title-md text-title-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="verified">verified</span>
+                            Prediction Accuracy
+                        </h3>
+<span class="text-status-available font-bold text-headline-md">98.4%</span>
+</div>
+<div class="relative h-64 w-full flex items-end gap-2 px-2">
+<!-- Simulated Chart -->
+<div class="flex-1 bg-primary/10 rounded-t-lg relative group" style="height: 85%;">
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-lg"></div>
+</div>
+<div class="flex-1 bg-primary/15 rounded-t-lg relative group" style="height: 70%;"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg relative group" style="height: 95%;"></div>
+<div class="flex-1 bg-primary/30 rounded-t-lg relative group" style="height: 80%;"></div>
+<div class="flex-1 bg-primary/40 rounded-t-lg relative group" style="height: 65%;"></div>
+<div class="flex-1 bg-primary/50 rounded-t-lg relative group" style="height: 88%;"></div>
+<div class="flex-1 bg-primary rounded-t-lg relative group chart-glow" style="height: 98.4%;">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-label-md px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">Today: 98.4%</div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-label-md text-secondary uppercase tracking-wider">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+<!-- AI Insight Card 1 -->
+<div class="md:col-span-4 ai-gradient-border p-gutter shadow-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-ai-accent" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-label-md font-bold text-ai-accent uppercase tracking-widest">AI Prediction</span>
+</div>
+<h4 class="font-title-md text-title-md mb-2">Potential Congestion Alert</h4>
+<p class="text-body-md text-secondary">Predicting 95% occupancy tomorrow between 08:30 – 10:00 due to local event.</p>
+</div>
+<div class="mt-6 pt-6 border-t border-border-subtle">
+<p class="text-label-md font-bold mb-3">RECOMMENDED ACTION</p>
+<button class="w-full py-2.5 px-4 bg-primary text-on-primary rounded-lg font-medium text-body-md hover:shadow-md active:scale-95 transition-all">
+                            Enable Overflow Mode
+                        </button>
+</div>
+</div>
+<!-- Occupancy Heatmap -->
+<div class="md:col-span-5 bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm">
+<h3 class="font-title-md text-title-md mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-status-occupied" data-icon="grid_view">grid_view</span>
+                        Occupancy Heatmap
+                    </h3>
+<div class="grid grid-cols-6 gap-2">
+<!-- Heatmap Grid Cells -->
+<div class="aspect-square rounded bg-primary/10"></div>
+<div class="aspect-square rounded bg-primary/20"></div>
+<div class="aspect-square rounded bg-primary/40"></div>
+<div class="aspect-square rounded bg-primary/60"></div>
+<div class="aspect-square rounded bg-primary/80"></div>
+<div class="aspect-square rounded bg-primary"></div>
+<div class="aspect-square rounded bg-primary/20"></div>
+<div class="aspect-square rounded bg-primary/30"></div>
+<div class="aspect-square rounded bg-primary/50"></div>
+<div class="aspect-square rounded bg-primary/70"></div>
+<div class="aspect-square rounded bg-primary"></div>
+<div class="aspect-square rounded bg-primary/90"></div>
+<div class="aspect-square rounded bg-primary/5"></div>
+<div class="aspect-square rounded bg-primary/10"></div>
+<div class="aspect-square rounded bg-primary/20"></div>
+<div class="aspect-square rounded bg-primary/40"></div>
+<div class="aspect-square rounded bg-primary/60"></div>
+<div class="aspect-square rounded bg-primary/80"></div>
+<div class="aspect-square rounded bg-primary/10"></div>
+<div class="aspect-square rounded bg-primary/15"></div>
+<div class="aspect-square rounded bg-primary/25"></div>
+<div class="aspect-square rounded bg-primary/35"></div>
+<div class="aspect-square rounded bg-primary/55"></div>
+<div class="aspect-square rounded bg-primary/75"></div>
+</div>
+<div class="mt-6 flex items-center justify-between text-label-md text-secondary">
+<span>L1 (Entrance)</span>
+<div class="flex gap-1 h-2 w-24 rounded-full overflow-hidden">
+<div class="flex-1 bg-primary/10"></div>
+<div class="flex-1 bg-primary/40"></div>
+<div class="flex-1 bg-primary"></div>
+</div>
+<span>L4 (Roof)</span>
+</div>
+</div>
+<!-- Peak Hour Prediction -->
+<div class="md:col-span-7 bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm overflow-hidden relative">
+<h3 class="font-title-md text-title-md mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-status-reserved" data-icon="timeline">timeline</span>
+                        Peak Hour Prediction
+                    </h3>
+<div class="relative h-48 w-full">
+<!-- Curved Line Chart Placeholder -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 400 100">
+<path class="chart-glow" d="M0,80 Q50,70 100,20 T200,40 T300,10 T400,50" fill="none" stroke="rgba(37, 99, 235, 0.8)" stroke-width="3"></path>
+<path d="M0,80 Q50,70 100,20 T200,40 T300,10 T400,50 L400,100 L0,100 Z" fill="url(#grad1)"></path>
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:rgba(37, 99, 235, 0.1);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:rgba(37, 99, 235, 0);stop-opacity:1"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute top-[10px] left-[250px] w-2 h-2 rounded-full bg-primary ring-4 ring-primary/20"></div>
+<div class="absolute top-0 left-[260px] bg-white border border-border-subtle px-3 py-1 shadow-sm rounded-lg">
+<p class="text-label-md font-bold">14:00 - Peak</p>
+<p class="text-[10px] text-secondary">Est. 142 Cars</p>
+</div>
+</div>
+<div class="flex justify-between mt-6 text-label-md text-secondary">
+<span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span><span>20:00</span>
+</div>
+</div>
+<!-- AI Suggestion Column -->
+<div class="md:col-span-6 bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full bg-ai-accent/10 flex items-center justify-center text-ai-accent">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+</div>
+<div>
+<h4 class="font-title-md text-title-md">Efficiency Recommendation</h4>
+<p class="text-label-md text-secondary uppercase">Level 2 Optimization</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface mb-6">
+                        Reducing EV charging station standby time on Level 2 could increase throughput by 12% during morning hours.
+                    </p>
+<div class="flex gap-3">
+<button class="flex-1 py-2 px-4 bg-primary text-on-primary rounded-lg font-medium text-body-md transition-all active:scale-95">Apply Settings</button>
+<button class="px-4 py-2 border border-outline-variant rounded-lg text-secondary text-body-md hover:bg-surface-container-low transition-all">Details</button>
+</div>
+</div>
+<!-- Live Feed / Status -->
+<div class="md:col-span-6 bg-surface-container-lowest p-gutter rounded-xl border border-border-subtle shadow-sm flex items-center gap-6">
+<div class="w-32 h-32 rounded-lg bg-surface-container relative overflow-hidden group">
+<img class="w-full h-full object-cover" data-alt="A high-tech digital surveillance feed showing a clean, modern parking garage with glowing green sensors above every stall. The architecture is minimalist with polished concrete floors and bright white LED lighting. The image captures a high-end, premium atmosphere consistent with a sophisticated AI-driven parking management system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGqwloiXSDVHL4i9guP3xcgpgxd2FqYHsGwNlC9riK7NlyCzpKKhobS0jE5ynhdCBW-MfB1dxfdnVE-jjq3JBGbfWrlbqcVECLTRTR18KABRJqYJOIs_t7vUCW184HhEwN9LObsKbo6mFyPRyhr4pAkndFNAvq2GvUEBjsdcNW4RDa2znAwe6qoLkzA0vUNZwoF7y88CMehnjsld6qkodOe092U4WWlOBjXJZlXm0DiNkjIErjUjutSg"/>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors"></div>
+<div class="absolute top-2 left-2 flex items-center gap-1 bg-status-occupied text-white text-[8px] px-1.5 py-0.5 rounded-full font-bold uppercase">
+<span class="w-1 h-1 rounded-full bg-white animate-pulse"></span> Live
+                        </div>
+</div>
+<div class="flex-1">
+<p class="text-label-md font-bold text-secondary mb-1">SYSTEM STATUS</p>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-display text-[24px] leading-tight text-primary">All Sensors Online</span>
+</div>
+<div class="flex gap-4">
+<div>
+<p class="text-[10px] text-secondary">Active Gates</p>
+<p class="text-body-md font-bold">12/12</p>
+</div>
+<div>
+<p class="text-[10px] text-secondary">Avg. Processing</p>
+<p class="text-body-md font-bold">1.4s</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest border-t border-border-subtle shadow-lg z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="text-label-md font-label-md">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+<span class="text-label-md font-label-md">Cars</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-2 px-4 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-label-md font-label-md">AI</span>
+</a>
+</nav>
+<!-- AI Chat FAB (Floating Action Button) -->
+<button class="fixed bottom-24 right-6 lg:bottom-10 lg:right-10 w-14 h-14 rounded-full bg-primary text-white shadow-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40" id="ai-fab">
+<span class="material-symbols-outlined text-3xl" data-icon="chat_sparkle" style="font-variation-settings: 'FILL' 1;">qr_code_2</span>
+</button>
+<script>
+        // Micro-interaction for the FAB
+        const fab = document.getElementById('ai-fab');
+        fab.addEventListener('click', () => {
+            // Simplified toggle logic for prototype
+            const ripple = document.createElement('div');
+            ripple.className = 'absolute inset-0 bg-white/30 rounded-full animate-ping';
+            fab.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // Simulating some live data changes
+        setInterval(() => {
+            const acc = document.querySelector('.text-status-available');
+            if (acc) {
+                const current = 98.4;
+                const variance = (Math.random() * 0.2 - 0.1).toFixed(1);
+                acc.innerText = (current + parseFloat(variance)).toFixed(1) + '%';
+            }
+        }, 5000);
+    </script>
+</body></html>

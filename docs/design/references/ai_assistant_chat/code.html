@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Assistant - Smart Parking AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary-fixed": "#00174b",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#434655",
+                        "status-reserved": "#F59E0B",
+                        "tertiary-fixed": "#ffdbcd",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "outline-variant": "#c3c6d7",
+                        "on-surface": "#191b23",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#faf8ff",
+                        "on-secondary-container": "#54647a",
+                        "surface-container-highest": "#e1e2ed",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "ai-accent": "#8B5CF6",
+                        "outline": "#737686",
+                        "surface-container-low": "#f3f3fe",
+                        "primary-fixed": "#dbe1ff",
+                        "primary-container": "#2563eb",
+                        "on-background": "#191b23",
+                        "background": "#faf8ff",
+                        "inverse-surface": "#2e3039",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-variant": "#e1e2ed",
+                        "surface-container": "#ededf9",
+                        "inverse-primary": "#b4c5ff",
+                        "secondary-container": "#d0e1fb",
+                        "on-tertiary-container": "#ffede6",
+                        "tertiary": "#943700",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-tint": "#0053db",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-high": "#e7e7f3",
+                        "on-tertiary": "#ffffff",
+                        "border-subtle": "#E2E8F0",
+                        "primary": "#004ac6",
+                        "surface-container-lowest": "#ffffff",
+                        "bg-main": "#F8FAFC",
+                        "status-occupied": "#EF4444",
+                        "surface": "#faf8ff",
+                        "tertiary-container": "#bc4800",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d9d9e5",
+                        "secondary": "#505f76",
+                        "status-available": "#10B981",
+                        "inverse-on-surface": "#f0f0fb",
+                        "on-secondary-fixed-variant": "#38485d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "stack-sm": "8px",
+                        "container-max": "1280px",
+                        "stack-lg": "32px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .ai-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-bg-main font-body-md text-on-surface flex h-screen overflow-hidden">
+<!-- Sidebar Navigation (JSON Anchor: SideNavBar) -->
+<aside class="fixed left-0 top-0 bottom-0 z-50 py-stack-lg px-6 w-[240px] h-screen hidden lg:flex flex-col bg-surface-container-lowest border-r border-border-subtle">
+<div class="mb-stack-lg">
+<h1 class="text-headline-md font-headline-md text-primary">Smart Parking AI</h1>
+<p class="text-label-md text-secondary mt-1">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-body-md">Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-body-md">Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md">Analytics</span>
+</a>
+<!-- Active Tab: AI (Custom for this screen) -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-primary font-bold bg-primary-container/10" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-body-md">AI Assistant</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant space-y-2">
+<button class="w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Help Center</span>
+</button>
+<button class="w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="flex-1 flex flex-col lg:ml-[240px] h-full relative">
+<!-- Top Nav (JSON Anchor: TopNavBar) -->
+<header class="sticky top-0 right-0 z-40 flex items-center justify-between px-gutter w-full h-16 bg-surface-container-lowest/80 backdrop-blur-md border-b border-border-subtle shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary lg:hidden">menu</span>
+<div class="flex items-center gap-2 bg-surface-container py-1.5 px-4 rounded-full w-64 lg:w-96">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full p-0" placeholder="Search commands or data..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
+<span class="material-symbols-outlined text-primary cursor-pointer" style="font-variation-settings: 'FILL' 1;">qr_code_2</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a diverse system administrator in a clean, high-key office setting, smiling confidently. The lighting is soft and professional, emphasizing a modern corporate and high-tech SaaS environment. The image is crisp, with a shallow depth of field, aligning with a premium enterprise aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoauVkmxqXm6NaAkP2TWYR_9CAVA75soCNN4RdDvzopgwelsSPGy0q2CerjwnkSqltYpSLUfentcycu6GFRX50AZbnL6yQCmVJLSvLcpLxJF1k2WexhDssDBeHvu-klHLHLiD_WKTAROvR3WV5xF-utpUN1gUYte6-DNmBW4tKlkOMTIEu8_FJpX-z9bnrCIwtWdSOd4dV7BD4ti9Z2Qt9bFlmVvXw8mY5h9AQcFpy6FR3Xx2Ok1rgGw"/>
+</div>
+</div>
+</header>
+<!-- Chat Layout -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left: History Panel -->
+<section class="w-64 border-r border-border-subtle bg-surface-container-lowest flex flex-col hidden xl:flex">
+<div class="p-4 border-b border-border-subtle">
+<button class="w-full py-2 px-4 rounded-lg bg-primary text-white font-title-md flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-sm">add</span>
+                        New Chat
+                    </button>
+</div>
+<div class="flex-1 overflow-y-auto scrollbar-hide p-2 space-y-1">
+<div class="px-3 py-2 text-label-md text-secondary uppercase tracking-wider font-semibold">Recent</div>
+<div class="p-3 rounded-xl bg-surface-container-high cursor-pointer flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">chat</span>
+<div class="truncate">
+<p class="text-body-md font-medium truncate">Parking Availability Report</p>
+<p class="text-label-md text-outline">2 mins ago</p>
+</div>
+</div>
+<div class="p-3 rounded-xl hover:bg-surface-container text-on-surface-variant cursor-pointer flex items-center gap-3 transition-colors">
+<span class="material-symbols-outlined">history</span>
+<div class="truncate">
+<p class="text-body-md truncate">Guest Access - Event A</p>
+<p class="text-label-md text-outline">1 hour ago</p>
+</div>
+</div>
+<div class="p-3 rounded-xl hover:bg-surface-container text-on-surface-variant cursor-pointer flex items-center gap-3 transition-colors">
+<span class="material-symbols-outlined">history</span>
+<div class="truncate">
+<p class="text-body-md truncate">Monthly Revenue Trends</p>
+<p class="text-label-md text-outline">Yesterday</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Center: Chat UI -->
+<section class="flex-1 flex flex-col relative bg-white">
+<!-- AI Gradient Header -->
+<div class="absolute top-0 left-0 right-0 h-1 ai-shimmer z-10"></div>
+<!-- Chat Messages -->
+<div class="flex-1 overflow-y-auto p-gutter space-y-stack-lg scrollbar-hide" id="chat-messages">
+<!-- Bot Message -->
+<div class="flex gap-4 max-w-3xl">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary-container shrink-0">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div class="space-y-2">
+<div class="bg-surface-container-low p-4 rounded-2xl rounded-tl-none border border-border-subtle shadow-sm">
+<p class="text-body-lg text-on-surface">Hello, Admin. I've compiled the latest parking metrics for **North Zone 4**. Occupancy reached 92% at 10:15 AM. How can I assist you today?</p>
+</div>
+<span class="text-label-md text-outline">Just now</span>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-4 max-w-3xl ml-auto flex-row-reverse">
+<div class="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="space-y-2 flex flex-col items-end">
+<div class="bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-sm">
+<p class="text-body-lg">Show me a summary of current alerts and available guest spots.</p>
+</div>
+<span class="text-label-md text-outline">Just now</span>
+</div>
+</div>
+<!-- Bot Response with Table -->
+<div class="flex gap-4 max-w-3xl">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary-container shrink-0">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div class="space-y-4 flex-1">
+<div class="bg-surface-container-low p-4 rounded-2xl rounded-tl-none border border-border-subtle shadow-sm space-y-4">
+<p class="text-body-lg text-on-surface">Currently, there are **3 critical alerts** and **12 guest spots** remaining. Here is the breakdown:</p>
+<div class="overflow-hidden rounded-lg border border-border-subtle bg-white">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low border-b border-border-subtle">
+<tr>
+<th class="px-4 py-2 text-label-md font-semibold text-secondary">ZONE</th>
+<th class="px-4 py-2 text-label-md font-semibold text-secondary">AVAILABILITY</th>
+<th class="px-4 py-2 text-label-md font-semibold text-secondary">STATUS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr>
+<td class="px-4 py-3 font-mono-sm">B-42</td>
+<td class="px-4 py-3 text-body-md">4 spots</td>
+<td class="px-4 py-3"><span class="px-2 py-1 bg-green-100 text-status-available text-label-md rounded-full font-bold">Stable</span></td>
+</tr>
+<tr>
+<td class="px-4 py-3 font-mono-sm">C-18</td>
+<td class="px-4 py-3 text-body-md">8 spots</td>
+<td class="px-4 py-3"><span class="px-2 py-1 bg-amber-100 text-status-reserved text-label-md rounded-full font-bold">Filling Fast</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Area & Suggested Actions -->
+<div class="p-gutter border-t border-border-subtle glass-panel">
+<div class="max-w-4xl mx-auto space-y-4">
+<!-- Suggested Actions Chips -->
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-border-subtle bg-white hover:bg-primary-container hover:text-white hover:border-primary transition-all text-body-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">local_parking</span>
+                                Check Parking
+                            </button>
+<button class="px-4 py-2 rounded-full border border-border-subtle bg-white hover:bg-primary-container hover:text-white hover:border-primary transition-all text-body-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">app_registration</span>
+                                Register Vehicle
+                            </button>
+<button class="px-4 py-2 rounded-full border border-border-subtle bg-white hover:bg-primary-container hover:text-white hover:border-primary transition-all text-body-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person_add</span>
+                                Guest Parking
+                            </button>
+</div>
+<!-- Chat Input -->
+<div class="relative flex items-center bg-surface-container rounded-2xl p-2 border-2 border-transparent focus-within:border-primary/20 focus-within:ring-2 focus-within:ring-primary/10 transition-all">
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-lg px-2" placeholder="Ask AI to generate a report, find a spot, or alert security..." type="text"/>
+<button class="bg-primary text-white w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<p class="text-center text-label-md text-outline">Smart Parking AI may produce inaccurate info. Verify critical alerts.</p>
+</div>
+</div>
+</section>
+<!-- Right Panel: Parking Summary & Alerts -->
+<aside class="w-80 border-l border-border-subtle bg-surface-container-lowest hidden lg:flex flex-col p-gutter space-y-stack-lg overflow-y-auto scrollbar-hide">
+<!-- Live Summary Card -->
+<div class="bg-white rounded-2xl p-stack-md border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-title-md text-on-surface">Parking Summary</h3>
+<span class="text-label-md text-status-available font-bold flex items-center gap-1">
+<span class="w-2 h-2 bg-status-available rounded-full animate-pulse"></span>
+                            Live
+                        </span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<div>
+<p class="text-display text-primary leading-none">842</p>
+<p class="text-label-md text-secondary">Total Occupancy</p>
+</div>
+<div class="text-right">
+<p class="text-title-md text-status-available">158</p>
+<p class="text-label-md text-secondary">Free Spots</p>
+</div>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden flex">
+<div class="bg-primary h-full w-[84%]"></div>
+<div class="bg-status-available h-full w-[16%]"></div>
+</div>
+</div>
+</div>
+<!-- Recent Alerts -->
+<div class="space-y-4">
+<h3 class="font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-status-occupied">notification_important</span>
+                        Recent Alerts
+                    </h3>
+<div class="space-y-3">
+<!-- Alert Item -->
+<div class="p-3 bg-error-container/20 border border-error/10 rounded-xl flex gap-3">
+<span class="material-symbols-outlined text-error text-[20px]">warning</span>
+<div>
+<p class="text-body-md font-bold text-on-error-container">Unauthorized Entry</p>
+<p class="text-label-md text-on-error-container/80">Zone D, Gate 2 - Plate: ABC-1234</p>
+<p class="text-label-md font-mono-sm mt-1">10:42 AM</p>
+</div>
+</div>
+<!-- Alert Item -->
+<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex gap-3">
+<span class="material-symbols-outlined text-amber-600 text-[20px]">schedule</span>
+<div>
+<p class="text-body-md font-bold text-amber-900">Overstay Warning</p>
+<p class="text-label-md text-amber-800">Spot B-12, Guest #182 (Expired 15m)</p>
+<p class="text-label-md font-mono-sm mt-1">10:30 AM</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Mini Map / Area View -->
+<div class="space-y-4">
+<h3 class="font-title-md text-on-surface">Hot Zones</h3>
+<div class="relative h-48 rounded-2xl overflow-hidden border border-border-subtle">
+<div class="absolute inset-0 bg-slate-200" data-alt="A high-angle, detailed schematic 3D map of a modern parking garage. The visualization uses a clean, architectural style with soft ambient occlusion and glow effects on occupied spaces. The color palette consists of cool grays, deep blues for primary navigation, and vibrant amber heat-maps indicating high-traffic zones. The atmosphere is high-tech, professional, and minimalist." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDs7FsKSzKeTDfJzEyeaDx2pvB_Z3k3j3EFZP8poM28hNbaK_tbZb_bIWD6qM6u9KWTalcvSs4-lmzwgiPumaqaOsyrvr4FqTzfxbQxcKk1B1Aalc5MJEy0WMT5EBKF_m6humO7xTBHhvn4YY37LYz1JrQFf1oLMnJ-rF03D7b90EC2waEwFgrOBz2m-6g_wthe8K9rTHDLFxeknkij0s1frqDoFUQmaJuZmjI9hABimk4dIfd0itMiYQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-3">
+<button class="text-white text-label-md font-bold flex items-center gap-1 hover:underline">
+                                View Full Map <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Bottom Nav (JSON Anchor: BottomNavBar) -->
+<nav class="lg:hidden fixed bottom-0 w-full bg-surface-container-lowest border-t border-border-subtle shadow-lg flex justify-around items-center px-4 py-2 pb-safe z-50">
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-md">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4">
+<span class="material-symbols-outlined">map</span>
+<span class="text-label-md">Map</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-2 px-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-label-md">AI</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-label-md">Profile</span>
+</button>
+</nav>
+</main>
+<script>
+        // Micro-interaction for chat auto-scrolling and hover effects
+        const chatContainer = document.getElementById('chat-messages');
+        
+        // Simulating the scroll to bottom on load
+        window.onload = () => {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        };
+
+        // Interactive focus for input
+        const chatInput = document.querySelector('input[type="text"]');
+        chatInput.addEventListener('focus', () => {
+            document.querySelector('.glass-panel').classList.add('bg-white');
+        });
+        chatInput.addEventListener('blur', () => {
+            document.querySelector('.glass-panel').classList.remove('bg-white');
+        });
+    </script>
+</body></html>

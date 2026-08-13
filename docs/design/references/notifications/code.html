@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notifications | Smart Parking AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#d3e4fe",
+                    "on-primary-fixed": "#00174b",
+                    "on-tertiary-fixed": "#360f00",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#434655",
+                    "status-reserved": "#F59E0B",
+                    "tertiary-fixed": "#ffdbcd",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "outline-variant": "#c3c6d7",
+                    "on-surface": "#191b23",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf8ff",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "ai-accent": "#8B5CF6",
+                    "outline": "#737686",
+                    "surface-container-low": "#f3f3fe",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-container": "#2563eb",
+                    "on-background": "#191b23",
+                    "background": "#faf8ff",
+                    "inverse-surface": "#2e3039",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container": "#ededf9",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-container": "#d0e1fb",
+                    "on-tertiary-container": "#ffede6",
+                    "tertiary": "#943700",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "surface-tint": "#0053db",
+                    "on-primary-container": "#eeefff",
+                    "surface-container-high": "#e7e7f3",
+                    "on-tertiary": "#ffffff",
+                    "border-subtle": "#E2E8F0",
+                    "primary": "#004ac6",
+                    "surface-container-lowest": "#ffffff",
+                    "bg-main": "#F8FAFC",
+                    "status-occupied": "#EF4444",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#bc4800",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d9d9e5",
+                    "secondary": "#505f76",
+                    "status-available": "#10B981",
+                    "inverse-on-surface": "#f0f0fb",
+                    "on-secondary-fixed-variant": "#38485d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px",
+                    "stack-lg": "32px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-item .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            background-color: #F8FAFC;
+        }
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Side Navigation Bar (Desktop) -->
+<aside class="fixed left-0 top-0 bottom-0 z-50 py-stack-lg px-gutter w-[240px] h-screen hidden lg:flex flex-col bg-surface-container-lowest border-r border-border-subtle">
+<div class="mb-stack-lg">
+<h1 class="text-headline-md font-headline-md text-primary">Smart Parking AI</h1>
+<p class="text-label-md text-on-surface-variant opacity-70">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-secondary hover:bg-surface-container-high scale-100 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-secondary hover:bg-surface-container-high scale-100 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-body-md">Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-secondary hover:bg-surface-container-high scale-100 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-body-md">Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-secondary hover:bg-surface-container-high scale-100 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-secondary hover:bg-surface-container-high scale-100 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full py-2 px-4 rounded-lg bg-surface-container-low text-primary text-label-md font-bold hover:bg-surface-container-high transition-colors">
+                Help Center
+            </button>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl text-secondary hover:bg-surface-container-high cursor-pointer">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md">Logout</span>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 right-0 z-40 h-16 w-full lg:pl-[240px] bg-surface-container-lowest/80 backdrop-blur-md border-b border-border-subtle shadow-sm flex items-center justify-between px-gutter">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg text-body-md focus:ring-2 focus:ring-primary-container" placeholder="Search system notifications..." type="text"/>
+</div>
+<button class="lg:hidden p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative p-2 rounded-full text-primary bg-primary-container/10 font-bold">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</div>
+<div class="p-2 rounded-full text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined">qr_code_2</span>
+</div>
+<div class="p-2 rounded-full text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="lg:ml-[240px] min-h-[calc(100vh-64px)] p-4 md:p-margin-desktop bg-bg-main pb-24 lg:pb-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<!-- Page Header -->
+<div class="mb-stack-lg flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Notifications</h2>
+<p class="text-body-md text-on-surface-variant mt-1">Manage system alerts, approvals, and vehicle status updates.</p>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-lowest p-1 rounded-xl shadow-sm border border-border-subtle">
+<button class="px-4 py-1.5 rounded-lg text-label-md font-bold bg-primary text-on-primary shadow-sm transition-all">All</button>
+<button class="px-4 py-1.5 rounded-lg text-label-md font-medium text-on-surface-variant hover:bg-surface-container-low transition-all">Unread</button>
+<button class="px-4 py-1.5 rounded-lg text-label-md font-medium text-on-surface-variant hover:bg-surface-container-low transition-all">Important</button>
+</div>
+</div>
+<!-- Notifications Bento Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Main List -->
+<div class="xl:col-span-8 space-y-4">
+<!-- Notification Item: Vehicle Expiring -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-border-subtle hover:border-primary-container transition-all cursor-pointer shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-error-container/20 flex items-center justify-center text-error">
+<span class="material-symbols-outlined">timer_off</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="text-label-md text-error font-bold tracking-wide">VEHICLE EXPIRING</span>
+<span class="text-mono-sm text-on-surface-variant">2 mins ago</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mt-1">Parking Session Near Limit</h3>
+<p class="text-body-md text-on-surface-variant mt-1">Vehicle <span class="font-mono-sm bg-surface-container-low px-1 rounded">TX-5542</span> in Zone B-4 is set to expire in 10 minutes. AI predicts 85% probability of overstay.</p>
+<div class="mt-4 flex items-center gap-3">
+<button class="px-4 py-2 bg-primary-container text-on-primary-container rounded-lg text-label-md font-bold hover:opacity-90 transition-opacity">Extend Time</button>
+<button class="px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-lg text-label-md font-bold hover:bg-surface-container-high transition-colors">Alert Security</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Item: Guest Check-in -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-border-subtle hover:border-primary-container transition-all cursor-pointer shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-status-available"></div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-status-available/10 flex items-center justify-center text-status-available">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="text-label-md text-status-available font-bold tracking-wide">GUEST CHECK-IN</span>
+<span class="text-mono-sm text-on-surface-variant">45 mins ago</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mt-1">Guest Arrival: Robert Downey</h3>
+<p class="text-body-md text-on-surface-variant mt-1">Guest has checked into VIP Slot 01. Automatic barrier released at 09:12 AM. Welcome message sent.</p>
+<div class="mt-4 flex items-center gap-3">
+<button class="px-4 py-2 border border-border-subtle text-secondary rounded-lg text-label-md font-bold hover:bg-surface-container-high transition-colors">View Guest Info</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Item: Approval Completed -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-border-subtle hover:border-primary-container transition-all cursor-pointer shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="text-label-md text-primary font-bold tracking-wide">APPROVAL COMPLETED</span>
+<span class="text-mono-sm text-on-surface-variant">2 hours ago</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mt-1">Maintenance Request Approved</h3>
+<p class="text-body-md text-on-surface-variant mt-1">Repair for Sensor Node #219 has been authorized by System Administrator. Technician dispatched.</p>
+</div>
+</div>
+</div>
+<!-- Notification Item: System Alert -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-border-subtle hover:border-primary-container transition-all cursor-pointer shadow-sm relative overflow-hidden">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="text-label-md text-on-surface-variant font-bold tracking-wide">SYSTEM ALERT</span>
+<span class="text-mono-sm text-on-surface-variant">Yesterday</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mt-1">Weekly AI Report Ready</h3>
+<p class="text-body-md text-on-surface-variant mt-1">The parking occupancy analysis for last week is now available for download. Peak occupancy reached 94%.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar / Stats -->
+<div class="xl:col-span-4 space-y-gutter">
+<!-- AI Assistant Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-border-subtle shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-10">
+<span class="material-symbols-outlined text-6xl text-ai-accent">auto_awesome</span>
+</div>
+<h4 class="text-title-md font-title-md text-on-surface mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-ai-accent">auto_awesome</span>
+                            Smart Insights
+                        </h4>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                            Based on current alerts, you have <span class="text-primary font-bold">3 critical</span> tasks requiring attention. Predictive modeling suggests a high turnover rate in Zone B within the next hour.
+                        </p>
+<button class="mt-4 w-full py-2.5 rounded-lg text-label-md font-bold bg-white border border-ai-accent text-ai-accent hover:bg-ai-accent hover:text-white transition-all">
+                            Ask AI Assistant
+                        </button>
+</div>
+<!-- Quick Filters -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-border-subtle shadow-sm">
+<h4 class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider mb-4">Notification Types</h4>
+<ul class="space-y-3">
+<li class="flex items-center justify-between text-body-md py-1 border-b border-surface-container">
+<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error"></span> Urgent Alerts</span>
+<span class="font-mono-sm text-on-surface-variant">04</span>
+</li>
+<li class="flex items-center justify-between text-body-md py-1 border-b border-surface-container">
+<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-status-available"></span> Activity</span>
+<span class="font-mono-sm text-on-surface-variant">12</span>
+</li>
+<li class="flex items-center justify-between text-body-md py-1">
+<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span> Approvals</span>
+<span class="font-mono-sm text-on-surface-variant">02</span>
+</li>
+</ul>
+</div>
+<!-- Visual Summary (Illustration) -->
+<div class="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-sm overflow-hidden h-48 relative">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary to-transparent"></div>
+</div>
+<div class="relative z-10 p-6 h-full flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-4xl text-primary opacity-40 mb-2">notifications_paused</span>
+<p class="text-label-md text-on-surface-variant">No outages reported in the last 24 hours. Your system is healthy.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest border-t border-border-subtle shadow-lg z-50">
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95">
+<span class="material-symbols-outlined">map</span>
+<span class="text-label-md">Map</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 transition-transform active:scale-95">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="text-label-md">Cars</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-2 px-4 transition-transform active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="text-label-md">Inbox</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for notification dismissal (visual only)
+        document.querySelectorAll('.group').forEach(item => {
+            item.addEventListener('click', () => {
+                // Simulate marking as read
+                const indicator = item.querySelector('.w-1');
+                if(indicator) indicator.style.opacity = '0.3';
+                item.classList.add('opacity-75');
+            });
+        });
+    </script>
+</body></html>
