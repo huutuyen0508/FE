@@ -58,16 +58,15 @@ export const approvals = [
   { id: 'REQ-1046', person: 'James Thomas', kind: 'Guest extension', detail: 'Unit B-0302 · +6 hours', submitted: '2 hr ago', status: 'Pending' },
 ]
 
-export type ParkingSlotStatus = 'available' | 'occupied' | 'reserved' | 'yours'
+export type ParkingSlotStatus = 'available' | 'occupied' | 'reserved' | 'out_of_service'
 export type ParkingSlot = { id: string; status: ParkingSlotStatus }
 export type ParkingZone = { id: 'A' | 'B' | 'C' | 'D'; name: string; slots: ParkingSlot[] }
 export type ParkingFloor = { id: 'B1' | 'B2' | 'B3'; label: string; zones: ParkingZone[] }
 
 const zoneNames = ['A', 'B', 'C', 'D'] as const
 const slotStatus = (floorIndex: number, zoneIndex: number, slotIndex: number): ParkingSlotStatus => {
-  if (floorIndex === 0 && zoneIndex === 0 && slotIndex === 4) return 'yours'
-  const value = (floorIndex * 11 + zoneIndex * 5 + slotIndex) % 10
-  return value < 4 ? 'available' : value < 7 ? 'occupied' : value < 9 ? 'reserved' : 'available'
+  const value = (floorIndex * 11 + zoneIndex * 5 + slotIndex) % 12
+  return value < 4 ? 'available' : value < 7 ? 'occupied' : value < 9 ? 'reserved' : value === 9 ? 'out_of_service' : 'available'
 }
 
 export const parkingFloors: ParkingFloor[] = (['B1', 'B2', 'B3'] as const).map((id, floorIndex) => ({

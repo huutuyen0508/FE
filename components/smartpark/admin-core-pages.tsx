@@ -2,7 +2,7 @@
 
 import { BarChart3, CalendarDays, CarFront, ChevronDown, Clock3, Download, Gauge, MoreHorizontal, RefreshCw, ParkingCircle, Sparkles, TrendingUp, Users } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { activity, parkingFloors, type ParkingSlot, type ParkingSlotStatus } from '@/lib/smartpark-data'
+import { activity } from '@/lib/smartpark-data'
 import { AdminShell, PageHeader, StatCard, Status } from './shell'
 import { ParkingMap } from './parking-map'
 
@@ -14,9 +14,10 @@ function LineChart() { return <div className="mt-8"><div className="relative fle
 function MiniStat({ label, value, tone }: { label:string; value:string; tone:string }) { return <div className="rounded-xl bg-muted/60 p-3"><span className={`mx-auto mb-2 block size-2 rounded-full bg-${tone}`} /><p className="font-semibold">{value}</p><p className="text-[11px] text-muted-foreground">{label}</p></div> }
 function Insight({ title, text }: { title:string; text:string }) { return <div className="rounded-xl border bg-muted/30 p-4"><p className="text-sm font-semibold">{title}</p><p className="mt-1 text-xs leading-relaxed text-muted-foreground">{text}</p><button className="mt-3 text-xs font-semibold text-primary">Review recommendation →</button></div> }
 
-export function ParkingMapPage() { return <AdminShell><div className="mx-auto max-w-6xl"><div className="text-center"><PageHeader title="Sơ đồ mặt bằng trực tiếp" description="" /><div className="-mt-4 inline-flex items-center gap-2 text-sm font-medium text-success"><span className="realtime-dot" />Trạng thái thời gian thực</div></div><ParkingMap /></div></AdminShell> }
+export function ParkingMapPage() { return <AdminShell><div className="mx-auto max-w-6xl"><div className="text-center"><PageHeader title="Sơ đồ mặt bằng trực tiếp" description="" /><div className="-mt-4 inline-flex items-center gap-2 text-sm font-medium text-success"><span className="realtime-dot" />Trạng thái thời gian thực</div></div><ParkingMap mode="admin" /></div></AdminShell> }
 
-function LegacyParkingMapPage() {
+/* Legacy map implementation removed; ParkingMap is the single shared implementation. */
+/* function LegacyParkingMapPage() {
   const [floorId, setFloorId] = useState<ParkingFloorId>('B1')
   const [selected, setSelected] = useState<ParkingSlot | null>(null)
   const floor = parkingFloors.find((item) => item.id === floorId) ?? parkingFloors[0]
@@ -26,9 +27,7 @@ function LegacyParkingMapPage() {
   return <AdminShell><div className="mx-auto max-w-6xl"><div className="text-center"><PageHeader title="Sơ đồ mặt bằng trực tiếp" description="" /><div className="-mt-4 inline-flex items-center gap-2 text-sm font-medium text-success"><span className="realtime-dot" />Trạng thái thời gian thực</div></div><div className="mt-7 flex justify-center border-b"><div className="flex gap-2" role="tablist" aria-label="Parking floors">{parkingFloors.map((item) => <button key={item.id} role="tab" aria-selected={floorId === item.id} onClick={() => { setFloorId(item.id); setSelected(null) }} className={`floor-tab ${floorId === item.id ? 'floor-tab-active' : ''}`}>{item.label}</button>)}</div></div><section className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_240px]"><article className="map-card min-w-0 overflow-x-auto p-4 sm:p-6"><div className="parking-map-canvas"><div className="parking-zone-grid">{floor.zones.map((zone) => <div key={zone.id} className={`parking-zone parking-zone-${zone.id}`}><span className="zone-letter" aria-hidden="true">{zone.id}</span><div className="relative z-10 flex items-center justify-between"><div><h2 className="text-sm font-semibold">{zone.name}</h2><p className="mt-1 text-[11px] text-muted-foreground">12 slots</p></div><span className="rounded-md bg-muted px-2 py-1 text-[10px] font-semibold text-muted-foreground">{zone.slots.filter((slot) => slot.status === 'available').length} free</span></div><div className="parking-slots">{zone.slots.map((slot) => <button key={slot.id} type="button" aria-label={`${slot.id}, ${statusLabel[slot.status]}`} aria-pressed={selected?.id === slot.id} onClick={() => setSelected(slot)} className={`parking-slot parking-slot-${slot.status} ${selected?.id === slot.id ? 'parking-slot-selected' : ''}`}><span>{slot.id}</span></button>)}</div></div>)}</div><div className="parking-lane parking-lane-horizontal" aria-hidden="true" /><div className="parking-lane parking-lane-vertical" aria-hidden="true" /></div></article><aside className="map-legend self-start p-5"><h2 className="text-xs font-bold uppercase tracking-[.18em]">Chú giải</h2><div className="mt-5 flex flex-col gap-3 text-sm">{legendItems.map(({ status, label }) => <div key={status} className="flex items-center gap-3"><span className={`legend-swatch legend-swatch-${status}`} /><span>{label}</span></div>)}</div><div className="mt-7 border-t pt-5"><div className="flex items-end justify-between"><div><p className="text-xs text-muted-foreground">Tổng sức chứa</p><p className="mt-1 text-2xl font-bold">{allSlots.length}</p></div><ParkingCircle className="size-5 text-primary" /></div><div className="mt-5 flex items-end justify-between"><div><p className="text-xs text-muted-foreground">Trống hiện tại</p><p className="mt-1 text-2xl font-bold text-success">{counts.available}</p></div><span className="text-xs text-muted-foreground">{counts.occupied + counts.reserved + counts.yours} in use</span></div></div>{selected && <div className="mt-6 rounded-xl bg-primary/5 p-3"><p className="text-xs text-muted-foreground">Selected slot</p><p className="mt-1 font-mono font-semibold text-primary">{selected.id}</p><p className="mt-1 text-xs">{statusLabel[selected.status]}</p></div>}</aside></section></div></AdminShell>
 }
 
-type ParkingFloorId = (typeof parkingFloors)[number]['id']
-const statusLabel: Record<ParkingSlotStatus, string> = { available: 'Trống', occupied: 'Đã có xe', reserved: 'Đã đặt', yours: 'Xe của bạn' }
-const legendItems: { status: ParkingSlotStatus; label: string }[] = [{ status: 'available', label: 'Trống' }, { status: 'occupied', label: 'Đã có xe' }, { status: 'reserved', label: 'Đã đặt' }, { status: 'yours', label: 'Xe của bạn' }]
+*/
 function Info({ label, value, mono }: { label:string; value:string; mono?:boolean }) { return <div className="flex items-center justify-between border-b py-3"><span className="text-sm text-muted-foreground">{label}</span><span className={`text-sm font-semibold ${mono ? 'font-mono' : ''}`}>{value}</span></div> }
 
 export function AnalyticsPage() {
