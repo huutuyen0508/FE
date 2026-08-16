@@ -153,6 +153,11 @@
   .map-card { @apply rounded-2xl border bg-card shadow-sm; background: #eff4ff; }
   .map-legend { @apply rounded-2xl border bg-card shadow-sm; }
   .parking-map-canvas { @apply relative min-w-[650px] overflow-hidden rounded-xl border p-5; background: #eff4ff; }
+  .map-card-chat .parking-map-canvas { @apply min-w-0 p-3; }
+  .map-card-chat .parking-zone-grid { @apply gap-3 sm:gap-4; }
+  .map-card-chat .parking-zone { @apply min-h-0 p-3; }
+  .map-card-chat .parking-slots { @apply mt-3 grid-cols-6 gap-1 sm:gap-2; }
+  .map-card-chat .parking-slot { @apply h-9 w-full min-w-0 text-[9px] sm:h-10; }
   .parking-zone-grid { @apply relative z-10 grid grid-cols-2 gap-20; }
   .parking-zone { @apply relative min-h-[175px] overflow-hidden rounded-xl border bg-card p-4 shadow-sm; }
   .zone-letter { @apply pointer-events-none absolute -right-2 -top-8 text-[11rem] font-bold leading-none text-primary/[.035]; }
