@@ -90,10 +90,5 @@ export const nav = [
   { href: '/admin/map', label: 'Parking map', icon: 'Map' },
   { href: '/admin/vehicles', label: 'Vehicles', icon: 'CarFront' },
   { href: '/admin/residents', label: 'Residents', icon: 'Users' },
-  { href: '/admin/analytics', label: 'AI analytics', icon: 'ChartNoAxesCombined' },
-  { href: '/admin/alerts', label: 'Alerts', icon: 'TriangleAlert' },
-  { href: '/admin/notifications', label: 'Notifications', icon: 'Bell' },
-  { href: '/admin/approvals', label: 'Approvals', icon: 'ClipboardCheck' },
-  { href: '/admin/assistant', label: 'AI assistant', icon: 'Sparkles' },
   { href: '/admin/settings', label: 'Settings', icon: 'Settings' },
 ]
