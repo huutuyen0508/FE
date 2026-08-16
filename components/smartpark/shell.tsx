@@ -60,7 +60,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
 export function ResidentShell({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const links = [
-    ['/resident', 'Home', LayoutDashboard], ['/resident/vehicles', 'My vehicles', CarFront], ['/resident/guest-parking', 'Guest parking', Users],
+    ['/resident', 'Home', LayoutDashboard], ['/resident/assistant', 'Assistant', Sparkles], ['/resident/vehicles', 'My vehicles', CarFront], ['/resident/guest-parking', 'Guest parking', Users],
   ] as const
   return <div className="min-h-screen bg-muted/40"><header className="sticky top-0 z-20 border-b bg-background/90 backdrop-blur"><div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 md:px-7"><Logo /><nav className="hidden items-center gap-1 md:flex">{links.map(([href, label, Icon]) => <Link key={href} href={href} className={`top-nav ${pathname === href ? 'top-nav-active' : ''}`}><Icon />{label}</Link>)}</nav><div className="flex items-center gap-2"><button className="icon-button" aria-label="Notifications"><Bell /></button><span className="avatar">OM</span></div></div></header><main className="mx-auto max-w-7xl p-4 pb-24 md:p-7">{children}</main><nav className="fixed inset-x-0 bottom-0 z-20 flex justify-around border-t bg-background p-2 md:hidden">{links.map(([href, label, Icon]) => <Link key={href} href={href} className={`mobile-tab ${pathname === href ? 'text-primary' : ''}`}><Icon />{label}</Link>)}</nav></div>
 }
