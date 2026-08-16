@@ -167,6 +167,8 @@
   .parking-slot-occupied { background: transparent; color: #ba1a1a; border: 2px solid #ba1a1a; }
   .parking-slot-reserved { background: #ffb95f; color: #31200d; border-color: #ffb95f; }
   .parking-slot-out_of_service { background: repeating-linear-gradient(135deg, #d8d9e2 0 5px, #b7bac8 5px 10px); color: #4a4d5b; border-color: #8e91a0; }
+  .parking-slot-recommended { box-shadow: 0 0 0 3px rgb(59 91 219 / .34); position: relative; }
+  .parking-slot-recommended::after { content: 'EV'; position: absolute; right: 2px; top: 2px; border-radius: 3px; background: #3b5bdb; color: white; font-size: 7px; font-weight: 800; line-height: 1; padding: 2px; }
   .parking-slot-selected { transform: scale(1.08); outline: 2px solid currentColor; outline-offset: 3px; }
   .parking-lane { @apply pointer-events-none absolute rounded-full; background: #c3c6d7; opacity: .45; }
   .parking-lane-horizontal { @apply inset-x-0 top-1/2 h-16 -translate-y-1/2; }
