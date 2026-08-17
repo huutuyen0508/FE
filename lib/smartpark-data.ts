@@ -58,9 +58,10 @@ export const approvals = [
   { id: 'REQ-1046', person: 'James Thomas', kind: 'Guest extension', detail: 'Unit B-0302 · +6 hours', submitted: '2 hr ago', status: 'Pending' },
 ]
 
+export type ParkingRowId = 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
 export type ParkingSlotStatus = 'available' | 'occupied' | 'reserved' | 'out_of_service'
-export type ParkingSlot = { id: string; status: ParkingSlotStatus }
-export type ParkingZone = { id: 'A' | 'B' | 'C' | 'D' | 'E' | 'F'; name: string; slots: ParkingSlot[] }
+export type ParkingSlot = { id: string; floorId: 'B1' | 'B2' | 'B3'; row: ParkingRowId; status: ParkingSlotStatus; isMine?: boolean }
+export type ParkingZone = { id: ParkingRowId; name: string; slots: ParkingSlot[] }
 export type ParkingFloor = { id: 'B1' | 'B2' | 'B3'; label: string; zones: ParkingZone[] }
 
 const zoneNames = ['A', 'B', 'C', 'D', 'E', 'F'] as const
@@ -76,7 +77,7 @@ export const parkingFloors: ParkingFloor[] = (['B1', 'B2', 'B3'] as const).map((
   zones: zoneNames.map((zone, zoneIndex) => ({
     id: zone,
     name: `Row ${zone}`,
-    slots: Array.from({ length: rowLengths[zoneIndex] }, (_, slotIndex) => ({ id: `${zone}${String(slotIndex + 1).padStart(2, '0')}`, status: slotStatus(floorIndex, zoneIndex, slotIndex) })),
+    slots: Array.from({ length: rowLengths[zoneIndex] }, (_, slotIndex) => ({ id: `${zone}${String(slotIndex + 1).padStart(2, '0')}`, floorId: id, row: zone, status: slotStatus(floorIndex, zoneIndex, slotIndex), isMine: (id === 'B1' && zone === 'A' && slotIndex === 3) || (id === 'B1' && zone === 'E' && slotIndex === 1) })),
   })),
 }))
 
