@@ -160,10 +160,10 @@
   .floorplan-card { @apply overflow-hidden rounded-xl border bg-card p-3 shadow-sm sm:p-5; }
   .floorplan-card-chat { @apply rounded-lg p-2 shadow-none; }
   .floorplan-scroll { @apply overflow-x-auto; }
-  .floorplan-shell { @apply flex min-w-[1120px] overflow-hidden rounded-sm border-[6px] border-foreground/90 bg-[#f3f4f6]; min-height: 650px; }
+  .floorplan-shell { @apply flex min-w-[1120px] overflow-hidden rounded-sm border-[6px] border-foreground/90 bg-[#f3f4f6]; aspect-ratio: 16 / 9; height: min(650px, calc((100vw - 320px) * .5625)); min-height: 560px; }
   .floorplan-left { @apply flex w-[9%] shrink-0 flex-col border-r-4 border-slate-400 bg-card; }
   .floorplan-main { @apply flex min-w-0 flex-1 flex-col justify-between px-5 py-3; }
-  .floorplan-exit { @apply flex w-[6%] shrink-0 flex-col items-center justify-center gap-3 border-l-4 border-slate-400 bg-card; }
+  .floorplan-exit { @apply flex w-[6%] min-w-[72px] shrink-0 flex-col items-center justify-center gap-3 border-l-4 border-slate-400 bg-card; }
   .floorplan-entry, .floorplan-exit { @apply text-center; }
   .floorplan-entry strong { @apply text-sm font-bold tracking-[.18em] text-primary; }
   .floorplan-exit strong { @apply text-sm font-bold tracking-[.18em] text-destructive; }
