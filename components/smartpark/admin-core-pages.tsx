@@ -14,7 +14,7 @@ function LineChart() { return <div className="mt-8"><div className="relative fle
 function MiniStat({ label, value, tone }: { label:string; value:string; tone:string }) { return <div className="rounded-xl bg-muted/60 p-3"><span className={`mx-auto mb-2 block size-2 rounded-full bg-${tone}`} /><p className="font-semibold">{value}</p><p className="text-[11px] text-muted-foreground">{label}</p></div> }
 function Insight({ title, text }: { title:string; text:string }) { return <div className="rounded-xl border bg-muted/30 p-4"><p className="text-sm font-semibold">{title}</p><p className="mt-1 text-xs leading-relaxed text-muted-foreground">{text}</p><button className="mt-3 text-xs font-semibold text-primary">Review recommendation →</button></div> }
 
-export function ParkingMapPage() { return <AdminShell><div className="mx-auto max-w-6xl"><div className="text-center"><PageHeader title="Sơ đồ mặt bằng trực tiếp" description="" /><div className="-mt-4 inline-flex items-center gap-2 text-sm font-medium text-success"><span className="realtime-dot" />Trạng thái thời gian thực</div></div><ParkingMap mode="admin" /></div></AdminShell> }
+export function ParkingMapPage() { return <AdminShell><div className="mx-auto min-w-0 w-full max-w-6xl"><div className="text-center"><PageHeader title="Sơ đồ mặt bằng trực tiếp" description="" /><div className="-mt-4 inline-flex items-center gap-2 text-sm font-medium text-success"><span className="realtime-dot" />Trạng thái thời gian thực</div></div><ParkingMap mode="admin" /></div></AdminShell> }
 
 /* Legacy map implementation removed; ParkingMap is the single shared implementation. */
 /* function LegacyParkingMapPage() {

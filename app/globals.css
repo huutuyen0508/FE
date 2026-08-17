@@ -159,8 +159,8 @@
   .floorplan-legend span { @apply inline-flex items-center gap-2; }
   .floorplan-card { @apply overflow-hidden rounded-xl border bg-card p-3 shadow-sm sm:p-5; }
   .floorplan-card-chat { @apply rounded-lg p-2 shadow-none; }
-  .floorplan-scroll { @apply overflow-x-auto; }
-  .floorplan-shell { @apply flex min-w-[1120px] overflow-hidden rounded-sm border-[6px] border-foreground/90 bg-[#f3f4f6]; aspect-ratio: 16 / 9; height: auto; }
+  .floorplan-scroll { @apply w-full max-w-full overflow-x-auto; }
+  .floorplan-shell { @apply flex w-full max-w-full min-w-0 overflow-hidden rounded-sm border-[6px] border-foreground/90 bg-[#f3f4f6]; aspect-ratio: 16 / 9; height: auto; }
   .floorplan-left { @apply flex w-[9%] shrink-0 flex-col border-r-4 border-slate-400 bg-card; }
   .floorplan-main { @apply flex min-w-0 flex-1 flex-col justify-between px-5 py-3; }
   .floorplan-exit { @apply flex w-[6%] min-w-[72px] shrink-0 flex-col items-center justify-center gap-3 border-l-4 border-slate-400 bg-card; }
@@ -205,6 +205,10 @@
   .floorplan-card-chat .floorplan-main { @apply px-3 py-2; }
   .floorplan-card-chat .floorplan-row { @apply min-h-[58px]; }
   .floorplan-card-chat .floorplan-slot { @apply text-[8px]; }
+  @media (max-width: 900px) {
+    .floorplan-scroll { @apply overflow-x-auto; }
+    .floorplan-shell { @apply min-w-[1120px]; }
+  }
   @keyframes realtime-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
   .alert-row, .notification-row { @apply flex items-start gap-4 border-b p-4 transition last:border-0 hover:bg-muted/50; }
   .alert-icon { @apply grid size-10 shrink-0 place-items-center rounded-xl; }

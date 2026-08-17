@@ -45,13 +45,13 @@ export function AdminShell({ children }: { children: ReactNode }) {
         <div className="border-t p-3"><div className="flex items-center gap-3 rounded-xl p-2"><span className="avatar">AR</span><div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold">Alex Rivera</p><p className="truncate text-xs text-muted-foreground">Administrator</p></div><ChevronDown className="size-4 text-muted-foreground" /></div><Link href="/login" className="nav-item mt-1"><LogOut />Sign out</Link></div>
       </aside>
       {mobileOpen && <button className="fixed inset-0 z-30 bg-foreground/20 lg:hidden" onClick={() => setMobileOpen(false)} aria-label="Close navigation backdrop" />}
-      <div className="lg:pl-64">
+      <div className="min-w-0 lg:pl-64">
         <header className="sticky top-0 z-20 flex h-18 items-center justify-between border-b bg-background/90 px-4 backdrop-blur-md md:px-7">
           <div className="flex items-center gap-3"><button className="icon-button lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Open navigation"><Menu /></button><button className="hidden items-center gap-2 rounded-xl border bg-muted/50 px-3 py-2 text-sm text-muted-foreground md:flex" onClick={() => setSearchOpen(!searchOpen)}><Search className="size-4" />Search anything <kbd className="rounded border bg-background px-1.5 font-mono text-[10px]">⌘K</kbd></button></div>
           <div className="flex items-center gap-2"><button className="icon-button" onClick={() => setDark(!dark)} aria-label="Toggle theme">{dark ? <Sun /> : <Moon />}</button><Link className="icon-button relative" href="/admin/notifications" aria-label="Notifications"><Bell /><span className="absolute right-2 top-2 size-2 rounded-full bg-primary ring-2 ring-background" /></Link><span className="avatar md:hidden">AR</span></div>
         </header>
         {searchOpen && <div className="border-b bg-background px-4 py-3 md:hidden"><label className="search-field"><Search /><input autoFocus placeholder="Search anything..." /></label></div>}
-        <main className="mx-auto w-full max-w-[1500px] p-4 md:p-7">{children}</main>
+        <main className="mx-auto min-w-0 w-full max-w-[1500px] p-4 md:p-7">{children}</main>
       </div>
     </div>
   )
