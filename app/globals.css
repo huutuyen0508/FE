@@ -152,32 +152,58 @@
   .realtime-dot { @apply size-2 rounded-full bg-success shadow-[0_0_0_4px_hsl(var(--success)/.12)]; animation: realtime-pulse 2s ease-in-out infinite; }
   .map-card { @apply rounded-2xl border bg-card shadow-sm; background: #eff4ff; }
   .map-legend { @apply rounded-2xl border bg-card shadow-sm; }
-  .parking-map-canvas { @apply relative min-w-[650px] overflow-hidden rounded-xl border p-5; background: #eff4ff; }
-  .map-card-chat .parking-map-canvas { @apply min-w-0 p-3; }
-  .map-card-chat .parking-zone-grid { @apply gap-3 sm:gap-4; }
-  .map-card-chat .parking-zone { @apply min-h-0 p-3; }
-  .map-card-chat .parking-slots { @apply mt-3 grid-cols-6 gap-1 sm:gap-2; }
-  .map-card-chat .parking-slot { @apply h-9 w-full min-w-0 text-[9px] sm:h-10; }
-  .parking-zone-grid { @apply relative z-10 grid grid-cols-2 gap-20; }
-  .parking-zone { @apply relative min-h-[175px] overflow-hidden rounded-xl border bg-card p-4 shadow-sm; }
-  .zone-letter { @apply pointer-events-none absolute -right-2 -top-8 text-[11rem] font-bold leading-none text-primary/[.035]; }
-  .parking-slots { @apply relative z-10 mt-5 grid grid-cols-6 gap-2; }
-  .parking-slot { @apply flex h-12 w-8 items-center justify-center rounded border text-[10px] font-semibold transition-transform duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary; }
-  .parking-slot-available { background: #006c49; color: white; border-color: #006c49; }
-  .parking-slot-occupied { background: transparent; color: #ba1a1a; border: 2px solid #ba1a1a; }
-  .parking-slot-reserved { background: #ffb95f; color: #31200d; border-color: #ffb95f; }
-  .parking-slot-out_of_service { background: repeating-linear-gradient(135deg, #d8d9e2 0 5px, #b7bac8 5px 10px); color: #4a4d5b; border-color: #8e91a0; }
-  .parking-slot-recommended { box-shadow: 0 0 0 3px rgb(59 91 219 / .34); position: relative; }
-  .parking-slot-recommended::after { content: 'EV'; position: absolute; right: 2px; top: 2px; border-radius: 3px; background: #3b5bdb; color: white; font-size: 7px; font-weight: 800; line-height: 1; padding: 2px; }
-  .parking-slot-selected { transform: scale(1.08); outline: 2px solid currentColor; outline-offset: 3px; }
-  .parking-lane { @apply pointer-events-none absolute rounded-full; background: #c3c6d7; opacity: .45; }
-  .parking-lane-horizontal { @apply inset-x-0 top-1/2 h-16 -translate-y-1/2; }
-  .parking-lane-vertical { @apply bottom-0 left-1/2 top-0 w-16 -translate-x-1/2; }
+  .floorplan-header { @apply mb-6 flex items-end justify-between gap-6 border-b pb-5; }
+  .floorplan-header h1 { @apply text-3xl font-bold tracking-tight text-foreground; }
+  .floorplan-header p { @apply mt-1 text-sm text-muted-foreground; }
+  .floorplan-legend { @apply flex flex-wrap items-center gap-4 rounded-lg border bg-muted/30 px-4 py-2 text-xs font-medium; }
+  .floorplan-legend span { @apply inline-flex items-center gap-2; }
+  .floorplan-card { @apply overflow-hidden rounded-xl border bg-card p-3 shadow-sm sm:p-5; }
+  .floorplan-card-chat { @apply rounded-lg p-2 shadow-none; }
+  .floorplan-scroll { @apply overflow-x-auto; }
+  .floorplan-shell { @apply flex min-w-[1120px] overflow-hidden rounded-sm border-[6px] border-foreground/90 bg-[#f3f4f6]; min-height: 650px; }
+  .floorplan-left { @apply flex w-[9%] shrink-0 flex-col border-r-4 border-slate-400 bg-card; }
+  .floorplan-main { @apply flex min-w-0 flex-1 flex-col justify-between px-5 py-3; }
+  .floorplan-exit { @apply flex w-[6%] shrink-0 flex-col items-center justify-center gap-3 border-l-4 border-slate-400 bg-card; }
+  .floorplan-entry, .floorplan-exit { @apply text-center; }
+  .floorplan-entry strong { @apply text-sm font-bold tracking-[.18em] text-primary; }
+  .floorplan-exit strong { @apply text-sm font-bold tracking-[.18em] text-destructive; }
+  .floorplan-entry span, .floorplan-exit span { @apply mx-auto mt-3 grid size-12 place-items-center rounded-xl text-primary-foreground shadow-lg; }
+  .floorplan-entry span { @apply bg-primary; }
+  .floorplan-exit span { @apply bg-destructive; }
+  .floorplan-entry svg, .floorplan-exit svg { @apply size-6; }
+  .floorplan-infra { @apply flex h-[28%] border-b-4 border-foreground/90; }
+  .floorplan-left > .floorplan-infra:last-child { @apply border-b-0 border-t-4; }
+  .floorplan-stairs { @apply w-[60%] border-r-2 border-foreground/80; background: repeating-linear-gradient(0deg, transparent 0 5px, #9ca3af 5px 6px); }
+  .floorplan-stairs.tall { @apply h-full; }
+  .floorplan-lift { @apply flex min-w-0 flex-1 items-center justify-center; }
+  .floorplan-lift-label { @apply flex flex-col items-center gap-1 text-[9px] font-bold uppercase tracking-tight text-muted-foreground; }
+  .floorplan-middle .floorplan-lift { @apply mx-2 w-[24%] flex-none border-x-4 border-foreground/90 bg-card; }
+  .floorplan-row-group { @apply flex flex-col gap-3; }
+  .floorplan-row { @apply flex min-h-[82px] flex-1 items-stretch gap-1; }
+  .floorplan-row-split { @apply flex items-stretch; }
+  .floorplan-row-split > .floorplan-row { @apply w-[38%]; }
+  .floorplan-divider { @apply h-2 rounded-full bg-foreground/80; }
+  .floorplan-middle { @apply flex flex-col gap-3; }
+  .floorplan-aisle { @apply flex flex-1 items-center justify-between px-10 text-slate-300; }
+  .floorplan-aisle svg { @apply size-8 opacity-60; }
+  .floorplan-slot { @apply relative flex min-w-0 flex-1 items-center justify-center rounded-sm border text-[10px] font-medium transition-transform hover:z-10 hover:scale-105 focus-visible:z-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary; }
+  .floorplan-slot span { @apply whitespace-nowrap; writing-mode: vertical-rl; transform: rotate(180deg); }
+  .floorplan-slot-available { @apply border-emerald-300 bg-emerald-50 text-emerald-800; }
+  .floorplan-slot-occupied { @apply border-2 border-red-300 bg-red-50 text-red-800; }
+  .floorplan-slot-reserved { @apply border-yellow-400 bg-yellow-50 text-yellow-800; }
+  .floorplan-slot-out_of_service { @apply border-slate-400 text-slate-600; background: repeating-linear-gradient(135deg, #d8d9e2 0 5px, #b7bac8 5px 10px); }
+  .floorplan-slot-recommended { @apply ring-2 ring-primary/40; }
+  .floorplan-slot-selected { @apply z-20 scale-105 outline-2 outline outline-offset-2 outline-primary; }
   .legend-swatch { @apply size-4 rounded-sm; }
-  .legend-swatch-available { background: #006c49; }
-  .legend-swatch-occupied { border: 2px solid #ba1a1a; }
-  .legend-swatch-reserved { background: #ffb95f; }
+  .legend-swatch-available { @apply border border-emerald-300 bg-emerald-50; }
+  .legend-swatch-occupied { @apply border border-red-300 bg-red-50; }
+  .legend-swatch-reserved { @apply border border-yellow-400 bg-yellow-50; }
+  .legend-swatch-mine { @apply border-2 border-purple-400 bg-purple-50; }
   .legend-swatch-out_of_service { background: repeating-linear-gradient(135deg, #d8d9e2 0 4px, #b7bac8 4px 8px); border: 1px solid #8e91a0; }
+  .floorplan-card-chat .floorplan-shell { @apply min-w-[900px]; min-height: 500px; }
+  .floorplan-card-chat .floorplan-main { @apply px-3 py-2; }
+  .floorplan-card-chat .floorplan-row { @apply min-h-[58px]; }
+  .floorplan-card-chat .floorplan-slot { @apply text-[8px]; }
   @keyframes realtime-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
   .alert-row, .notification-row { @apply flex items-start gap-4 border-b p-4 transition last:border-0 hover:bg-muted/50; }
   .alert-icon { @apply grid size-10 shrink-0 place-items-center rounded-xl; }

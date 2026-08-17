@@ -60,10 +60,11 @@ export const approvals = [
 
 export type ParkingSlotStatus = 'available' | 'occupied' | 'reserved' | 'out_of_service'
 export type ParkingSlot = { id: string; status: ParkingSlotStatus }
-export type ParkingZone = { id: 'A' | 'B' | 'C' | 'D'; name: string; slots: ParkingSlot[] }
+export type ParkingZone = { id: 'A' | 'B' | 'C' | 'D' | 'E' | 'F'; name: string; slots: ParkingSlot[] }
 export type ParkingFloor = { id: 'B1' | 'B2' | 'B3'; label: string; zones: ParkingZone[] }
 
-const zoneNames = ['A', 'B', 'C', 'D'] as const
+const zoneNames = ['A', 'B', 'C', 'D', 'E', 'F'] as const
+const rowLengths = [25, 25, 20, 20, 25, 25] as const
 const slotStatus = (floorIndex: number, zoneIndex: number, slotIndex: number): ParkingSlotStatus => {
   const value = (floorIndex * 11 + zoneIndex * 5 + slotIndex) % 12
   return value < 4 ? 'available' : value < 7 ? 'occupied' : value < 9 ? 'reserved' : value === 9 ? 'out_of_service' : 'available'
@@ -74,15 +75,11 @@ export const parkingFloors: ParkingFloor[] = (['B1', 'B2', 'B3'] as const).map((
   label: `${id} Floor`,
   zones: zoneNames.map((zone, zoneIndex) => ({
     id: zone,
-    name: `Khu vực ${zone}`,
-    slots: Array.from({ length: 12 }, (_, slotIndex) => ({
-      id: `${zone}${slotIndex + 1}`,
-      status: slotStatus(floorIndex, zoneIndex, slotIndex),
-    })),
+    name: `Row ${zone}`,
+    slots: Array.from({ length: rowLengths[zoneIndex] }, (_, slotIndex) => ({ id: `${zone}${String(slotIndex + 1).padStart(2, '0')}`, status: slotStatus(floorIndex, zoneIndex, slotIndex) })),
   })),
 }))
 
-// Retained for existing admin views that consume the legacy flat collection.
 export const parkingSpaces = parkingFloors[0].zones.flatMap((zone) => zone.slots)
 
 export const nav = [
