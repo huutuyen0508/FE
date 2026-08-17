@@ -6,6 +6,7 @@ import { ResidentsPage, VehiclesPage } from './admin-management-pages'
 import { AlertsPage, ApprovalsPage, AssistantPage, NotificationsPage, SettingsPage } from './admin-tool-pages'
 import { LoginPage } from './public-pages'
 import { GuestParkingPage, MyVehiclesPage, RegisterVehiclePage, ResidentDashboard } from './resident-pages'
+import { ResidentAssistantPage } from './resident-assistant-page'
 
 export function SmartParkRouter() {
   const path = usePathname()
@@ -22,6 +23,7 @@ export function SmartParkRouter() {
     '/admin/assistant': AssistantPage,
     '/admin/settings': SettingsPage,
     '/resident': ResidentDashboard,
+    '/resident/assistant': ResidentAssistantPage,
     '/resident/vehicles': MyVehiclesPage,
     '/resident/vehicles/register': RegisterVehiclePage,
     '/resident/guest-parking': GuestParkingPage,
