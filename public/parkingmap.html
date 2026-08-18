@@ -174,4 +174,71 @@
 
 
 
+<style data-purpose="parking-slot-interaction-styles">
+  .slot-status-popover { position: fixed; z-index: 1000; display: flex; flex-direction: column; gap: 2px; min-width: 128px; padding: 5px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(15,23,42,.18); }
+  .slot-status-popover button { border: 0; border-radius: 5px; background: transparent; color: #1f2937; cursor: pointer; font: 500 12px/1.2 system-ui, sans-serif; padding: 7px 9px; text-align: left; }
+  .slot-status-popover button:hover, .slot-status-popover button:focus-visible { background: #f3f4f6; outline: none; }
+</style>
+<script>
+(() => {
+  const statusClasses = ['avail', 'occ', 'resv', 'mine'];
+  const options = [
+    ['Available', 'avail'],
+    ['Occupied', 'occ'],
+    ['Reserved', 'resv'],
+    ['Your Car', 'mine']
+  ];
+  let popover;
+  let activeSlot;
+
+  function closePopover() {
+    popover?.remove();
+    popover = undefined;
+    activeSlot = undefined;
+  }
+
+  function openPopover(slot) {
+    closePopover();
+    activeSlot = slot;
+    popover = document.createElement('div');
+    popover.className = 'slot-status-popover';
+    popover.setAttribute('role', 'menu');
+    popover.setAttribute('aria-label', 'Choose parking status');
+    options.forEach(([label, status]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = label;
+      button.setAttribute('role', 'menuitem');
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        statusClasses.forEach((className) => slot.classList.remove(className));
+        slot.classList.add(status);
+        closePopover();
+      });
+      popover.appendChild(button);
+    });
+    document.body.appendChild(popover);
+    const rect = slot.getBoundingClientRect();
+    const width = popover.offsetWidth;
+    const left = Math.min(Math.max(8, rect.left), window.innerWidth - width - 8);
+    const top = rect.bottom + 6 + popover.offsetHeight <= window.innerHeight ? rect.bottom + 6 : rect.top - popover.offsetHeight - 6;
+    popover.style.left = left + 'px';
+    popover.style.top = Math.max(8, top) + 'px';
+  }
+
+  document.querySelectorAll('.slot').forEach((slot) => {
+    const label = slot.querySelector('span')?.textContent?.trim() || 'parking slot';
+    slot.setAttribute('role', 'button');
+    slot.setAttribute('tabindex', '0');
+    slot.setAttribute('aria-label', label + ', choose status');
+    slot.addEventListener('click', (event) => { event.stopPropagation(); openPopover(slot); });
+    slot.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openPopover(slot); }
+    });
+  });
+  document.addEventListener('click', (event) => { if (popover && !popover.contains(event.target)) closePopover(); });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closePopover(); });
+  window.addEventListener('resize', closePopover);
+})();
+</script>
 </body></html>
