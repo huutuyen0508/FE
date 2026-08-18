@@ -59,17 +59,22 @@ export const approvals = [
 ]
 
 export type ParkingRowId = 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
-export type ParkingSlotStatus = 'available' | 'occupied' | 'reserved' | 'out_of_service'
+export type ParkingSlotStatus = 'available' | 'occupied' | 'reserved' | 'special' | 'out_of_service'
 export type ParkingSlot = { id: string; floorId: 'B1' | 'B2' | 'B3'; row: ParkingRowId; status: ParkingSlotStatus; isMine?: boolean }
 export type ParkingZone = { id: ParkingRowId; name: string; slots: ParkingSlot[] }
 export type ParkingFloor = { id: 'B1' | 'B2' | 'B3'; label: string; zones: ParkingZone[] }
 
 const zoneNames = ['A', 'B', 'C', 'D', 'E', 'F'] as const
 const rowLengths = [25, 25, 20, 20, 25, 25] as const
-const slotStatus = (floorIndex: number, zoneIndex: number, slotIndex: number): ParkingSlotStatus => {
-  const value = (floorIndex * 11 + zoneIndex * 5 + slotIndex) % 12
-  return value < 4 ? 'available' : value < 7 ? 'occupied' : value < 9 ? 'reserved' : value === 9 ? 'out_of_service' : 'available'
+const referenceStatuses: Record<ParkingRowId, ParkingSlotStatus[]> = {
+  A: ['available','occupied','available','special','reserved','available','occupied','reserved','reserved','occupied','occupied','available','occupied','occupied','reserved','available','special','available','occupied','available','available','available','available','available','available'],
+  B: ['available','available','occupied','special','occupied','available','available','available','available','occupied','special','occupied','available','available','occupied','available','occupied','available','occupied','occupied','occupied','occupied','occupied','reserved','available'],
+  C: ['available','occupied','occupied','available','occupied','occupied','occupied','available','available','available','available','available','available','available','available','available','occupied','available','occupied','occupied'],
+  D: ['available','available','available','available','available','available','available','occupied','available','occupied','available','available','available','available','available','available','available','available','occupied','available'],
+  E: ['available','special','available','available','available','occupied','available','available','available','available','available','available','occupied','available','available','occupied','available','available','occupied','occupied','available','occupied','available','occupied','available'],
+  F: ['available','available','occupied','available','available','occupied','reserved','occupied','occupied','occupied','available','occupied','occupied','occupied','special','available','available','occupied','occupied','available','available','available','occupied','available','available'],
 }
+const slotStatus = (floorIndex: number, zone: ParkingRowId, slotIndex: number): ParkingSlotStatus => referenceStatuses[zone][slotIndex] ?? (floorIndex === 0 ? 'available' : 'occupied')
 
 export const parkingFloors: ParkingFloor[] = (['B1', 'B2', 'B3'] as const).map((id, floorIndex) => ({
   id,
@@ -77,7 +82,7 @@ export const parkingFloors: ParkingFloor[] = (['B1', 'B2', 'B3'] as const).map((
   zones: zoneNames.map((zone, zoneIndex) => ({
     id: zone,
     name: `Row ${zone}`,
-    slots: Array.from({ length: rowLengths[zoneIndex] }, (_, slotIndex) => ({ id: `${zone}${String(slotIndex + 1).padStart(2, '0')}`, floorId: id, row: zone, status: slotStatus(floorIndex, zoneIndex, slotIndex), isMine: (id === 'B1' && zone === 'A' && slotIndex === 3) || (id === 'B1' && zone === 'E' && slotIndex === 1) })),
+    slots: Array.from({ length: rowLengths[zoneIndex] }, (_, slotIndex) => ({ id: `${zone}${String(slotIndex + 1).padStart(2, '0')}`, floorId: id, row: zone, status: slotStatus(floorIndex, zone, slotIndex), isMine: (id === 'B1' && zone === 'A' && slotIndex === 3) || (id === 'B1' && zone === 'E' && slotIndex === 1) })),
   })),
 }))
 
