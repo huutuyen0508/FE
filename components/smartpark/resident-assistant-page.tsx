@@ -14,7 +14,7 @@ const initialMessages: ChatMessage[] = [
   { id: 1, role: 'assistant', type: 'text', content: 'Xin chào Olivia. Tôi có thể giúp bạn tìm chỗ đỗ, quản lý khách và trả lời các câu hỏi về xe của bạn.' },
 ]
 const quickPrompt = 'Hãy tìm cho tôi chỗ đỗ xe điện'
-const candidates = ['A5', 'B4', 'C3', 'D5']
+const candidates = ['A05', 'B04', 'C03', 'D05']
 
 function isElectricRequest(value: string) {
   const text = value.toLowerCase().replace(/[!?.,]/g, '')

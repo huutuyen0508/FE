@@ -1,0 +1,244 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Parking Lot Floor Plan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="parking-map-styles">
+    /* Base map container styling */
+    .map-container {
+      aspect-ratio: 16 / 9;
+      background-color: #f3f4f6; /* Light gray for driving lanes */
+      position: relative;
+    }
+
+    /* Slot base styling */
+    .slot {
+      flex: 1;
+      height: 100%;
+      border-width: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      border-radius: 0.125rem;
+      box-sizing: border-box;
+      min-width: 0; /* allows flex shrinking */
+      position: relative;
+    }
+    
+    @media (min-width: 1024px) {
+      .slot { font-size: 0.65rem; }
+    }
+
+    .slot span {
+      transform: rotate(-90deg);
+      white-space: nowrap;
+      display: block;
+      user-select: none;
+    }
+
+    /* Slot Status Colors */
+    .slot.avail { background-color: #ecfdf5; border-color: #6ee7b7; color: #065f46; } /* Green */
+    .slot.occ { background-color: #fef2f2; border-color: #fca5a5; color: #991b1b; } /* Red */
+    .slot.resv { background-color: #fefce8; border-color: #fde047; color: #854d0e; } /* Yellow */
+    .slot.mine { background-color: #f3e8ff; border-color: #c084fc; color: #6b21a8; font-weight: 700; border-width: 2px; } /* Purple */
+    .slot.other { background-color: #eff6ff; border-color: #93c5fd; color: #1e3a8a; } /* Blue (Secondary/Special) */
+
+    /* Structural elements */
+    .wall-thick { background-color: #374151; } /* Dark gray/slate walls */
+    
+    .stairs-hatch {
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 4px,
+        #9ca3af 4px,
+        #9ca3af 5px
+      );
+    }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"></head>
+<body class="bg-gray-100 p-4 md:p-8 font-sans text-gray-800">
+<!-- BEGIN: Main Dashboard Container -->
+<div class="max-w-7xl mx-auto bg-white p-6 rounded-xl shadow-lg">
+<!-- Header -->
+<header class="mb-6 flex justify-between items-end border-b pb-4">
+<div>
+<h1 class="text-3xl font-bold text-gray-900 tracking-tight">Ground Floor Plan</h1>
+<p class="text-gray-500 text-sm mt-1">Live parking availability and zoning.</p>
+</div>
+<!-- BEGIN: Legend -->
+<div class="flex gap-4 text-xs font-medium bg-gray-50 px-4 py-2 rounded-lg border border-gray-200">
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-sm bg-[#ecfdf5] border border-[#6ee7b7]"></div> Available</div>
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-sm bg-[#fef2f2] border border-[#fca5a5]"></div> Occupied</div>
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-sm bg-[#fefce8] border border-[#fde047]"></div> Reserved</div>
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-sm bg-[#f3e8ff] border-2 border-[#c084fc]"></div> Your Car</div>
+</div>
+<!-- END: Legend -->
+</header>
+<!-- BEGIN: Map Area -->
+<main class="w-full relative">
+<!-- The main floorplan wrapper -->
+<div class="map-container border-8 border-gray-800 rounded-sm flex shadow-inner">
+<!-- BEGIN: Left Infrastructure Column (Entrance, Stairs) -->
+<div class="w-[8%] h-full border-r-4 border-gray-400 flex flex-col bg-white relative z-10">
+<!-- Top Stairs Block -->
+<div class="h-[28%] border-b-4 border-gray-800 border-r-4 border-gray-800 flex">
+<div class="w-[60%] h-full stairs-hatch border-r-2 border-gray-800"></div>
+<div class="w-[40%] h-full relative overflow-hidden flex items-center justify-center"><div class="flex flex-col items-center justify-center gap-1"><span class="material-symbols-outlined text-gray-400 text-lg">elevator</span><span class="text-[8px] font-bold text-gray-500 uppercase tracking-tighter">Lift</span></div></div>
+</div>
+<!-- Entrance Area -->
+<div class="flex-1 flex flex-col items-center justify-center relative"><div class="flex flex-col items-center gap-3">
+  <span class="text-[#2563eb] font-bold tracking-widest text-sm uppercase">Entry</span>
+  <div class="bg-[#2563eb] w-10 h-10 flex items-center justify-center rounded-xl shadow-lg">
+    <span class="material-symbols-outlined text-white text-2xl">login</span>
+  </div>
+</div></div>
+<!-- Bottom Stairs Block -->
+<div class="h-[28%] border-t-4 border-gray-800 border-r-4 border-gray-800 flex">
+<div class="w-[60%] h-full stairs-hatch border-r-2 border-gray-800"></div>
+<div class="w-[40%] h-full relative overflow-hidden flex items-center justify-center"><div class="flex flex-col items-center justify-center gap-1"><span class="material-symbols-outlined text-gray-400 text-lg">elevator</span><span class="text-[8px] font-bold text-gray-500 uppercase tracking-tighter">Lift</span></div></div>
+</div>
+</div>
+<!-- END: Left Infrastructure Column -->
+<!-- BEGIN: Central Parking Zone -->
+<div class="flex-1 h-full flex flex-col px-4 py-2 justify-between">
+<!-- Top Rows (A & B) -->
+<div class="h-[26%] flex flex-col justify-between">
+<!-- Row A (attached to top wall) -->
+<div class="h-[42%] w-full flex gap-[2px] items-start"><div class="slot avail"><span class="">A01</span></div><div class="slot occ"><span class="">A02</span></div><div class="slot avail"><span class="">A03</span></div><div class="slot mine"><span class="">A04</span></div><div class="slot resv"><span class="">A05</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">A06</span></div><div class="slot occ"><span class="">A07</span></div><div class="slot resv"><span class="">A08</span></div><div class="slot resv"><span class="">A09</span></div><div class="slot occ"><span class="">A10</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot occ"><span class="">A11</span></div><div class="slot avail"><span class="">A12</span></div><div class="slot occ"><span class="">A13</span></div><div class="slot occ"><span class="">A14</span></div><div class="slot resv"><span class="">A15</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">A16</span></div><div class="slot other"><span class="">A17</span></div><div class="slot avail"><span class="">A18</span></div><div class="slot occ"><span class="">A19</span></div><div class="slot avail"><span class="">A20</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">A21</span></div><div class="slot avail"><span class="">A22</span></div><div class="slot avail"><span class="">A23</span></div><div class="slot avail"><span class="">A24</span></div><div class="slot avail"><span class="">A25</span></div></div>
+<!-- Driving Lane (Top) -->
+<div class="flex-1 flex items-center justify-end pr-8">
+<svg class="w-8 h-8 text-gray-300 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<!-- Row B (facing up) -->
+<div class="h-[42%] w-full flex gap-[2px] items-end"><div class="slot avail"><span class="">B01</span></div><div class="slot avail"><span class="">B02</span></div><div class="slot occ"><span class="">B03</span></div><div class="slot other"><span class="">B04</span></div><div class="slot occ"><span class="">B05</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">B06</span></div><div class="slot avail"><span class="">B07</span></div><div class="slot avail"><span class="">B08</span></div><div class="slot avail"><span class="">B09</span></div><div class="slot occ"><span class="">B10</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot other"><span class="">B11</span></div><div class="slot occ"><span class="">B12</span></div><div class="slot avail"><span class="">B13</span></div><div class="slot avail"><span class="">B14</span></div><div class="slot occ"><span class="">B15</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">B16</span></div><div class="slot occ"><span class="">B17</span></div><div class="slot avail"><span class="">B18</span></div><div class="slot occ"><span class="">B19</span></div><div class="slot occ"><span class="">B20</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot occ"><span class="">B21</span></div><div class="slot occ"><span class="">B22</span></div><div class="slot occ"><span class="">B23</span></div><div class="slot resv"><span class="">B24</span></div><div class="slot avail"><span class="">B25</span></div></div>
+</div>
+<!-- Solid Wall Divider between B & C -->
+<div class="w-full h-1.5 wall-thick rounded-full my-1"></div>
+<!-- Middle Section (C, Central Core, D, Main Aisle) -->
+<div class="h-[36%] flex flex-col justify-between relative">
+<!-- Row C (Split) -->
+<div class="h-[30%] w-full flex">
+<!-- C Left -->
+<div class="w-[38%] flex gap-[2px] items-start"><div class="slot avail"><span class="">C01</span></div><div class="slot occ"><span class="">C02</span></div><div class="slot occ"><span class="">C03</span></div><div class="slot avail"><span class="">C04</span></div><div class="slot occ"><span class="">C05</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot occ"><span class="">C06</span></div><div class="slot occ"><span class="">C07</span></div><div class="slot avail"><span class="">C08</span></div><div class="slot avail"><span class="">C09</span></div><div class="slot avail"><span class="">C10</span></div></div>
+<!-- Space for Central Core (overlaps) -->
+<div class="w-[24%] border-t-4 border-l-4 border-r-4 border-gray-800 bg-white mx-2 relative z-20 flex"><div class="w-[60%] h-full stairs-hatch border-r-2 border-gray-800"></div><div class="w-[40%] h-full relative overflow-hidden flex items-center justify-center"><div class="flex flex-col items-center justify-center gap-1"><span class="material-symbols-outlined text-gray-400 text-lg">elevator</span><span class="text-[8px] font-bold text-gray-500 uppercase tracking-tighter">Lift</span></div></div></div>
+<!-- C Right -->
+<div class="w-[38%] flex gap-[2px] items-start"><div class="slot avail"><span class="">C11</span></div><div class="slot avail"><span class="">C12</span></div><div class="slot avail"><span class="">C13</span></div><div class="slot avail"><span class="">C14</span></div><div class="slot avail"><span class="">C15</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">C16</span></div><div class="slot occ"><span class="">C17</span></div><div class="slot avail"><span class="">C18</span></div><div class="slot occ"><span class="">C19</span></div><div class="slot occ"><span class="">C20</span></div></div>
+</div>
+<!-- Main Driving Aisle (Middle) -->
+<div class="flex-1 w-full flex items-center justify-between px-10 relative z-10">
+<svg class="w-10 h-10 text-gray-300 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="w-10 h-10 text-gray-300 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<!-- Row D (Split) -->
+<div class="h-[30%] w-full flex">
+<!-- D Left -->
+<div class="w-[38%] flex gap-[2px] items-end"><div class="slot avail"><span class="">D01</span></div><div class="slot avail"><span class="">D02</span></div><div class="slot avail"><span class="">D03</span></div><div class="slot avail"><span class="">D04</span></div><div class="slot avail"><span class="">D05</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">D06</span></div><div class="slot avail"><span class="">D07</span></div><div class="slot occ"><span class="">D08</span></div><div class="slot avail"><span class="">D09</span></div><div class="slot occ"><span class="">D10</span></div></div>
+<!-- Central Core Bottom Half -->
+<div class="w-[24%] border-b-4 border-l-4 border-r-4 border-gray-800 bg-white mx-2 relative z-20 flex"><div class="w-[60%] h-full stairs-hatch border-r-2 border-gray-800"></div><div class="w-[40%] h-full relative overflow-hidden flex items-center justify-center"><div class="flex flex-col items-center justify-center gap-1"><span class="material-symbols-outlined text-gray-400 text-lg">elevator</span><span class="text-[8px] font-bold text-gray-500 uppercase tracking-tighter">Lift</span></div></div></div>
+<!-- D Right -->
+<div class="w-[38%] flex gap-[2px] items-end"><div class="slot avail"><span class="">D11</span></div><div class="slot avail"><span class="">D12</span></div><div class="slot avail"><span class="">D13</span></div><div class="slot avail"><span class="">D14</span></div><div class="slot avail"><span class="">D15</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">D16</span></div><div class="slot avail"><span class="">D17</span></div><div class="slot avail"><span class="">D18</span></div><div class="slot occ"><span class="">D19</span></div><div class="slot avail"><span class="">D20</span></div></div>
+</div>
+</div>
+<!-- Solid Wall Divider between D & E -->
+<div class="w-full h-1.5 wall-thick rounded-full my-1"></div>
+<!-- Bottom Rows (E & F) -->
+<div class="h-[26%] flex flex-col justify-between">
+<!-- Row E (facing down) -->
+<div class="h-[42%] w-full flex gap-[2px] items-start"><div class="slot avail"><span class="">E01</span></div><div class="slot mine"><span class="">E02</span></div><div class="slot avail"><span class="">E03</span></div><div class="slot avail"><span class="">E04</span></div><div class="slot avail"><span class="">E05</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot occ"><span class="">E06</span></div><div class="slot avail"><span class="">E07</span></div><div class="slot avail"><span class="">E08</span></div><div class="slot avail"><span class="">E09</span></div><div class="slot avail"><span class="">E10</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">E11</span></div><div class="slot avail"><span class="">E12</span></div><div class="slot occ"><span class="">E13</span></div><div class="slot avail"><span class="">E14</span></div><div class="slot avail"><span class="">E15</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot occ"><span class="">E16</span></div><div class="slot avail"><span class="">E17</span></div><div class="slot avail"><span class="">E18</span></div><div class="slot occ"><span class="">E19</span></div><div class="slot occ"><span class="">E20</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">E21</span></div><div class="slot occ"><span class="">E22</span></div><div class="slot avail"><span class="">E23</span></div><div class="slot occ"><span class="">E24</span></div><div class="slot avail"><span class="">E25</span></div></div>
+<!-- Driving Lane (Bottom) -->
+<div class="flex-1 flex items-center justify-end pr-8">
+<svg class="w-8 h-8 text-gray-300 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<!-- Row F (attached to bottom wall) -->
+<div class="h-[42%] w-full flex gap-[2px] items-end"><div class="slot avail"><span class="">F01</span></div><div class="slot avail"><span class="">F02</span></div><div class="slot occ"><span class="">F03</span></div><div class="slot avail"><span class="">F04</span></div><div class="slot avail"><span class="">F05</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot occ"><span class="">F06</span></div><div class="slot resv"><span class="">F07</span></div><div class="slot occ"><span class="">F08</span></div><div class="slot occ"><span class="">F09</span></div><div class="slot occ"><span class="">F10</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">F11</span></div><div class="slot occ"><span class="">F12</span></div><div class="slot occ"><span class="">F13</span></div><div class="slot occ"><span class="">F14</span></div><div class="slot other"><span class="">F15</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">F16</span></div><div class="slot avail"><span class="">F17</span></div><div class="slot occ"><span class="">F18</span></div><div class="slot occ"><span class="">F19</span></div><div class="slot avail"><span class="">F20</span></div><div class="w-1 h-full bg-gray-400 rounded-full mx-[1px]"></div><div class="slot avail"><span class="">F21</span></div><div class="slot avail"><span class="">F22</span></div><div class="slot occ"><span class="">F23</span></div><div class="slot avail"><span class="">F24</span></div><div class="slot avail"><span class="">F25</span></div></div>
+</div>
+</div>
+<!-- END: Central Parking Zone -->
+<!-- BEGIN: Right Infrastructure Column (Exit) -->
+<div class="w-[6%] h-full border-l-4 border-gray-400 flex flex-col justify-center items-center bg-white relative z-10"><div class="flex flex-col items-center gap-3">
+  <span class="text-red-600 font-bold tracking-widest text-sm uppercase">Exit</span>
+  <div class="bg-red-500 w-10 h-10 flex items-center justify-center rounded-xl shadow-lg">
+    <span class="material-symbols-outlined text-white text-2xl">logout</span>
+  </div>
+</div></div>
+<!-- END: Right Infrastructure Column -->
+</div>
+</main>
+<!-- END: Map Area -->
+</div>
+<!-- END: Main Dashboard Container -->
+
+
+
+
+<style data-purpose="parking-slot-interaction-styles">
+  .slot-status-popover { position: fixed; z-index: 1000; display: flex; flex-direction: column; gap: 2px; min-width: 128px; padding: 5px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(15,23,42,.18); }
+  .slot-status-popover button { border: 0; border-radius: 5px; background: transparent; color: #1f2937; cursor: pointer; font: 500 12px/1.2 system-ui, sans-serif; padding: 7px 9px; text-align: left; }
+  .slot-status-popover button:hover, .slot-status-popover button:focus-visible { background: #f3f4f6; outline: none; }
+</style>
+<script>
+(() => {
+  const statusClasses = ['avail', 'occ', 'resv', 'mine'];
+  const options = [
+    ['Available', 'avail'],
+    ['Occupied', 'occ'],
+    ['Reserved', 'resv'],
+    ['Your Car', 'mine']
+  ];
+  let popover;
+  let activeSlot;
+
+  function closePopover() {
+    popover?.remove();
+    popover = undefined;
+    activeSlot = undefined;
+  }
+
+  function openPopover(slot) {
+    closePopover();
+    activeSlot = slot;
+    popover = document.createElement('div');
+    popover.className = 'slot-status-popover';
+    popover.setAttribute('role', 'menu');
+    popover.setAttribute('aria-label', 'Choose parking status');
+    options.forEach(([label, status]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = label;
+      button.setAttribute('role', 'menuitem');
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        statusClasses.forEach((className) => slot.classList.remove(className));
+        slot.classList.add(status);
+        closePopover();
+      });
+      popover.appendChild(button);
+    });
+    document.body.appendChild(popover);
+    const rect = slot.getBoundingClientRect();
+    const width = popover.offsetWidth;
+    const left = Math.min(Math.max(8, rect.left), window.innerWidth - width - 8);
+    const top = rect.bottom + 6 + popover.offsetHeight <= window.innerHeight ? rect.bottom + 6 : rect.top - popover.offsetHeight - 6;
+    popover.style.left = left + 'px';
+    popover.style.top = Math.max(8, top) + 'px';
+  }
+
+  document.querySelectorAll('.slot').forEach((slot) => {
+    const label = slot.querySelector('span')?.textContent?.trim() || 'parking slot';
+    slot.setAttribute('role', 'button');
+    slot.setAttribute('tabindex', '0');
+    slot.setAttribute('aria-label', label + ', choose status');
+    slot.addEventListener('click', (event) => { event.stopPropagation(); openPopover(slot); });
+    slot.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openPopover(slot); }
+    });
+  });
+  document.addEventListener('click', (event) => { if (popover && !popover.contains(event.target)) closePopover(); });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closePopover(); });
+  window.addEventListener('resize', closePopover);
+})();
+</script>
+</body></html>

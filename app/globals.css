@@ -192,6 +192,7 @@
   .floorplan-slot-mine { @apply border-2 border-purple-400 bg-purple-50 font-bold text-purple-800; }
   .floorplan-slot-occupied { @apply border-2 border-red-300 bg-red-50 text-red-800; }
   .floorplan-slot-reserved { @apply border-yellow-400 bg-yellow-50 text-yellow-800; }
+  .floorplan-slot-special { @apply border-blue-300 bg-blue-50 text-blue-800; }
   .floorplan-slot-out_of_service { @apply border-slate-400 text-slate-600; background: repeating-linear-gradient(135deg, #d8d9e2 0 5px, #b7bac8 5px 10px); }
   .floorplan-slot-recommended { @apply ring-2 ring-primary/40; }
   .floorplan-slot-selected { @apply z-20 scale-105 outline-2 outline outline-offset-2 outline-primary; }
@@ -199,6 +200,7 @@
   .legend-swatch-available { @apply border border-emerald-300 bg-emerald-50; }
   .legend-swatch-occupied { @apply border border-red-300 bg-red-50; }
   .legend-swatch-reserved { @apply border border-yellow-400 bg-yellow-50; }
+  .legend-swatch-special { @apply border border-blue-300 bg-blue-50; }
   .legend-swatch-mine { @apply border-2 border-purple-400 bg-purple-50; }
   .legend-swatch-out_of_service { background: repeating-linear-gradient(135deg, #d8d9e2 0 4px, #b7bac8 4px 8px); border: 1px solid #8e91a0; }
   .floorplan-card-chat .floorplan-shell { @apply min-w-[900px]; min-height: 500px; }
