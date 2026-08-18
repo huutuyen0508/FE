@@ -51,7 +51,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-2"><button className="icon-button" onClick={() => setDark(!dark)} aria-label="Toggle theme">{dark ? <Sun /> : <Moon />}</button><Link className="icon-button relative" href="/admin/notifications" aria-label="Notifications"><Bell /><span className="absolute right-2 top-2 size-2 rounded-full bg-primary ring-2 ring-background" /></Link><span className="avatar md:hidden">AR</span></div>
         </header>
         {searchOpen && <div className="border-b bg-background px-4 py-3 md:hidden"><label className="search-field"><Search /><input autoFocus placeholder="Search anything..." /></label></div>}
-        <main className="mx-auto min-w-0 w-full max-w-[1500px] p-4 md:p-7">{children}</main>
+        <main className="mx-auto min-w-0 w-full max-w-[1500px] overflow-x-hidden p-4 md:p-7">{children}</main>
       </div>
     </div>
   )
@@ -77,7 +77,7 @@ export function Status({ children, tone = 'neutral' }: { children: ReactNode; to
   return <span className={`status status-${tone}`}>{children}</span>
 }
 
-export function Modal({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ReactNode }) {
+export function Modal({ open, onClose, title, children, compact = false }: { open: boolean; onClose: () => void; title: string; children: ReactNode; compact?: boolean }) {
   if (!open) return null
-  return <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/35 p-4" role="presentation" onMouseDown={onClose}><section className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-2xl border bg-background p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="modal-title" onMouseDown={(e) => e.stopPropagation()}><div className="mb-5 flex items-center justify-between"><h2 id="modal-title" className="text-lg font-semibold">{title}</h2><button className="icon-button" onClick={onClose} aria-label="Close dialog"><X /></button></div>{children}</section></div>
+  return <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/35 p-4" role="presentation" onMouseDown={onClose}><section className={`max-h-[90vh] w-full ${compact ? 'max-w-sm p-4' : 'max-w-lg p-6'} overflow-auto rounded-2xl border bg-background shadow-2xl`} role="dialog" aria-modal="true" aria-labelledby="modal-title" onMouseDown={(e) => e.stopPropagation()}><div className="mb-5 flex items-center justify-between"><h2 id="modal-title" className="text-lg font-semibold">{title}</h2><button className="icon-button" onClick={onClose} aria-label="Close dialog"><X /></button></div>{children}</section></div>
 }
