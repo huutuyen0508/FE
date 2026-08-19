@@ -5,7 +5,7 @@ import { AdminDashboard, AnalyticsPage, ParkingMapPage } from './admin-core-page
 import { ResidentsPage, VehiclesPage } from './admin-management-pages'
 import { AlertsPage, ApprovalsPage, AssistantPage, NotificationsPage, SettingsPage } from './admin-tool-pages'
 import { LoginPage } from './public-pages'
-import { GuestParkingPage, MyVehiclesPage, RegisterVehiclePage, ResidentDashboard, ResidentMapPage } from './resident-pages'
+import { GuestParkingPage, MyVehiclesPage, RegisterVehiclePage, ResidentDashboard } from './resident-pages'
 import { ResidentAssistantPage } from './resident-assistant-page'
 
 export function SmartParkRouter() {
@@ -23,7 +23,6 @@ export function SmartParkRouter() {
     '/admin/assistant': AssistantPage,
     '/admin/settings': SettingsPage,
     '/resident': ResidentDashboard,
-    '/resident/map': ResidentMapPage,
     '/resident/assistant': ResidentAssistantPage,
     '/resident/vehicles': MyVehiclesPage,
     '/resident/vehicles/register': RegisterVehiclePage,
